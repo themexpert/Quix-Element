@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="quix" method="upgrade">
+
+	<name>Custom Element Plugin - Quix Page Builder</name>
+	<author>ThemeXpert</author>
+	<creationDate>6 Aug 2020</creationDate>
+	<copyright>Copyright (C) 2010 - 2020 themexpert.com. All rights reserved.</copyright>
+	<license>GNU/GPL V2 or Later</license>
+	<authorEmail>support@themexpert.com</authorEmail>
+	<authorUrl>www.themexpert.com</authorUrl>
+	<version>1.0.0</version>
+	<description>Custom element plugin for Quix Page Builder</description>
+	<scriptfile>installer.php</scriptfile>
+
+	<files>
+		<filename plugin="custom">custom.php</filename>
+		<folder>app</folder>
+	</files>
+
+</extension>
