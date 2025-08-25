@@ -24,7 +24,36 @@
 
 
 {% set content_type = general.content_settings.content_type %}
-{% set video_src = general.content_settings.video_link %}
+{% set video_link_raw = general.content_settings.video_link %}
+
+{# Convert video URLs to embeddable format #}
+{% set video_src = video_link_raw %}
+{% if video_link_raw %}
+    {# YouTube: Convert watch URLs to embed #}
+    {% if 'youtube.com/watch?v=' in video_link_raw %}
+        {% set video_id = video_link_raw|split('v=')[1]|split('&')[0] %}
+        {% set video_src = 'https://www.youtube.com/embed/' ~ video_id %}
+    {% elseif 'youtu.be/' in video_link_raw %}
+        {% set video_id = video_link_raw|split('youtu.be/')[1]|split('?')[0] %}
+        {% set video_src = 'https://www.youtube.com/embed/' ~ video_id %}
+    {% elseif 'm.youtube.com/watch?v=' in video_link_raw %}
+        {% set video_id = video_link_raw|split('v=')[1]|split('&')[0] %}
+        {% set video_src = 'https://www.youtube.com/embed/' ~ video_id %}
+    
+    {# Vimeo: Convert regular URLs to embed #}
+    {% elseif 'vimeo.com/' in video_link_raw and '/embed/' not in video_link_raw %}
+        {% set video_id = video_link_raw|split('vimeo.com/')[1]|split('?')[0] %}
+        {% set video_src = 'https://player.vimeo.com/video/' ~ video_id %}
+    
+    {# Dailymotion: Convert regular URLs to embed #}
+    {% elseif 'dailymotion.com/video/' in video_link_raw and '/embed/' not in video_link_raw %}
+        {% set video_id = video_link_raw|split('/video/')[1]|split('?')[0] %}
+        {% set video_src = 'https://www.dailymotion.com/embed/video/' ~ video_id %}
+    
+    {# If already an embed URL or unknown platform, use as-is #}
+    {% endif %}
+{% endif %}
+
 {% set hide_modal_content = general.content_settings.hide_content %}
 
 {#{% set video_map_height = styles.modal_fg_element_style.modal_image_style.image_min_height %}#}
@@ -203,12 +232,15 @@
 									</figure>
 								{% endif %}
 							{% elseif content_type == "video" %}
-						 
-								<iframe class="qx-element-modal_video" src="{{video_src}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<figure class="qx-element-modal_video">
+									<iframe class="qx-element-modal_video-iframe" src="{{video_src}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</figure>
 							{% else %}
-								<iframe class="qx-element-modal_map" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ q }}&amp;t={{ views }}&amp;z={{ zoom|default('16') }}&amp;output=embed&amp;iwloc=near" aria-label="{{ label }}" allowfullscreen="">
-									Loading...
-								</iframe>
+								<figure class="qx-element-modal_map">
+									<iframe id="googleMaps" class="qx-element-modal_map-iframe" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ q }}&amp;t={{ views }}&amp;z={{ zoom|default('16') }}&amp;output=embed&amp;iwloc=near" aria-label="{{ label }}" allowfullscreen="">
+										Loading...
+									</iframe>
+								</figure>
 							{% endif %}
 						{% endif %}
 
@@ -321,11 +353,15 @@
 									</figure>
 								{% endif %}
 							{% elseif content_type == "video" %}
-								<iframe src="{{video_src}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								<figure class="qx-element-modal_video">
+									<iframe class="qx-element-modal_video-iframe" src="{{video_src}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</figure>
 							{% else %}
-								<iframe id="googleMaps" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ q }}&amp;t={{ views }}&amp;z={{ zoom|default('16') }}&amp;output=embed&amp;iwloc=near" aria-label="{{ label }}" allowfullscreen="">
-									Loading...
-								</iframe>
+								<figure class="qx-element-modal_map">
+									<iframe id="googleMaps" class="qx-element-modal_map-iframe" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ q }}&amp;t={{ views }}&amp;z={{ zoom|default('16') }}&amp;output=embed&amp;iwloc=near" aria-label="{{ label }}" allowfullscreen="">
+										Loading...
+									</iframe>
+								</figure>
 							{% endif %}
 						{% endif %}
 
