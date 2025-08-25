@@ -152,14 +152,27 @@
 
 
 {% set videoSelector = ModalID ~ ' .qx-element-modal_video' %}
-{{ style.width(videoSelector, imageWidth, '%') }}
-{{ style.minHeight(videoSelector, imageMinHeight) }}
+{{ style.css(videoSelector, 'display', 'block') }}
+{{ style.css(videoSelector, 'width', '100%') }}
+{{ style.css(videoSelector ~ ' iframe', 'display', 'block') }}
+{{ style.css(videoSelector ~ ' iframe', 'width', '100%') }}
+{{ style.css(videoSelector ~ ' iframe', 'height', 'auto') }}
+{{ style.css(videoSelector ~ ' iframe', 'aspect-ratio', '16/9') }}
+{{ style.css(videoSelector ~ ' iframe', 'min-height', '250px') }}
+{{ style.width(videoSelector ~ ' iframe', imageWidth) }}
+{{ style.minHeight(videoSelector ~ ' iframe', imageMinHeight) }}
 {{ style.alignment(videoSelector, imageAlignment) }}
 
 
 {% set mapSelector = ModalID ~ ' .qx-element-modal_map' %}
-{{ style.width(mapSelector, imageWidth, '%') }}
-{{ style.minHeight(mapSelector, imageMinHeight) }}
+{{ style.css(mapSelector, 'display', 'block') }}
+{{ style.css(mapSelector, 'width', '100%') }}
+{{ style.css(mapSelector ~ ' iframe', 'display', 'block') }}
+{{ style.css(mapSelector ~ ' iframe', 'width', '100%') }}
+{{ style.css(mapSelector ~ ' iframe', 'height', 'auto') }}
+{{ style.css(mapSelector ~ ' iframe', 'min-height', '250px') }}
+{{ style.width(mapSelector ~ ' iframe', imageWidth) }}
+{{ style.minHeight(mapSelector ~ ' iframe', imageMinHeight) }}
 {{ style.alignment(mapSelector, imageAlignment) }}
 
 
@@ -199,7 +212,7 @@
 {{ style.css(imageSelector , 'width', '100%') }}
 {{ style.css(imageSelector ~ ' img' , 'min-height', '100%') }}
 {{ style.css(imageSelector ~ ' img' , 'object-fit', 'cover') }}
-{{ style.width(imageSelector ~ ' img' , imageWidth, '%') }}
+{{ style.responsiveCss(imageSelector ~ ' img', imageWidth, 'width', imageWidth.unit) }}
 {{ style.minHeight(imageSelector ~ ' img', imageMinHeight) }}
 {{ style.alignment(imageSelector, imageAlignment) }}
 
