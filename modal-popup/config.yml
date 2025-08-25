@@ -154,10 +154,10 @@ form:
             content_type: map
 
         - name: video_link
-          label: Video Embed Url
+          label: Video URL
           type: text
-          value: https://www.youtube-nocookie.com/embed/67QeCi8zb7A
-          help:  add `?controls=0` at the end of youtube embed video link to hide controls
+          value: https://www.youtube.com/watch?v=67QeCi8zb7A
+          help: Paste any YouTube, Vimeo, or Dailymotion video URL. Regular video page URLs will be automatically converted to embeddable format.
           depends:
             element_mode : classic
             content_type: video
