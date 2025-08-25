@@ -1,0 +1,31 @@
+{% set id = advanced.identifier.id %}
+{% set modal_triggerMode = general.modal_trigger_options.modal_trigger_settings %}
+{% set modal_delay_time = general.modal_trigger_options.delay_time %}
+
+ 
+
+{% if mode != 'builder' %}
+
+  if("{{modal_triggerMode}}" == "ondelay")
+  {
+    $(document).ready(function() {
+      setTimeout(function() {
+        $("#{{id}}-btn").trigger('click');
+      }, {{modal_delay_time}});
+    });
+  }
+  else if("{{modal_triggerMode}}" == "onscroll")
+  {
+    var lastposition = 0;
+    var f = 0;
+    $(window).on('scroll', function(event){
+      var st = $(this).scrollTop();
+      var viewableOffset = $("#{{id}}-btn").offset().top;
+      if ( f == 0 && st>lastposition && st > (viewableOffset-976) && (st < viewableOffset-491)){
+        $("#{{id}}-btn").trigger('click');
+        f = 1;
+      }
+      lastposition = st;
+    });
+  }
+{% endif %}
