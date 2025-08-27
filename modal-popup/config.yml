@@ -162,6 +162,38 @@ form:
             element_mode : classic
             content_type: video
 
+        # Content Width/Height for image, video, and map
+        - name: content_width
+          label: Content Width (px)
+          type: number
+          value: 500
+          help: Set the width of the image, video, or map content
+          depends:
+            element_mode: classic
+            content_type: image,video,map
+
+        - name: content_height
+          label: Content Height (px)  
+          type: number
+          value: 300
+          help: Set the height of the image, video, or map content
+          depends:
+            element_mode: classic
+            content_type: image,video,map
+
+        - name: content_align
+          label: Content Alignment
+          type: select
+          value: center
+          help: Align the content horizontally within the modal
+          options:
+            left: Left
+            center: Center
+            right: Right
+          depends:
+            element_mode: classic
+            content_type: image,video,map
+
         - name: image
           label: Featured Image
           type: media
@@ -397,6 +429,45 @@ form:
             end:
               label: Right
               icon: qxuicon-align-right        
+
+        # When onscroll is selected:
+        - name: scroll_trigger_value
+          label: Position
+          type: text
+          help: Enter a value between 0 and 100 to set the scroll percentage at which the modal will be triggered.
+          value: 50
+          depends:
+            modal_trigger_settings: onscroll
+
+        # New modal positioning fields:
+        - name: modal_position_type
+          label: Modal Position
+          type: select
+          value: 'center'
+          options:
+            center: Center (Default)
+            custom: Custom Position
+
+        - name: modal_horizontal_align
+          label: Horizontal Position
+          type: select
+          value: center
+          depends:
+            modal_position_type: custom
+          options:
+            left: Left
+            center: Center
+            right: Right
+
+        - name: modal_vertical_align
+          label: Vertical Position
+          type: select
+          value: top
+          depends:
+            modal_position_type: custom
+          options:
+            top: Top
+            bottom: Bottom
 
     - name : modal_fg_markup
       label : Markup

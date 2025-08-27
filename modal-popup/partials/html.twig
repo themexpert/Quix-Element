@@ -88,6 +88,43 @@
 {% set graphicsHorizontalAlignment = styles.modal_fg_element_style.graphics_horizontal_alignment %}
 {% set graphicsVerticalPosition = styles.modal_fg_element_style.graphics_vertical_position %}
 
+{# Modal positioning variables #}
+{% set modal_position_type = general.modal_trigger_options.modal_position_type %}
+{% set modal_horizontal_align = general.modal_trigger_options.modal_horizontal_align %}
+{% set modal_vertical_align = general.modal_trigger_options.modal_vertical_align %}
+
+{# Inline styling for modal positioning to override UIkit default centered positioning #}
+<style>
+{% if modal_position_type == 'custom' %}
+[qx-modal]#{{ id }}-modal .qx-modal-dialog {
+    position: fixed !important;
+    transform: none !important;
+    margin: 0 !important;
+    inset: auto !important;
+    
+    {%- if modal_horizontal_align == 'left' %}
+    left: 2rem !important;
+    right: auto !important;
+    {%- elseif modal_horizontal_align == 'right' %}
+    right: 2rem !important;
+    left: auto !important;
+    {%- else %}
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    {%- endif %}
+    
+    {%- if modal_vertical_align == 'top' %}
+    top: 2rem !important;
+    bottom: auto !important;
+    {%- elseif modal_vertical_align == 'bottom' %}
+    bottom: 2rem !important;
+    top: auto !important;
+    {%- endif %}
+}
+{% endif %}
+</style>
+
 {% set modal_title = general.content_settings.title %}
 {% set modal_subtitle = general.content_settings.subtitle %}
 {% set enable_content = general.content_settings.enable_content|default(true) %}

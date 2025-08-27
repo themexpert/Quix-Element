@@ -13,7 +13,7 @@
 {% set nalignment = styles.button_style_options.button_spacing_fields_group.nalignment %}
 {% set btnPadding = styles.button_style_options.button_spacing_fields_group.btn_padding %}
 {% set iconSpacing = prepareResponsiveValue(styles.button_style_options.icon_spacing) %}
-{% set btnBorder = styles.button_style_options.button_spacing_fields_group.button_border_group.btn_border %}
+{% set btnBorder = styles.button_style_options.button_spacing_fields_group.button_border %}
 
 {# Background > .qx-btn #}
 {{ style.background (id ~ ' .qx-btn', btnBackground) }}
@@ -133,6 +133,16 @@
 {% set buttonFont = styles.modal_fg_element_style.button_font %}
 {% set buttonPadding = styles.modal_fg_element_style.button_padding %}
 
+{# Modal Positioning #}
+{% set modal_position_type = general.modal_trigger_options.modal_position_type %}
+{% set modal_horizontal_align = general.modal_trigger_options.modal_horizontal_align %}
+{% set modal_vertical_align = general.modal_trigger_options.modal_vertical_align %}
+
+{# Content Sizing #}
+{% set content_width = general.content_settings.content_width %}
+{% set content_height = general.content_settings.content_height %}
+{% set content_align = general.content_settings.content_align %}
+
 {# Selectors #}
 {% set modal = ModalID ~ ' .qx-modal-dialog ' %}
 {# This is imoirtant if we want to make width preview on builder... #} 
@@ -159,9 +169,27 @@
 {{ style.css(videoSelector ~ ' iframe', 'height', 'auto') }}
 {{ style.css(videoSelector ~ ' iframe', 'aspect-ratio', '16/9') }}
 {{ style.css(videoSelector ~ ' iframe', 'min-height', '250px') }}
-{{ style.width(videoSelector ~ ' iframe', imageWidth) }}
-{{ style.minHeight(videoSelector ~ ' iframe', imageMinHeight) }}
-{{ style.alignment(videoSelector, imageAlignment) }}
+
+{# Apply custom content sizing if set #}
+{% if content_width %}
+    {{ style.css(videoSelector ~ ' iframe', 'width', content_width ~ 'px') }}
+    {{ style.css(videoSelector, 'max-width', content_width ~ 'px') }}
+{% else %}
+    {{ style.width(videoSelector ~ ' iframe', imageWidth) }}
+{% endif %}
+
+{% if content_height %}
+    {{ style.css(videoSelector ~ ' iframe', 'height', content_height ~ 'px') }}
+    {{ style.css(videoSelector ~ ' iframe', 'aspect-ratio', 'unset') }}
+{% else %}
+    {{ style.minHeight(videoSelector ~ ' iframe', imageMinHeight) }}
+{% endif %}
+
+{% if content_align %}
+    {{ style.alignment(videoSelector, content_align) }}
+{% else %}
+    {{ style.alignment(videoSelector, imageAlignment) }}
+{% endif %}
 
 
 {% set mapSelector = ModalID ~ ' .qx-element-modal_map' %}
@@ -171,9 +199,41 @@
 {{ style.css(mapSelector ~ ' iframe', 'width', '100%') }}
 {{ style.css(mapSelector ~ ' iframe', 'height', 'auto') }}
 {{ style.css(mapSelector ~ ' iframe', 'min-height', '250px') }}
-{{ style.width(mapSelector ~ ' iframe', imageWidth) }}
-{{ style.minHeight(mapSelector ~ ' iframe', imageMinHeight) }}
-{{ style.alignment(mapSelector, imageAlignment) }}
+
+{# Apply custom content sizing if set #}
+{% if content_width %}
+    {{ style.css(mapSelector ~ ' iframe', 'width', content_width ~ 'px') }}
+    {{ style.css(mapSelector, 'max-width', content_width ~ 'px') }}
+{% else %}
+    {{ style.width(mapSelector ~ ' iframe', imageWidth) }}
+{% endif %}
+
+{% if content_height %}
+    {{ style.css(mapSelector ~ ' iframe', 'height', content_height ~ 'px') }}
+{% else %}
+    {{ style.minHeight(mapSelector ~ ' iframe', imageMinHeight) }}
+{% endif %}
+
+{% if content_align %}
+    {{ style.alignment(mapSelector, content_align) }}
+{% else %}
+    {{ style.alignment(mapSelector, imageAlignment) }}
+{% endif %}
+
+{# Image content sizing #}
+{% if content_width %}
+    {{ style.css(imageSelector ~ ' img', 'width', content_width ~ 'px') }}
+    {{ style.css(imageSelector, 'max-width', content_width ~ 'px') }}
+{% endif %}
+
+{% if content_height %}
+    {{ style.css(imageSelector ~ ' img', 'height', content_height ~ 'px') }}
+    {{ style.css(imageSelector ~ ' img', 'object-fit', 'cover') }}
+{% endif %}
+
+{% if content_align %}
+    {{ style.alignment(imageSelector, content_align) }}
+{% endif %}
 
 
 {# Cover Mode #}
@@ -280,5 +340,36 @@
 {{ style.padding(buttonSelector ~ ' a ', buttonPadding) }}
 
 {# Modal End #}
+
+{# Add modal positioning CSS - only apply if position type is custom #}
+{% if modal_position_type == 'custom' %}
+    {# More specific selectors to override UIkit defaults #}
+    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'position', 'fixed !important') }}
+    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'none !important') }}
+    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'margin', '0 !important') }}
+    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'inset', 'auto !important') }}
+
+    {# Horizontal positioning #}
+    {% if modal_horizontal_align == 'left' %}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'left', '2rem !important') }}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto !important') }}
+    {% elseif modal_horizontal_align == 'right' %}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'right', '2rem !important') }}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'left', 'auto !important') }}
+    {% elseif modal_horizontal_align == 'center' %}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'left', '50% !important') }}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto !important') }}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateX(-50%) !important') }}
+    {% endif %}
+
+    {# Vertical positioning #}
+    {% if modal_vertical_align == 'top' %}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'top', '2rem !important') }}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'bottom', 'auto !important') }}
+    {% elseif modal_vertical_align == 'bottom' %}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'bottom', '2rem !important') }}
+        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'top', 'auto !important') }}
+    {% endif %}
+{% endif %}
 
 {{ style.load(id) }}

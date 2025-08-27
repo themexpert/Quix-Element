@@ -1,31 +1,63 @@
 {% set id = advanced.identifier.id %}
 {% set modal_triggerMode = general.modal_trigger_options.modal_trigger_settings %}
 {% set modal_delay_time = general.modal_trigger_options.delay_time %}
-
- 
+{% set scroll_trigger_value = general.modal_trigger_options.scroll_trigger_value %}
+{% set scroll_trigger_unit = general.modal_trigger_options.scroll_trigger_unit %}
 
 {% if mode != 'builder' %}
-
-  if("{{modal_triggerMode}}" == "ondelay")
-  {
-    $(document).ready(function() {
-      setTimeout(function() {
-        $("#{{id}}-btn").trigger('click');
-      }, {{modal_delay_time}});
-    });
+jQuery(document).ready(function($) {
+  var modalTriggerMode = "{{modal_triggerMode}}";
+  var modalId = "{{id}}";
+  
+  if(modalTriggerMode == "ondelay") {
+    var delayTime = {{modal_delay_time|default(5000)}};
+    setTimeout(function() {
+      $("#" + modalId + "-btn").trigger('click');
+    }, delayTime);
   }
-  else if("{{modal_triggerMode}}" == "onscroll")
-  {
-    var lastposition = 0;
-    var f = 0;
-    $(window).on('scroll', function(event){
-      var st = $(this).scrollTop();
-      var viewableOffset = $("#{{id}}-btn").offset().top;
-      if ( f == 0 && st>lastposition && st > (viewableOffset-976) && (st < viewableOffset-491)){
-        $("#{{id}}-btn").trigger('click');
-        f = 1;
-      }
-      lastposition = st;
-    });
+  else if(modalTriggerMode == "onscroll") {
+    var trigger = document.createElement('div');
+    trigger.style.position = 'absolute';
+    trigger.style.height = '1px';
+    trigger.style.width = '100%';
+    trigger.style.pointerEvents = 'none';
+    trigger.style.zIndex = '-1';
+    
+    var value = {{scroll_trigger_value|default(50)}};
+    var unit = "{{scroll_trigger_unit|default('%')}}";
+    
+    if(unit === '%') {
+        trigger.style.top = value + '%';
+    }
+    
+    document.body.appendChild(trigger);
+    
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+              if(entry.isIntersecting) {
+                  $("#" + modalId + "-btn").trigger('click');
+                  observer.disconnect();
+                  if(trigger.parentNode) {
+                      trigger.parentNode.removeChild(trigger);
+                  }
+              }
+          });
+      }, {
+          threshold: 0.1
+      });
+      
+      observer.observe(trigger);
+    } else {
+      $(window).on('scroll', function() {
+          var scrollTop = $(window).scrollTop();
+          
+          if(scrollTop >= triggerPosition) {
+              $("#" + modalId + "-btn").trigger('click');
+              $(window).off('scroll');
+          }
+      });
+    }
   }
+});
 {% endif %}
