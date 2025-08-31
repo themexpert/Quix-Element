@@ -306,6 +306,7 @@ form:
             onscroll: Scroll
             ondelay: Delay
             onimage: Image
+            onbeforeleave: Before Leave
 
         - name: text
           label: Button Text
@@ -410,7 +411,7 @@ form:
           type: text
           help: Add alt text to improve SEO and accessibility.
           depends:
-            modal_trigger_settings: onimage
+            modal_trigger_settings: onimage      
 
         - name: trigger_image_alignment
           label: Alignment
@@ -438,6 +439,23 @@ form:
           value: 50
           depends:
             modal_trigger_settings: onscroll
+
+        # When onbeforeleave is selected:
+        - name: exit_intent_delay
+          label: Exit Intent Delay (MS)
+          type: text
+          help: Delay before modal appears when user tries to leave (in milliseconds). Set to 0 for immediate display.
+          value: 500
+          depends:
+            modal_trigger_settings: onbeforeleave
+
+        - name: exit_intent_cooldown
+          label: Cooldown Period (Minutes)
+          type: text
+          help: Time to wait before showing modal again after it's been closed (in minutes). Set to 0 to show every time.
+          value: 5
+          depends:
+            modal_trigger_settings: onbeforeleave
 
         # New modal positioning fields:
         - name: modal_position_type

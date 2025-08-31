@@ -3,6 +3,9 @@
 {% set modal_delay_time = general.modal_trigger_options.delay_time %}
 {% set scroll_trigger_value = general.modal_trigger_options.scroll_trigger_value %}
 {% set scroll_trigger_unit = general.modal_trigger_options.scroll_trigger_unit %}
+{% set exit_intent_delay = general.modal_trigger_options.exit_intent_delay %}
+{% set exit_intent_cooldown = general.modal_trigger_options.exit_intent_cooldown %}
+{% set exit_intent_trigger_type = general.modal_trigger_options.exit_intent_trigger_type %}
 
 {% if mode != 'builder' %}
 jQuery(document).ready(function($) {
@@ -59,5 +62,118 @@ jQuery(document).ready(function($) {
       });
     }
   }
-});
+  else if(modalTriggerMode == "onbeforeleave") {
+    var exitIntentDelay = {{exit_intent_delay|default(500)}};
+    var exitIntentCooldown = {{exit_intent_cooldown|default(5)}};
+    var modalTriggered = false;
+    var allowPageLeave = false;
+    var cooldownKey = 'modal_' + modalId + '_last_shown';
+    var pendingAction = null;
+    
+    function isInCooldown() {
+      if(exitIntentCooldown <= 0) return false;
+      
+      var lastShown = localStorage.getItem(cooldownKey);
+      if(!lastShown) return false;
+      
+      var now = new Date().getTime();
+      var cooldownTime = exitIntentCooldown * 60 * 1000;
+      return (now - parseInt(lastShown)) < cooldownTime;
+    }
+ 
+    function triggerModal(callback) {
+      if(modalTriggered || isInCooldown()) {
+        if(callback) callback();
+        return;
+      }
+      
+      modalTriggered = true;
+      
+      setTimeout(function() {
+        try {
+          var modalElement;
+          if(typeof UIkit !== 'undefined' && UIkit.modal) {
+            modalElement = UIkit.modal("#" + modalId + "-modal");
+            modalElement.show();
+ 
+            $("#" + modalId + "-modal").off('hidden').on('hidden', function() {
+              allowPageLeave = true;
+              modalTriggered = false;
+              if(callback) callback();
+            });
+            
+          } else {
+            $("#" + modalId + "-btn").trigger('click');
+            
+            $("#" + modalId + "-modal").off('hidden').on('hidden', function() {
+              allowPageLeave = true;
+              modalTriggered = false;
+              if(callback) callback();
+            });
+          }
+          localStorage.setItem(cooldownKey, new Date().getTime().toString());
+        } catch(e) {
+          console.error('Error showing modal:', e);
+          if(callback) callback();
+        }
+      }, exitIntentDelay);
+    }
+
+    function executeAction() {
+      if(pendingAction === 'reload') {
+        window.location.reload();
+      } else if(pendingAction && pendingAction.startsWith('navigate:')) {
+        window.location.href = pendingAction.substring(9);
+      }
+      pendingAction = null;
+    }
+
+    $(document).on('click', 'a[href]', function(e) {
+      if(allowPageLeave || modalTriggered || isInCooldown()) {
+        return true;
+      }
+      
+      var href = $(this).attr('href');
+      if(href && href !== '#' && !href.startsWith('javascript:') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+        e.preventDefault();
+        pendingAction = 'navigate:' + href;
+        triggerModal(executeAction);
+        return false;
+      }
+    });
+
+    $(window).on('keydown', function(e) {
+      if((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.keyCode === 116)) {
+        if(allowPageLeave || modalTriggered || isInCooldown()) {
+          return true;
+        }
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if(e.shiftKey) {
+          return false;
+        }
+        
+        pendingAction = 'reload';
+        triggerModal(executeAction);
+        return false;
+      }
+      
+      if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'r' || e.keyCode === 116)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    });
+
+    if (typeof document.hidden !== "undefined") {
+      $(document).on('visibilitychange', function() {
+        if(document.hidden && !allowPageLeave && !modalTriggered) {
+          triggerModal();
+        }
+      });
+    }
+  }
+} );
 {% endif %}

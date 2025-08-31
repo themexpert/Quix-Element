@@ -181,7 +181,10 @@
 {% if content_height %}
     {{ style.css(videoSelector ~ ' iframe', 'height', content_height ~ 'px') }}
     {{ style.css(videoSelector ~ ' iframe', 'aspect-ratio', 'unset') }}
-{% else %}
+{% endif %}
+
+{# Always apply minimum height from Primary Content settings if set #}
+{% if imageMinHeight %}
     {{ style.minHeight(videoSelector ~ ' iframe', imageMinHeight) }}
 {% endif %}
 
@@ -210,7 +213,10 @@
 
 {% if content_height %}
     {{ style.css(mapSelector ~ ' iframe', 'height', content_height ~ 'px') }}
-{% else %}
+{% endif %}
+
+{# Always apply minimum height from Primary Content settings if set #}
+{% if imageMinHeight %}
     {{ style.minHeight(mapSelector ~ ' iframe', imageMinHeight) }}
 {% endif %}
 
@@ -246,6 +252,8 @@
 {# Element style #}
 {% set heightType = height %}
 {% if heightType == 'custom' %}
+  {{ style.minHeight(modal, elementMinHeight) }}
+  {{ style.minHeight(elementSelector, elementMinHeight) }}
   {{ style.minHeight(contentSelector, elementMinHeight) }}
 {% endif %}
 {{ style.width(modal, elementWidth)}}

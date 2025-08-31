@@ -217,6 +217,9 @@
 		{% if modal_triggerMode == "onscroll" %}
 			{% set display = 'style=visibility:hidden !important;' %}
 		{% endif %}
+		{% if modal_triggerMode == "onbeforeleave" %}
+			{% set display = 'style=display:none !important;' %}
+		{% endif %}
 
 		{% if modal_triggerMode == "onclick" %}
 			<button id='{{id}}-btn' class="{{btnClass}} qx-margin-small-right" type="button" {{display}} qx-toggle="target: #{{id}}-modal;">
@@ -236,7 +239,7 @@
 					{{ image(triggerImage.source, triggerImageAltText, '', '', triggerImage) }}
 				{% endif %}
 			</div>
-		{% elseif modal_triggerMode == "ondelay" or modal_triggerMode == "onscroll" %}
+		{% elseif modal_triggerMode == "ondelay" or modal_triggerMode == "onscroll" or modal_triggerMode == "onbeforeleave" %}
 			<button id='{{id}}-btn' class="{{btnClass}} qx-margin-small-right" type="button" {{display}} qx-toggle="target: #{{id}}-modal;" style="display: none;">
 				{# minimal button content #}
 			</button>
