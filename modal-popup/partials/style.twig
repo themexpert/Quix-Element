@@ -86,6 +86,7 @@
 {% set bgBlendModeHover = styles.modal_fg_element_style.bg_blend_mode_hover %}
 
 {# Element style #}
+{% set modalBackgroundColor = styles.modal_fg_element_style.modal_background_color|default('') %}
 {% set height = styles.modal_fg_element_style.height %}
 {% set elementMinHeight = styles.modal_fg_element_style.element_min_height %}
 {% set elementWidth = styles.modal_fg_element_style.element_width %}
@@ -378,6 +379,25 @@
         {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'bottom', '2rem !important') }}
         {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'top', 'auto !important') }}
     {% endif %}
+{% endif %}
+
+{# Modal background color #}
+{% if modalBackgroundColor and modalBackgroundColor != '' %}
+    {# Apply to modal overlay (UIkit modal backdrop) - keep existing overlay settings #}
+    {{ style.css('[qx-modal]#' ~ id ~ '-modal', 'background-color', modalBackgroundColor ~ ' !important') }}
+    {{ style.css('#' ~ id ~ '-modal[qx-modal]', 'background-color', modalBackgroundColor ~ ' !important') }}
+    {{ style.css('#' ~ id ~ '-modal.qx-modal', 'background-color', modalBackgroundColor ~ ' !important') }}
+    {{ style.css('#' ~ id ~ '-modal.uk-modal', 'background-color', modalBackgroundColor ~ ' !important') }}
+    
+    {# Apply to modal dialog container - use safe selector construction #}
+    {% if ModalID %}
+        {{ style.css(ModalID ~ ' .qx-modal-dialog', 'background-color', modalBackgroundColor ~ ' !important') }}
+    {% endif %}
+    
+    {# Apply to modal content wrapper (the actual visible modal content) #}
+    {{ style.css(elementSelector, 'background-color', modalBackgroundColor ~ ' !important') }}
+    {{ style.css(elementSelector ~ '.classic-mode', 'background-color', modalBackgroundColor ~ ' !important') }}
+    {{ style.css(elementSelector ~ '.cover-mode', 'background-color', modalBackgroundColor ~ ' !important') }}
 {% endif %}
 
 {{ style.load(id) }}
