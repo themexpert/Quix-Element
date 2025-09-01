@@ -400,4 +400,12 @@
     {{ style.css(elementSelector ~ '.cover-mode', 'background-color', modalBackgroundColor ~ ' !important') }}
 {% endif %}
 
+{# Template content CSS overrides - Target template content directly in modal #}
+{# When content_source is 'template', override unwanted .qx-inner and builder CSS #}
+{{ style.css(ModalID ~ ' .qx-inner', 'background', 'none') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'border', 'none') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'padding', '0 !important') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'border-radius', '0 !important') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'outline', 'none') }}
+
 {{ style.load(id) }}
