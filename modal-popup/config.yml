@@ -24,12 +24,6 @@ form:
           depends:
             content_source: template
 
-        - name: content_source_template_label
-          type: divider
-          help: Custom Content option will not work when you select Template as Content source. Change to custom to enable custom content.
-          depends:
-            content_source: template
-
         - name: enable_preview
           label: Disable Modal Preview
           help: For builder preview only.
