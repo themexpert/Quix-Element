@@ -526,6 +526,15 @@ form:
           value: 'rgba(0,0,0,0.5)'
           alpha: true
 
+        - name: modal_border_group
+          label: Modal Border
+          type: fields-group
+          schema:
+            - name: modal_border
+              type: border
+              label: Border
+              popover: true
+
         - name : height
           type: select
           value: default

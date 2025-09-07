@@ -87,6 +87,7 @@
 
 {# Element style #}
 {% set modalBackgroundColor = styles.modal_fg_element_style.modal_background_color|default('') %}
+{% set modalBorder = styles.modal_fg_element_style.modal_border_group.modal_border %}
 {% set height = styles.modal_fg_element_style.height %}
 {% set elementMinHeight = styles.modal_fg_element_style.element_min_height %}
 {% set elementWidth = styles.modal_fg_element_style.element_width %}
@@ -399,6 +400,10 @@
     {{ style.css(elementSelector ~ '.classic-mode', 'background-color', modalBackgroundColor ~ ' !important') }}
     {{ style.css(elementSelector ~ '.cover-mode', 'background-color', modalBackgroundColor ~ ' !important') }}
 {% endif %}
+
+{# Modal border styling #}
+{{ style.border(ModalID ~ ' .qx-modal-dialog', modalBorder) }}
+{{ style.border('#' ~ id ~ '-modal .modal-preview-for-builder .qx-modal-dialog', modalBorder) }}
 
 {# Template content CSS overrides - Target template content directly in modal #}
 {# When content_source is 'template', override unwanted .qx-inner and builder CSS #}
