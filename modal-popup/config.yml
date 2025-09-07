@@ -204,6 +204,17 @@ form:
           depends:
             content_type: image
 
+        - name: image_border_radius
+          label: Border Radius
+          type: dimensions
+          help: Set border radius for the featured content
+          depends:
+            content_type: image
+          value:
+            desktop: 0
+            tablet: 0
+            phone: 0
+
         - name : modal_fg_content_label
           label: General Content
           type: divider
@@ -520,12 +531,18 @@ form:
           label: Basic
           type: divider
 
-        - name: modal_background_color
-          label: Modal Background
+        - name: modal_overlay_background
+          label: Modal Overlay Background
           type: color
-          help: Set modal overlay/background color.
-          value: 'rgba(0,0,0,0.5)'
+          help: Set the background color of the entire popup overlay when modal is open.
+          value: 'rgba(0,0,0,0.6)'
           alpha: true
+
+        - name: modal_background
+          label: Modal Background
+          type: background
+          popover: true
+          help: Set the background for the modal content, including color, hover effects, gradients, etc.
 
         - name: modal_border_group
           label: Modal Border
@@ -659,6 +676,10 @@ form:
                 desktop: center
                 tablet: center
                 phone: center
+
+            - name: primary_content_border_radius
+              label: Border Radius
+              type: dimensions
 
 
         - name : modal_graphics_style_lable
@@ -868,53 +889,6 @@ form:
               bottom: 10
               left: 25
               right: 25
-
-        - name: modal_background_style
-          label: Background Overlay For Cover Mode
-          type: divider
-
-
-        - name: background_overlay_color
-          label: Overlay Color
-          type: color
-
-
-        - name: background_overlay_hover_color
-          label: Hover Overlay Color
-          type: color
-
-
-        - name : bg_blend_mode
-          type: select
-          label: Blend Mode
-          value: overlay
-          options:
-            normal : Normal
-            multiply: Multiply
-            screen: Screen
-            overlay: Overlay
-            darken: Darken
-            lighten: Lighten
-            color-dodge: Color Dodge
-            saturation: Saturation
-            color: Color
-            luminosity: Luminosity
-
-        - name : bg_blend_mode_hover
-          type: select
-          label: Hover Blend Mode
-          value:
-          options:
-            normal : Normal
-            multiply: Multiply
-            screen: Screen
-            overlay: Overlay
-            darken: Darken
-            lighten: Lighten
-            color-dodge: Color Dodge
-            saturation: Saturation
-            color: Color
-            luminosity: Luminosity
 
     - name : button_style_options
       label: Button Options

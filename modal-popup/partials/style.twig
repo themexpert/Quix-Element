@@ -80,13 +80,10 @@
 
 {% set ModalID = id ~ '-modal' %}
 {# Cover Mode #}
-{% set backgroundOverlayColor =  styles.modal_fg_element_style.background_overlay_color %}
-{% set backgroundOverlayHoverColor =  styles.modal_fg_element_style.background_overlay_hover_color %}
-{% set bgBlendMode = styles.modal_fg_element_style.bg_blend_mode %}
-{% set bgBlendModeHover = styles.modal_fg_element_style.bg_blend_mode_hover %}
+{% set modalBackground = styles.modal_fg_element_style.modal_background %}
 
 {# Element style #}
-{% set modalBackgroundColor = styles.modal_fg_element_style.modal_background_color|default('') %}
+{% set modalOverlayBackground = styles.modal_fg_element_style.modal_overlay_background|default('') %}
 {% set modalBorder = styles.modal_fg_element_style.modal_border_group.modal_border %}
 {% set height = styles.modal_fg_element_style.height %}
 {% set elementMinHeight = styles.modal_fg_element_style.element_min_height %}
@@ -108,6 +105,9 @@
 {% set graphicsVerticalPosition = styles.modal_fg_element_style.graphics_vertical_position %}
 {% set graphicsBorderRadius = styles.modal_fg_element_style.graphics_border_radius %}
 {% set graphicsSpacing = styles.modal_fg_element_style.graphics_spacing %}
+
+{# Primary Content Border Radius #}
+{% set primaryContentBorderRadius = styles.modal_fg_element_style.modal_image_style.primary_content_border_radius %}
 
 {# Title Style #}
 {% set titleColor = styles.modal_fg_element_style.title_color %}
@@ -144,6 +144,7 @@
 {% set content_width = general.content_settings.content_width %}
 {% set content_height = general.content_settings.content_height %}
 {% set content_align = general.content_settings.content_align %}
+{% set image_border_radius = general.content_settings.image_border_radius %}
 
 {# Selectors #}
 {% set modal = ModalID ~ ' .qx-modal-dialog ' %}
@@ -244,13 +245,6 @@
 {% endif %}
 
 
-{# Cover Mode #}
-{{ style.css(coverMode, 'background-color', backgroundOverlayColor) }}
-{{ style.css(coverMode ~ ':hover' , 'background-color', backgroundOverlayHoverColor) }}
-{{ style.css(coverMode , 'background-blend-mode', bgBlendMode) }}
-{{ style.css(coverMode ~ ':hover' , 'background-blend-mode', bgBlendModeHover) }}
-{{ style.css(coverMode , 'background-size', 'cover') }}
-
 {# Element style #}
 {% set heightType = height %}
 {% if heightType == 'custom' %}
@@ -285,6 +279,29 @@
 {{ style.responsiveCss(imageSelector ~ ' img', imageWidth, 'width', imageWidth.unit) }}
 {{ style.minHeight(imageSelector ~ ' img', imageMinHeight) }}
 {{ style.alignment(imageSelector, imageAlignment) }}
+
+{# Image Border Radius #}
+{% if image_border_radius %}
+  {% if general.content_settings.content_type == 'image' %}
+    {{ style.borderRadius(imageSelector ~ ' img', image_border_radius) }}
+  {% elseif general.content_settings.content_type == 'video' %}
+    {{ style.borderRadius(videoSelector ~ ' iframe', image_border_radius) }}
+    {{ style.borderRadius(videoSelector ~ ' video', image_border_radius) }}
+    {{ style.borderRadius(ModalID ~ ' .vp-video-wrapper', image_border_radius) }}
+    {{ style.borderRadius('.vp-video-wrapper', image_border_radius) }}
+    {# Additional specificity for Vimeo #}
+    {{ style.css('.vp-video-wrapper', 'border-radius', image_border_radius.desktop ~ 'px') }}
+  {% elseif general.content_settings.content_type == 'map' %}
+    {{ style.borderRadius(mapSelector ~ ' iframe', image_border_radius) }}
+  {% endif %}
+{% endif %}
+
+{# Primary Content Border Radius #}
+{% if primaryContentBorderRadius %}
+{{ style.borderRadius(elementSelector, primaryContentBorderRadius) }}
+{{ style.borderRadius(elementSelector ~ '.cover-mode', primaryContentBorderRadius) }}
+{{ style.borderRadius(elementSelector ~ '.classic-mode', primaryContentBorderRadius) }}
+{% endif %}
 
 {# Graphics image and icon #}
 {{ style.responsiveCss(graphicsSelector ~ ' *', graphicsWidth, 'width', graphicsWidth.unit) }}
@@ -396,22 +413,21 @@
 {% endif %}
 
 {# Modal background color #}
-{% if modalBackgroundColor and modalBackgroundColor != '' %}
-    {# Apply to modal overlay (UIkit modal backdrop) - keep existing overlay settings #}
-    {{ style.css('[qx-modal]#' ~ id ~ '-modal', 'background-color', modalBackgroundColor ~ ' !important') }}
-    {{ style.css('#' ~ id ~ '-modal[qx-modal]', 'background-color', modalBackgroundColor ~ ' !important') }}
-    {{ style.css('#' ~ id ~ '-modal.qx-modal', 'background-color', modalBackgroundColor ~ ' !important') }}
-    {{ style.css('#' ~ id ~ '-modal.uk-modal', 'background-color', modalBackgroundColor ~ ' !important') }}
-    
-    {# Apply to modal dialog container - use safe selector construction #}
-    {% if ModalID %}
-        {{ style.css(ModalID ~ ' .qx-modal-dialog', 'background-color', modalBackgroundColor ~ ' !important') }}
-    {% endif %}
-    
+{% if modalBackground %}
     {# Apply to modal content wrapper (the actual visible modal content) #}
-    {{ style.css(elementSelector, 'background-color', modalBackgroundColor ~ ' !important') }}
-    {{ style.css(elementSelector ~ '.classic-mode', 'background-color', modalBackgroundColor ~ ' !important') }}
-    {{ style.css(elementSelector ~ '.cover-mode', 'background-color', modalBackgroundColor ~ ' !important') }}
+    {{ style.background(elementSelector, modalBackground) }}
+    {{ style.background(elementSelector ~ '.classic-mode', modalBackground) }}
+    {{ style.background(elementSelector ~ '.cover-mode', modalBackground) }}
+    
+    {# Smooth transition for background color on hover #}
+    {{ style.css(elementSelector, 'transition', 'background-color 0.3s ease') }}
+    {{ style.css(elementSelector ~ '.classic-mode', 'transition', 'background-color 0.3s ease') }}
+    {{ style.css(elementSelector ~ '.cover-mode', 'transition', 'background-color 0.3s ease') }}
+{% endif %}
+
+{# Modal overlay background - for the entire popup backdrop when modal is open #}
+{% if modalOverlayBackground and modalOverlayBackground != '' %}
+    {{ style.css('.qx-modal', 'background', modalOverlayBackground ~ '') }}
 {% endif %}
 
 {# Modal border styling #}
