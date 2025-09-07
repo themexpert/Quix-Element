@@ -479,6 +479,7 @@ form:
             modal_position_type: custom
           options:
             top: Top
+            center: Center
             bottom: Bottom
 
     - name : modal_fg_markup

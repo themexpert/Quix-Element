@@ -353,32 +353,45 @@
 
 {# Add modal positioning CSS - only apply if position type is custom #}
 {% if modal_position_type == 'custom' %}
-    {# More specific selectors to override UIkit defaults #}
-    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'position', 'fixed !important') }}
-    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'none !important') }}
-    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'margin', '0 !important') }}
-    {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'inset', 'auto !important') }}
+    {# Base modal dialog positioning #}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'position', 'fixed') }}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'none') }}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'margin', '0') }}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'inset', 'auto') }}
 
     {# Horizontal positioning #}
     {% if modal_horizontal_align == 'left' %}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'left', '2rem !important') }}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto !important') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'left', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto') }}
     {% elseif modal_horizontal_align == 'right' %}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'right', '2rem !important') }}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'left', 'auto !important') }}
-    {% elseif modal_horizontal_align == 'center' %}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'left', '50% !important') }}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto !important') }}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateX(-50%) !important') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'right', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'left', 'auto') }}
+    {% else %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'left', '50%') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto') }}
     {% endif %}
 
     {# Vertical positioning #}
     {% if modal_vertical_align == 'top' %}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'top', '2rem !important') }}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'bottom', 'auto !important') }}
+        {% if modal_horizontal_align == 'center' %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateX(-50%)') }}
+        {% endif %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'top', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'bottom', 'auto') }}
+    {% elseif modal_vertical_align == 'center' %}
+        {% if modal_horizontal_align == 'center' %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translate(-50%, -50%)') }}
+        {% else %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateY(-50%)') }}
+        {% endif %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'top', '50%') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'bottom', 'auto') }}
     {% elseif modal_vertical_align == 'bottom' %}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'bottom', '2rem !important') }}
-        {{ style.css('[qx-modal]#' ~ id ~ '-modal .qx-modal-dialog', 'top', 'auto !important') }}
+        {% if modal_horizontal_align == 'center' %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateX(-50%)') }}
+        {% endif %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'bottom', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'top', 'auto') }}
     {% endif %}
 {% endif %}
 
