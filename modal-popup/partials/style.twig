@@ -450,27 +450,29 @@
 {{ style.css('[class*=qx-modal-close-]:hover', 'color', '#fff') }}
 {{ style.css('[class*=qx-modal-close-]', 'color', '#fff') }}
 
-{# Close Button Delay Message Styles #}
-{% set delayMessageSelector = ModalID ~ ' .qx-modal-delay-message' %}
-{{ style.css(delayMessageSelector, 'color', '#000') }}
-{{ style.css(delayMessageSelector, 'padding', '0px 20px') }}
-{{ style.css(delayMessageSelector, 'font-size', '14px') }}
-{{ style.css(delayMessageSelector, 'font-weight', '500') }}
-{{ style.css(delayMessageSelector, 'text-align', 'center') }}
-{{ style.css(delayMessageSelector, 'margin-top', '15px') }}
+{# Shared Message Styles for Delay and Auto Close #}
+{% set messageSelector = ModalID ~ ' .qx-modal-delay-message, ' ~ ModalID ~ ' .qx-modal-auto-close-message' %}
+{{ style.css(messageSelector, 'color', '#000') }}
+{{ style.css(messageSelector, 'padding', '0px 20px') }}
+{{ style.css(messageSelector, 'font-size', '14px') }}
+{{ style.css(messageSelector, 'font-weight', '500') }}
+{{ style.css(messageSelector, 'text-align', 'center') }}
+{{ style.css(messageSelector, 'margin-top', '15px') }}
 
-{# For builder preview styling #}
-{% set delayMessageBuilderSelector = id ~ '-modal.border .qx-modal-delay-message' %}
-{{ style.css(delayMessageBuilderSelector, 'position', 'relative') }}
-{{ style.css(delayMessageBuilderSelector, 'top', 'auto') }}
-{{ style.css(delayMessageBuilderSelector, 'left', 'auto') }}
-{{ style.css(delayMessageBuilderSelector, 'transform', 'none') }}
-{{ style.css(delayMessageBuilderSelector, 'margin', '10px auto 20px auto') }}
-{{ style.css(delayMessageBuilderSelector, 'display', 'block') }}
-{{ style.css(delayMessageBuilderSelector, 'width', 'fit-content') }}
+{# Shared builder preview styling #}
+{% set messageBuilderSelector = id ~ '-modal.border .qx-modal-delay-message, ' ~ id ~ '-modal.border .qx-modal-auto-close-message' %}
+{{ style.css(messageBuilderSelector, 'position', 'relative') }}
+{{ style.css(messageBuilderSelector, 'top', 'auto') }}
+{{ style.css(messageBuilderSelector, 'left', 'auto') }}
+{{ style.css(messageBuilderSelector, 'transform', 'none') }}
+{{ style.css(messageBuilderSelector, 'margin', '10px auto 20px auto') }}
+{{ style.css(messageBuilderSelector, 'display', 'block') }}
+{{ style.css(messageBuilderSelector, 'width', 'fit-content') }}
 
-{# Countdown number styling #}
-{{ style.css(delayMessageSelector ~ ' #' ~ id ~ '-countdown', 'font-weight', 'bold') }}
-{{ style.css(delayMessageSelector ~ ' #' ~ id ~ '-countdown', 'color', '#ff6b6b') }}
+{# Countdown number styling - different colors for each type #}
+{{ style.css(ModalID ~ ' .qx-modal-delay-message #' ~ id ~ '-countdown', 'font-weight', 'bold') }}
+{{ style.css(ModalID ~ ' .qx-modal-delay-message #' ~ id ~ '-countdown', 'color', '#ff6b6b') }}
+{{ style.css(ModalID ~ ' .qx-modal-auto-close-message #' ~ id ~ '-auto-countdown', 'font-weight', 'bold') }}
+{{ style.css(ModalID ~ ' .qx-modal-auto-close-message #' ~ id ~ '-auto-countdown', 'color', '#f39c12') }}
 
 {{ style.load(id) }}

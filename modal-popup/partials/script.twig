@@ -213,5 +213,44 @@ jQuery(document).ready(function($) {
       }
     })();
   {% endif %}
+  
+  {% set enable_auto_close = general.content_source_group.modal_close_button.enable_auto_close|default(false) %}
+  {% if enable_auto_close %}
+    {% set auto_close_seconds = (general.content_source_group.modal_close_button.auto_close_seconds.value ?? general.content_source_group.modal_close_button.auto_close_seconds) | default(10) %}
+    
+    (function() {
+      var m = document.getElementById('{{id}}-modal'), msg = document.getElementById('{{id}}-auto-close-message'), 
+          cnt = document.getElementById('{{id}}-auto-countdown'), sec = {{auto_close_seconds}}, timer;
+      
+      function start() {
+        clearInterval(timer);
+        var remaining = sec;
+        if(cnt) cnt.textContent = remaining;
+        if(msg) msg.style.display = 'block';
+        timer = setInterval(function() {
+          if(cnt) cnt.textContent = --remaining;
+          if(remaining <= 0) {
+            clearInterval(timer);
+            if(msg) msg.style.display = 'none';
+            var closeBtn = m && m.querySelector('[qx-close]');
+            if(closeBtn) closeBtn.click();
+          }
+        }, 1000);
+      }
+      
+      function stop() { clearInterval(timer); if(msg) msg.style.display = 'none'; }
+      
+      if(m) {
+        if(m.classList.contains('border')) setTimeout(start, 100);
+        else {
+          document.querySelectorAll('[qx-toggle*="{{id}}-modal"]').forEach(function(el) {
+            el.addEventListener('click', function() { stop(); setTimeout(start, 150); });
+          });
+          m.querySelectorAll('[qx-close]').forEach(function(el) { el.addEventListener('click', stop); });
+          {% if close_on_outside_click %}m.addEventListener('click', function(e) { if(e.target === m) stop(); });{% endif %}
+        }
+      }
+    })();
+  {% endif %}
 });
 {% endif %}

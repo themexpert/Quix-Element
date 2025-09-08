@@ -52,6 +52,8 @@ form:
               type: switch
               value: false
               help: When enabled, the close button will appear after a specified delay with a countdown message
+              depends:
+                enable_auto_close: false
               
             - name: close_delay_seconds
               label: Delay Time (Seconds)
@@ -64,6 +66,7 @@ form:
               help: Number of seconds to wait before showing the close button
               depends:
                 enable_close_delay: true
+                enable_auto_close: false
 
             - name: close_delay_message
               label: Delay Message
@@ -72,6 +75,37 @@ form:
               help: Message to show during the delay. Use {seconds} to display the countdown
               depends:
                 enable_close_delay: true
+                enable_auto_close: false
+
+            - name: enable_auto_close
+              label: Enable Auto Close
+              type: switch
+              value: false
+              help: When enabled, the modal will automatically close after a specified time
+              depends:
+                enable_close_delay: false
+              
+            - name: auto_close_seconds
+              label: Auto Close Time (Seconds)
+              type: slider
+              value: 10
+              min: 1
+              max: 60
+              responsive: false
+              suffix: s
+              help: Number of seconds before automatically closing the modal
+              depends:
+                enable_auto_close: true
+                enable_close_delay: false
+
+            - name: auto_close_message
+              label: Auto Close Message
+              type: text
+              value: "This modal will close automatically in {seconds} seconds"
+              help: Message to show during the auto close countdown. Use {seconds} to display the countdown
+              depends:
+                enable_auto_close: true
+                enable_close_delay: false
 
     - name : content_settings
       label: Custom Content
