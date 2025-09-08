@@ -290,7 +290,7 @@
     {{ style.borderRadius(ModalID ~ ' .vp-video-wrapper', image_border_radius) }}
     {{ style.borderRadius('.vp-video-wrapper', image_border_radius) }}
     {# Additional specificity for Vimeo #}
-    {{ style.css('.vp-video-wrapper', 'border-radius', image_border_radius.desktop ~ 'px') }}
+    {{ style.css('.vp-video-wrapper', 'border-radius', image_border_radius.desktop ~ 'px !important') }}
   {% elseif general.content_settings.content_type == 'map' %}
     {{ style.borderRadius(mapSelector ~ ' iframe', image_border_radius) }}
   {% endif %}
@@ -449,5 +449,28 @@
 {{ style.css('[class*=qx-modal-close-]:hover', 'background', 'rgba(255, 0, 0, 1)') }}
 {{ style.css('[class*=qx-modal-close-]:hover', 'color', '#fff') }}
 {{ style.css('[class*=qx-modal-close-]', 'color', '#fff') }}
+
+{# Close Button Delay Message Styles #}
+{% set delayMessageSelector = ModalID ~ ' .qx-modal-delay-message' %}
+{{ style.css(delayMessageSelector, 'color', '#000') }}
+{{ style.css(delayMessageSelector, 'padding', '0px 20px') }}
+{{ style.css(delayMessageSelector, 'font-size', '14px') }}
+{{ style.css(delayMessageSelector, 'font-weight', '500') }}
+{{ style.css(delayMessageSelector, 'text-align', 'center') }}
+{{ style.css(delayMessageSelector, 'margin-top', '15px') }}
+
+{# For builder preview styling #}
+{% set delayMessageBuilderSelector = id ~ '-modal.border .qx-modal-delay-message' %}
+{{ style.css(delayMessageBuilderSelector, 'position', 'relative') }}
+{{ style.css(delayMessageBuilderSelector, 'top', 'auto') }}
+{{ style.css(delayMessageBuilderSelector, 'left', 'auto') }}
+{{ style.css(delayMessageBuilderSelector, 'transform', 'none') }}
+{{ style.css(delayMessageBuilderSelector, 'margin', '10px auto 20px auto') }}
+{{ style.css(delayMessageBuilderSelector, 'display', 'block') }}
+{{ style.css(delayMessageBuilderSelector, 'width', 'fit-content') }}
+
+{# Countdown number styling #}
+{{ style.css(delayMessageSelector ~ ' #' ~ id ~ '-countdown', 'font-weight', 'bold') }}
+{{ style.css(delayMessageSelector ~ ' #' ~ id ~ '-countdown', 'color', '#ff6b6b') }}
 
 {{ style.load(id) }}

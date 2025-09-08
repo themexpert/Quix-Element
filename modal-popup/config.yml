@@ -47,6 +47,31 @@ form:
               value: true
               help: Allow closing the modal by clicking outside the modal content
 
+            - name: enable_close_delay
+              label: Enable Close Button Delay
+              type: switch
+              value: false
+              help: When enabled, the close button will appear after a specified delay with a countdown message
+              
+            - name: close_delay_seconds
+              label: Delay Time (Seconds)
+              type: slider
+              value: 5
+              min: 1
+              max: 60
+              responsive: false
+              suffix: s
+              help: Number of seconds to wait before showing the close button
+              depends:
+                enable_close_delay: true
+
+            - name: close_delay_message
+              label: Delay Message
+              type: text
+              value: "The button for closing the modal window will appear after {seconds} seconds"
+              help: Message to show during the delay. Use {seconds} to display the countdown
+              depends:
+                enable_close_delay: true
 
     - name : content_settings
       label: Custom Content

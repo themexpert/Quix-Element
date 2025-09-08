@@ -128,6 +128,16 @@
 {% set content_source = general.content_source_group.content_source %}
 {% set advanced_mode_id = general.content_source_group.id %}
 
+{# close button delay #}
+{% set enable_close_delay = general.content_source_group.modal_close_button.enable_close_delay|default(false) %}
+{% set close_delay_seconds_raw = general.content_source_group.modal_close_button.close_delay_seconds|default(5) %}
+{% if close_delay_seconds_raw.value %}
+	{% set close_delay_seconds = close_delay_seconds_raw.value %}
+{% else %}
+	{% set close_delay_seconds = close_delay_seconds_raw %}
+{% endif %}
+{% set close_delay_message = general.content_source_group.modal_close_button.close_delay_message|default("The button for closing the modal window will appear after {seconds} seconds") %}
+
 {# Wrapper Class #}
 {% set wrapperClassesForCallToAction = classNames('qx-element-modal_wrapper qx-animation-toggle',
     modal_elementMode ? modal_elementMode ~ '-mode': '',
@@ -218,7 +228,13 @@
 		{% if mode == 'builder' and enableModalPreview == false %}
 			<div id="{{id}}-modal" class="border mt-2">
 				<div class="modal-preview-for-builder">
-					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close></button>
+					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close{% if enable_close_delay %} id="{{id}}-close-btn" style="display: none;"{% endif %}></button>
+					
+					{% if enable_close_delay %}
+					<div class="qx-modal-delay-message" id="{{id}}-delay-message" style="display: block;">
+						<span>{{ close_delay_message|replace({'{seconds}': '<span id="' ~ id ~ '-countdown">' ~ close_delay_seconds ~ '</span>'})|raw }}</span>
+					</div>
+					{% endif %}
 					{# Call to action Markup start #}
 
 					{% if content_source != 'template' %}
@@ -340,7 +356,13 @@
 		{% else %}
 			<div id="{{id}}-modal"{% if close_on_outside_click is defined and close_on_outside_click == false %} qx-modal="bg-close: false; esc-close: false"{% else %} qx-modal{% endif %}>
 				<div class="qx-modal-dialog">
-					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close></button>
+					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close{% if enable_close_delay %} id="{{id}}-close-btn" style="display: none;"{% endif %}></button>
+					
+					{% if enable_close_delay %}
+					<div class="qx-modal-delay-message" id="{{id}}-delay-message">
+						<span>{{ close_delay_message|replace({'{seconds}': '<span id="' ~ id ~ '-countdown">' ~ close_delay_seconds ~ '</span>'})|raw }}</span>
+					</div>
+					{% endif %}
 					
 					{% if content_source != 'template' %}
 					{# Call to action Markup start #}
