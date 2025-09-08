@@ -442,4 +442,12 @@
 {{ style.css(ModalID ~ ' .qx-inner', 'border-radius', '0 !important') }}
 {{ style.css(ModalID ~ ' .qx-inner', 'outline', 'none') }}
 
+{# Close Button Styles #}
+{{ style.css('[class*=qx-modal-close-]', 'background', 'red') }}
+{{ style.css('[class*=qx-modal-close-]', 'border-radius', '100%') }}
+{{ style.css('[class*=qx-modal-close-]:hover', 'background', 'rgba(255, 0, 0, 0.7)') }}
+{{ style.css('[class*=qx-modal-close-]:hover', 'background', 'rgba(255, 0, 0, 1)') }}
+{{ style.css('[class*=qx-modal-close-]:hover', 'color', '#fff') }}
+{{ style.css('[class*=qx-modal-close-]', 'color', '#fff') }}
+
 {{ style.load(id) }}

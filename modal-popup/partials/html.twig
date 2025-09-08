@@ -124,6 +124,7 @@
 
 {# close button #}
 {% set modal_close_button = general.content_source_group.modal_close_button.button_type %}
+{% set close_on_outside_click = general.content_source_group.modal_close_button.close_on_outside_click %}
 {% set content_source = general.content_source_group.content_source %}
 {% set advanced_mode_id = general.content_source_group.id %}
 
@@ -208,7 +209,7 @@
 				{% endif %}
 			</div>
 		{% elseif modal_triggerMode == "ondelay" or modal_triggerMode == "onscroll" or modal_triggerMode == "onbeforeleave" %}
-			<button id='{{id}}-btn' class="{{btnClass}} qx-margin-small-right" type="button" {{display}} qx-toggle="target: #{{id}}-modal;" style="display: none;">
+			<button id='{{id}}-btn' class="{{btnClass}} qx-margin-small-right" type="button" {{display}} qx-toggle="target: #{{id}}-modal;">
 				{# minimal button content #}
 			</button>
 		{% endif %}
@@ -337,7 +338,7 @@
 				</div>
 			</div>
 		{% else %}
-			<div id="{{id}}-modal" qx-modal>
+			<div id="{{id}}-modal"{% if close_on_outside_click is defined and close_on_outside_click == false %} qx-modal="bg-close: false; esc-close: false"{% else %} qx-modal{% endif %}>
 				<div class="qx-modal-dialog">
 					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close></button>
 					

@@ -41,6 +41,11 @@ form:
               options:
                 default: Default
                 outside: Outside
+            - name: close_on_outside_click
+              label: Close on Outside Click
+              type: switch
+              value: true
+              help: Allow closing the modal by clicking outside the modal content
 
 
     - name : content_settings
