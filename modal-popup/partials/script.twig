@@ -177,29 +177,47 @@ jQuery(document).ready(function($) {
   }
   
   {% set enable_close_delay = general.content_source_group.modal_close_button.enable_close_delay|default(false) %}
-  {% if enable_close_delay %}
-    {% set close_delay_seconds = (general.content_source_group.modal_close_button.close_delay_seconds.value ?? general.content_source_group.modal_close_button.close_delay_seconds) | default(5) %}
+  {% set enable_auto_close = general.content_source_group.modal_close_button.enable_auto_close|default(false) %}
+  {% if enable_close_delay or enable_auto_close %}
+    {% if enable_close_delay %}
+      {% set timer_seconds = (general.content_source_group.modal_close_button.close_delay_seconds.value ?? general.content_source_group.modal_close_button.close_delay_seconds) | default(5) %}
+      {% set feature_type = 'delay' %}
+    {% else %}
+      {% set timer_seconds = (general.content_source_group.modal_close_button.auto_close_seconds.value ?? general.content_source_group.modal_close_button.auto_close_seconds) | default(10) %}
+      {% set feature_type = 'auto' %}
+    {% endif %}
     
     (function() {
-      var m = document.getElementById('{{id}}-modal'), msg = document.getElementById('{{id}}-delay-message'), 
-          btn = document.getElementById('{{id}}-close-btn'), cnt = document.getElementById('{{id}}-countdown'),
-          sec = {{close_delay_seconds}}, timer;
+      var m = document.getElementById('{{id}}-modal'), 
+          msg = document.getElementById('{{id}}-{{feature_type == "delay" ? "delay-message" : "auto-close-message"}}'), 
+          btn = document.getElementById('{{id}}-close-btn'), 
+          cnt = document.getElementById('{{id}}-{{feature_type == "delay" ? "countdown" : "auto-countdown"}}'),
+          sec = {{timer_seconds}}, timer, isDelay = {{feature_type == "delay" ? "true" : "false"}};
       
       function start() {
         clearInterval(timer);
         var remaining = sec;
         if(cnt) cnt.textContent = remaining;
+        if(msg && !isDelay) msg.style.display = 'block';
         timer = setInterval(function() {
           if(cnt) cnt.textContent = --remaining;
           if(remaining <= 0) {
             clearInterval(timer);
             if(msg) msg.style.display = 'none';
-            if(btn) btn.style.display = 'block';
+            if(isDelay && btn) btn.style.display = 'block';
+            else if(!isDelay) {
+              var closeBtn = m && m.querySelector('[qx-close]');
+              if(closeBtn) closeBtn.click();
+            }
           }
         }, 1000);
       }
       
-      function reset() { clearInterval(timer); if(msg) msg.style.display = 'block'; if(btn) btn.style.display = 'none'; }
+      function reset() { 
+        clearInterval(timer); 
+        if(msg) msg.style.display = isDelay ? 'block' : 'none'; 
+        if(btn && isDelay) btn.style.display = 'none'; 
+      }
       
       if(m) {
         if(m.classList.contains('border')) setTimeout(start, 100);
@@ -209,45 +227,6 @@ jQuery(document).ready(function($) {
           });
           m.querySelectorAll('[qx-close]').forEach(function(el) { el.addEventListener('click', reset); });
           {% if close_on_outside_click %}m.addEventListener('click', function(e) { if(e.target === m) reset(); });{% endif %}
-        }
-      }
-    })();
-  {% endif %}
-  
-  {% set enable_auto_close = general.content_source_group.modal_close_button.enable_auto_close|default(false) %}
-  {% if enable_auto_close %}
-    {% set auto_close_seconds = (general.content_source_group.modal_close_button.auto_close_seconds.value ?? general.content_source_group.modal_close_button.auto_close_seconds) | default(10) %}
-    
-    (function() {
-      var m = document.getElementById('{{id}}-modal'), msg = document.getElementById('{{id}}-auto-close-message'), 
-          cnt = document.getElementById('{{id}}-auto-countdown'), sec = {{auto_close_seconds}}, timer;
-      
-      function start() {
-        clearInterval(timer);
-        var remaining = sec;
-        if(cnt) cnt.textContent = remaining;
-        if(msg) msg.style.display = 'block';
-        timer = setInterval(function() {
-          if(cnt) cnt.textContent = --remaining;
-          if(remaining <= 0) {
-            clearInterval(timer);
-            if(msg) msg.style.display = 'none';
-            var closeBtn = m && m.querySelector('[qx-close]');
-            if(closeBtn) closeBtn.click();
-          }
-        }, 1000);
-      }
-      
-      function stop() { clearInterval(timer); if(msg) msg.style.display = 'none'; }
-      
-      if(m) {
-        if(m.classList.contains('border')) setTimeout(start, 100);
-        else {
-          document.querySelectorAll('[qx-toggle*="{{id}}-modal"]').forEach(function(el) {
-            el.addEventListener('click', function() { stop(); setTimeout(start, 150); });
-          });
-          m.querySelectorAll('[qx-close]').forEach(function(el) { el.addEventListener('click', stop); });
-          {% if close_on_outside_click %}m.addEventListener('click', function(e) { if(e.target === m) stop(); });{% endif %}
         }
       }
     })();
