@@ -1,0 +1,146 @@
+{% set id = advanced.identifier.id %}
+{% set class = advanced.identifier.class %}
+{% set timelineItems = general.timeline_items %}
+{% set layout = general.layout_settings.layout %}
+{% set alignment = general.layout_settings.alignment %}
+{% set showConnector = general.layout_settings.show_connector %}
+{% set connectorStyle = general.layout_settings.connector_style %}
+
+{% set classes = classNames('qx-element qx-element-timeline-v2',
+    'qx-timeline-' ~ layout,
+    'qx-timeline-align-' ~ alignment,
+    visibilityClass(visibility),
+    class
+) %}
+
+{% set animation = advanced.animation_fields_group.animation %}
+{% set animationRepeat = advanced.animation_fields_group.animation_repeat %}
+{% set animationDelay = advanced.animation_fields_group.animation_delay %}
+{% set background = advanced.background_fields_group.background %}
+
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        {% if timelineItems %}
+            <div class="qx-timeline-wrapper">
+                {% if layout == 'vertical' %}
+                    <div class="qx-timeline qx-timeline-vertical">
+                        {% for item in timelineItems %}
+                            <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
+                                {% if showConnector %}
+                                    <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                                {% endif %}
+                                <div class="qx-timeline-marker">
+                                    {% if item.icon.source %}
+                                        {% if item.icon.type == "svg" %}
+                                            {{ icon(item.icon.source) }}
+                                        {% else %}
+                                            <img src="{{ imageUrl(item.icon.source) }}" alt="Timeline icon" />
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="qx-timeline-dot"></div>
+                                    {% endif %}
+                                </div>
+
+                                {% if item.icon.type == "svg" %}
+                                    {{ addIconStyle('#' ~ id ~ ' .qx-timeline-marker', item.icon) }}
+                                {% endif %}
+
+                                <div class="qx-timeline-content">
+                                    {% if item.date %}
+                                        <div class="qx-timeline-date">{{ item.date }}</div>
+                                    {% endif %}
+
+                                    {% if item.title %}
+                                        <h3 class="qx-timeline-title">
+                                            {% if item.link.url %}
+                                                {{ item.title | link(item.link) }}
+                                            {% else %}
+                                                {{ item.title }}
+                                            {% endif %}
+                                        </h3>
+                                    {% endif %}
+
+                                    {% if item.image.source %}
+                                        <div class="qx-timeline-image">
+                                            {{ image(item.image.source, item.title, '', '', item.image) }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if item.description %}
+                                        <div class="qx-timeline-description">
+                                            {{ item.description|raw }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="qx-timeline qx-timeline-horizontal">
+                        {% for item in timelineItems %}
+                            <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
+                                {% if showConnector %}
+                                    <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                                {% endif %}
+                                <div class="qx-timeline-marker">
+                                    {% if item.icon.source %}
+                                        {% if item.icon.type == "svg" %}
+                                            {{ icon(item.icon.source) }}
+                                        {% else %}
+                                            <img src="{{ imageUrl(item.icon.source) }}" alt="Timeline icon" />
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="qx-timeline-dot"></div>
+                                    {% endif %}
+                                </div>
+
+                                {% if item.icon.type == "svg" %}
+                                    {{ addIconStyle('#' ~ id ~ ' .qx-timeline-marker', item.icon) }}
+                                {% endif %}
+
+                                <div class="qx-timeline-content">
+                                    {% if item.date %}
+                                        <div class="qx-timeline-date">{{ item.date }}</div>
+                                    {% endif %}
+
+                                    {% if item.title %}
+                                        <h3 class="qx-timeline-title">
+                                            {% if item.link.url %}
+                                                {{ item.title | link(item.link) }}
+                                            {% else %}
+                                                {{ item.title }}
+                                            {% endif %}
+                                        </h3>
+                                    {% endif %}
+
+                                    {% if item.image.source %}
+                                        <div class="qx-timeline-image">
+                                            {{ image(item.image.source, item.title, '', '', item.image) }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if item.description %}
+                                        <div class="qx-timeline-description">
+                                            {{ item.description|raw }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="qx-timeline-placeholder">
+                <p>Add timeline items to get started</p>
+            </div>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

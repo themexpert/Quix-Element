@@ -1,0 +1,239 @@
+{% include 'global.twig' %}
+
+{% set id = '#' ~ advanced.identifier.id %}
+{% set timelineBg = styles.timeline_appearance.timeline_bg %}
+{% set connectorColor = styles.timeline_appearance.connector_color %}
+
+{# Extract slider values with responsive support #}
+{% set connectorWidth = (styles.timeline_appearance.connector_width.desktop ?? styles.timeline_appearance.connector_width.value ?? styles.timeline_appearance.connector_width ?: 2) %}
+{% set itemSpacing = styles.timeline_appearance.item_spacing %}
+
+{% set itemBg = styles.item_styles.item_bg %}
+{% set itemBorder = styles.item_styles.item_border %}
+{% set itemPadding = styles.item_styles.item_padding %}
+{% set itemBorderRadius = styles.item_styles.item_border_radius %}
+{% set itemShadow = styles.item_styles.item_shadow %}
+
+{% set iconBg = styles.icon_styles.icon_bg %}
+
+{# Extract slider values with responsive support #}
+{% set iconPadding = (styles.icon_styles.icon_padding.desktop ?? styles.icon_styles.icon_padding.value ?? styles.icon_styles.icon_padding ?: 10) %}
+{% set iconBorderRadius = (styles.icon_styles.icon_border_radius.desktop ?? styles.icon_styles.icon_border_radius.value ?? styles.icon_styles.icon_border_radius ?: 50) %}
+
+{% set titleColor = styles.content_styles.title_color %}
+{% set titleFont = styles.content_styles.title_font %}
+{% set dateColor = styles.content_styles.date_color %}
+{% set dateFont = styles.content_styles.date_font %}
+{% set descriptionColor = styles.content_styles.description_color %}
+{% set descriptionFont = styles.content_styles.description_font %}
+
+{% set enableHover = styles.hover_effects.enable_hover %}
+{% set hoverItemBg = styles.hover_effects.hover_item_bg %}
+{% set hoverTitleColor = styles.hover_effects.hover_title_color %}
+{% set hoverAnimation = styles.hover_effects.hover_animation %}
+
+{# Timeline Wrapper #}
+{{ style.css(id ~ ' .qx-timeline-wrapper', 'position', 'relative') }}
+{{ style.background(id ~ ' .qx-timeline-wrapper', timelineBg) }}
+
+{# Timeline Base Styles #}
+{{ style.css(id ~ ' .qx-timeline', 'position', 'relative') }}
+{{ style.css(id ~ ' .qx-timeline', 'list-style', 'none') }}
+{{ style.css(id ~ ' .qx-timeline', 'margin', '0') }}
+{{ style.css(id ~ ' .qx-timeline', 'padding', '0') }}
+
+{# Timeline Connector #}
+{{ style.css(id ~ ' .qx-timeline-connector', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-connector', 'background-color', connectorColor) }}
+{{ style.css(id ~ ' .qx-timeline-connector', 'width', connectorWidth ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-connector', 'border-radius', connectorWidth ~ 'px') }}
+
+{# Connector Styles #}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'border-style', 'dashed') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'border-width', '0 ' ~ connectorWidth ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'background-color', 'transparent') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'border-color', connectorColor) }}
+
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'border-style', 'dotted') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'border-width', '0 ' ~ connectorWidth ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'background-color', 'transparent') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'border-color', connectorColor) }}
+
+{# Horizontal Connector Styles #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item .qx-timeline-connector-dashed', 'border-width', connectorWidth ~ 'px 0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item .qx-timeline-connector-dotted', 'border-width', connectorWidth ~ 'px 0') }}
+
+{# Vertical Timeline #}
+{{ style.css(id ~ ' .qx-timeline-vertical', 'padding-left', '60px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item .qx-timeline-connector', 'left', '-50px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item .qx-timeline-connector', 'height', 'calc(100%)') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item .qx-timeline-connector', 'top', '20px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item .qx-timeline-connector', 'width', connectorWidth ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item:last-child .qx-timeline-connector', 'height', 'calc(100% - 20px)') }}
+
+{# Horizontal Timeline #}
+{{ style.css(id ~ ' .qx-timeline-horizontal', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal', 'justify-content', 'space-between') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal', 'align-items', 'flex-start') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item .qx-timeline-connector', 'top', '0px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item .qx-timeline-connector', 'left', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item .qx-timeline-connector', 'transform', 'translateX(-50%)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item .qx-timeline-connector', 'width', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item .qx-timeline-connector', 'height', connectorWidth ~ 'px') }}
+
+{# Timeline Items #}
+{{ style.css(id ~ ' .qx-timeline-item', 'position', 'relative') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'margin-bottom', '0') }}
+{{ style.responsiveCss(id ~ ' .qx-timeline-item', itemSpacing, 'margin-bottom', 'px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item:last-child', 'margin-bottom', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex', '1') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item:not(:last-child)', 'margin-right', '20px') }}
+
+{# Timeline Marker #}
+{{ style.css(id ~ ' .qx-timeline-marker', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'border-radius', iconBorderRadius ~ '%') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'padding', iconPadding ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'align-items', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'justify-content', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'z-index', '2') }}
+
+{# Vertical Marker Position #}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'left', '-60px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'top', '0') }}
+
+{# Horizontal Marker Position #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'top', '-60px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'left', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'transform', 'translateX(-50%)') }}
+
+{# Timeline Dot (default marker) #}
+{{ style.css(id ~ ' .qx-timeline-dot', 'width', '12px') }}
+{{ style.css(id ~ ' .qx-timeline-dot', 'height', '12px') }}
+{{ style.css(id ~ ' .qx-timeline-dot', 'border-radius', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-dot', 'background-color', connectorColor) }}
+
+{# Icon Styling #}
+{{ style.background(id ~ ' .qx-timeline-marker', iconBg) }}
+
+{# Timeline Content #}
+{{ style.css(id ~ ' .qx-timeline-content', 'position', 'relative') }}
+{{ style.background(id ~ ' .qx-timeline-content', itemBg) }}
+{{ style.border(id ~ ' .qx-timeline-content', itemBorder) }}
+{{ style.padding(id ~ ' .qx-timeline-content', itemPadding) }}
+{{ style.borderRadius(id ~ ' .qx-timeline-content', itemBorderRadius) }}
+{{ style.boxShadow(id ~ ' .qx-timeline-content', itemShadow) }}
+
+{# Timeline Date #}
+{{ style.css(id ~ ' .qx-timeline-date', 'color', dateColor) }}
+{{ style.css(id ~ ' .qx-timeline-date', 'margin-bottom', '8px') }}
+{{ style.css(id ~ ' .qx-timeline-date', 'font-size', '14px') }}
+{{ style.css(id ~ ' .qx-timeline-date', 'font-weight', '500') }}
+{{ style.typography(id ~ ' .qx-timeline-date', dateFont) }}
+
+{# Timeline Title #}
+{{ style.css(id ~ ' .qx-timeline-title', 'color', titleColor) }}
+{{ style.css(id ~ ' .qx-timeline-title', 'margin-bottom', '12px') }}
+{{ style.css(id ~ ' .qx-timeline-title', 'margin-top', '0') }}
+{{ style.typography(id ~ ' .qx-timeline-title', titleFont) }}
+{{ style.css(id ~ ' .qx-timeline-title a', 'color', 'inherit') }}
+{{ style.css(id ~ ' .qx-timeline-title a:hover', 'color', 'inherit') }}
+{{ style.css(id ~ ' .qx-timeline-title a', 'text-decoration', 'none') }}
+
+{# Timeline Image #}
+{{ style.css(id ~ ' .qx-timeline-image', 'margin-bottom', '15px') }}
+{{ style.css(id ~ ' .qx-timeline-image img', 'max-width', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-image img', 'height', 'auto') }}
+{{ style.css(id ~ ' .qx-timeline-image img', 'border-radius', '4px') }}
+
+{# Timeline Description #}
+{{ style.css(id ~ ' .qx-timeline-description', 'color', descriptionColor) }}
+{{ style.css(id ~ ' .qx-timeline-description', 'margin-bottom', '0') }}
+{{ style.typography(id ~ ' .qx-timeline-description', descriptionFont) }}
+{{ style.css(id ~ ' .qx-timeline-description p:last-child', 'margin-bottom', '0') }}
+
+{# Active Item Styling #}
+{{ style.css(id ~ ' .qx-timeline-item-active .qx-timeline-marker', 'transform', 'scale(1.2)') }}
+{{ style.css(id ~ ' .qx-timeline-item-active .qx-timeline-dot', 'background-color', titleColor) }}
+
+{# Hover Effects #}
+{% if enableHover %}
+    {{ style.css(id ~ ' .qx-timeline-item', 'transition', 'all 0.3s ease') }}
+
+    {% if hoverAnimation == 'fade' %}
+        {{ style.css(id ~ ' .qx-timeline-item:hover', 'opacity', '0.8') }}
+    {% elseif hoverAnimation == 'scale' %}
+        {{ style.css(id ~ ' .qx-timeline-item:hover', 'transform', 'scale(1.05)') }}
+    {% elseif hoverAnimation == 'slide' %}
+        {{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item:hover', 'transform', 'translateX(10px)') }}
+        {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item:hover', 'transform', 'translateY(-10px)') }}
+    {% endif %}
+
+    {% if hoverItemBg %}
+        {{ style.background(id ~ ' .qx-timeline-item:hover .qx-timeline-content', hoverItemBg) }}
+    {% endif %}
+
+    {% if hoverTitleColor %}
+        {{ style.css(id ~ ' .qx-timeline-item:hover .qx-timeline-title', 'color', hoverTitleColor) }}
+    {% endif %}
+{% endif %}
+
+{# Responsive Design #}
+{{ style.phone(id ~ ' .qx-timeline-vertical', 'padding-left: 40px') }}
+{{ style.phone(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'left: -40px') }}
+{{ style.phone(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'width: 30px') }}
+{{ style.phone(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'height: 30px') }}
+{{ style.phone(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'left: 10px') }}
+
+{{ style.phone(id ~ ' .qx-timeline-horizontal', 'flex-direction: column') }}
+{{ style.phone(id ~ ' .qx-timeline-horizontal', 'padding-top: 40px') }}
+{{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'top: -40px') }}
+{{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'left: -40px') }}
+{{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'transform: none') }}
+{{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'display: none') }}
+{{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'margin-right: 0') }}
+
+{# Placeholder Styling #}
+{{ style.css(id ~ ' .qx-timeline-placeholder', 'text-align', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-placeholder', 'padding', '40px') }}
+{{ style.css(id ~ ' .qx-timeline-placeholder', 'color', '#999') }}
+{{ style.css(id ~ ' .qx-timeline-placeholder p', 'margin', '0') }}
+
+{# JavaScript Animation Classes #}
+{{ style.css(id ~ ' .qx-timeline-item', 'opacity', '0') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'transform', 'translateY(30px)') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'transition', 'opacity 0.6s ease, transform 0.6s ease') }}
+
+{{ style.css(id ~ ' .qx-timeline-item-visible', 'opacity', '1') }}
+{{ style.css(id ~ ' .qx-timeline-item-visible', 'transform', 'translateY(0)') }}
+
+{% if enableHover and hoverAnimation != 'none' %}
+    {{ style.css(id ~ ' .qx-timeline-item-animated', 'animation-duration', '0.5s') }}
+    {{ style.css(id ~ ' .qx-timeline-item-animated', 'animation-fill-mode', 'both') }}
+
+    {% if hoverAnimation == 'fade' %}
+        {{ style.css(id ~ ' .qx-timeline-item-animated', 'animation-name', 'qx-timeline-fade-in') }}
+    {% elseif hoverAnimation == 'scale' %}
+        {{ style.css(id ~ ' .qx-timeline-item-animated', 'animation-name', 'qx-timeline-scale-in') }}
+    {% elseif hoverAnimation == 'slide' %}
+        {{ style.css(id ~ ' .qx-timeline-item-animated', 'animation-name', 'qx-timeline-slide-in') }}
+    {% endif %}
+{% endif %}
+
+{# Animation Keyframes #}
+@keyframes qx-timeline-fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes qx-timeline-scale-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes qx-timeline-slide-in {
+  0% { transform: translateX(-30px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+{{ style.load(id) }}

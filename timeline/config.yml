@@ -1,0 +1,274 @@
+name: Timeline
+slug: timeline
+groups: general
+helpId: timeline-element
+form:
+  general:
+    - name: timeline_items
+      label: Timeline Items
+      type: group-repeater
+      schema:
+        - name: title
+          label: Title
+          type: text
+          value: Timeline Item Title
+
+        - name: date
+          label: Date/Time
+          type: text
+          value: January 2024
+          help: Enter the date or time for this timeline item
+
+        - name: description
+          label: Description
+          type: editor
+          value: Add your timeline item description here.
+
+        - name: image
+          label: Image
+          type: media
+          filters: image
+          showstyle: true
+
+        - name: icon
+          label: Icon
+          type: media
+          filters: icon
+          help: Choose an icon for this timeline item
+
+        - name: link
+          label: Link
+          type: link
+          help: Optional link for the timeline item
+
+        - name: active
+          label: Active State
+          type: switch
+          value: false
+          help: Mark this item as currently active/highlighted
+
+    - name: layout_settings
+      label: Layout Settings
+      type: fields-group
+      status: open
+      schema:
+        - name: layout
+          label: Layout Type
+          type: select
+          value: vertical
+          options:
+            vertical: Vertical
+            horizontal: Horizontal
+
+        - name: alignment
+          label: Timeline Alignment
+          type: choose
+          value: center
+          responsive: false
+          options:
+            left:
+              label: Left
+              icon: qxuicon-align-left
+            center:
+              label: Center
+              icon: qxuicon-align-center
+            right:
+              label: Right
+              icon: qxuicon-align-right
+
+        - name: show_connector
+          label: Show Timeline Connector
+          type: switch
+          value: true
+          help: Display the connecting line between timeline items
+
+        - name: connector_style
+          label: Connector Style
+          type: select
+          value: solid
+          depends:
+            show_connector: true
+          options:
+            solid: Solid
+            dashed: Dashed
+            dotted: Dotted
+
+  styles:
+    - name: timeline_appearance
+      label: Timeline Appearance
+      type: fields-group
+      status: open
+      schema:
+        - name: timeline_bg
+          label: Timeline Background
+          type: background
+          popover: true
+
+        - name: connector_color
+          label: Connector Color
+          type: color
+          value: '#e5e5e5'
+
+        - name: connector_width
+          label: Connector Width
+          type: slider
+          min: 1
+          max: 10
+          suffix: px
+          value: 2
+
+        - name: item_spacing
+          label: Item Spacing
+          type: slider
+          max: 100
+          suffix: px
+          value: 20
+          responsive: true
+
+    - name: item_styles
+      label: Timeline Item Styles
+      type: fields-group
+      schema:
+        - name: item_bg
+          label: Item Background
+          type: background
+          popover: true
+
+        - name: item_border
+          label: Item Border
+          type: border
+          popover: true
+
+        - name: item_padding
+          label: Item Padding
+          type: dimensions
+          units: px
+          defaultUnit: px
+          value:
+            desktop:
+              top: 20
+              bottom: 20
+              left: 20
+              right: 20
+
+        - name: item_border_radius
+          label: Border Radius
+          type: dimensions
+          units: px
+          defaultUnit: px
+
+        - name: item_shadow
+          label: Box Shadow
+          type: box-shadow
+          popover: true
+
+    - name: icon_styles
+      label: Icon Styles
+      type: fields-group
+      schema:
+        - name: icon_bg
+          label: Icon Background
+          type: background
+          popover: true
+
+        - name: icon_padding
+          label: Icon Padding
+          type: slider
+          min: 0
+          max: 50
+          suffix: px
+          value: 10
+
+        - name: icon_border_radius
+          label: Icon Border Radius
+          type: slider
+          min: 0
+          max: 100
+          suffix: %
+          value: 50
+
+    - name: content_styles
+      label: Content Styles
+      type: fields-group
+      schema:
+        - name: title_color
+          label: Title Color
+          type: color
+          value: '#333333'
+
+        - name: title_font
+          label: Title Typography
+          type: typography
+          popover: true
+
+        - name: date_color
+          label: Date Color
+          type: color
+          value: '#666666'
+
+        - name: date_font
+          label: Date Typography
+          type: typography
+          popover: true
+
+        - name: description_color
+          label: Description Color
+          type: color
+          value: '#666666'
+
+        - name: description_font
+          label: Description Typography
+          type: typography
+          popover: true
+
+    - name: hover_effects
+      label: Hover Effects
+      type: fields-group
+      schema:
+        - name: enable_hover
+          label: Enable Hover Effects
+          type: switch
+          value: true
+
+        - name: hover_item_bg
+          label: Hover Item Background
+          type: background
+          popover: true
+          depends:
+            enable_hover: true
+
+        - name: hover_title_color
+          label: Hover Title Color
+          type: color
+          depends:
+            enable_hover: true
+
+        - name: hover_animation
+          label: Hover Animation
+          type: select
+          value: none
+          depends:
+            enable_hover: true
+          options:
+            none: None
+            fade: Fade
+            slide: Slide
+            scale: Scale
+
+    - name: responsive_settings
+      label: Responsive Settings
+      type: fields-group
+      schema:
+        - name: mobile_layout
+          label: Mobile Layout
+          type: select
+          value: vertical
+          options:
+            vertical: Vertical
+            horizontal: Horizontal
+
+        - name: hide_on_mobile
+          label: Hide Elements on Mobile
+          type: switch
+          value: false
+          help: Hide certain elements on mobile devices to save space
