@@ -42,6 +42,23 @@
 {{ style.css(id ~ ' .qx-timeline', 'margin', '0') }}
 {{ style.css(id ~ ' .qx-timeline', 'padding', '0') }}
 
+{# Timeline Alignment Styles #}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-content', 'text-align', 'left') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-content', 'text-align', 'center') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-content', 'text-align', 'right') }}
+
+{# Updated: Center/left/right align images using flexbox #}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-image', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-image', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-image', 'justify-content', 'flex-end') }}
+
+{{ style.css(id ~ '.qx-timeline-align-left .qx-timeline-horizontal', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-align-center .qx-timeline-horizontal', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-align-right .qx-timeline-horizontal', 'justify-content', 'flex-end') }}
+
 {# Timeline Connector #}
 {{ style.css(id ~ ' .qx-timeline-connector', 'position', 'absolute') }}
 {{ style.css(id ~ ' .qx-timeline-connector', 'background-color', connectorColor) }}
@@ -236,4 +253,4 @@
   100% { transform: translateX(0); opacity: 1; }
 }
 
-{{ style.load(id) }}
+{{ style.load(advanced.identifier.id) }}
