@@ -119,6 +119,55 @@
 {{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'left', '-60px') }}
 {{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'top', '0') }}
 
+{# Connector Position: Right Side #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical', 'padding-right', '60px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical', 'padding-left', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-item .qx-timeline-connector', 'left', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-item .qx-timeline-connector', 'right', '-46px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-marker', 'left', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-marker', 'right', '-60px') }}
+
+{# Center Connector Position: Alternate items left/right #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical', 'padding-left', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical', 'padding-right', '0') }}
+
+// Center connector placement: odd items on right edge, even on left edge
+// Odd items (left column)
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-connector', 'left', '109%') }}
+
+// Even items (right column)
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-connector', 'left', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-connector', 'transform', 'none') }}
+
+// Center marker placement
+// Odd items (left column)
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'left', '106.2%') }}
+
+// Even items (right column)
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'left', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'transform', 'none') }}
+
+// Center layout: two-column float structure
+// Set item width and box sizing
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'width', '46%') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'box-sizing', 'border-box') }}
+// Float items: odd left, even right, clear both to start new row
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd)', 'float', 'left') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even)', 'float', 'right') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'clear', 'both') }}
+
+// Alternate content alignment
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'text-align', 'right') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-content', 'text-align', 'left') }}
+
+// Align odd item images to the end (near connector)
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-image', 'justify-content', 'flex-end') }}
+
+// Center connector layout: equal columns (46% each + 6% spacing)
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'width', '46%') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'box-sizing', 'border-box') }}
+
 {# Horizontal Marker Position #}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'top', '-60px') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'left', '50%') }}

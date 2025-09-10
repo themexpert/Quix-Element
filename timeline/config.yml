@@ -92,6 +92,20 @@ form:
             solid: Solid
             dashed: Dashed
             dotted: Dotted
+            
+        - name: connector_position
+          label: Connector Position
+          type: select
+          value: left
+          depends:
+            show_connector: true
+          options:
+            left:
+              label: Left Side
+            center:
+              label: Center
+            right:
+              label: Right Side
 
   styles:
     - name: timeline_appearance

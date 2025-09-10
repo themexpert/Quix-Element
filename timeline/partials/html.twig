@@ -5,10 +5,12 @@
 {% set alignment = general.layout_settings.alignment %}
 {% set showConnector = general.layout_settings.show_connector %}
 {% set connectorStyle = general.layout_settings.connector_style %}
+{% set connectorPosition = general.layout_settings.connector_position %}
 
 {% set classes = classNames('qx-element qx-element-timeline-v2',
     'qx-timeline-' ~ layout,
     'qx-timeline-align-' ~ alignment,
+    'qx-timeline-connector-pos-' ~ connectorPosition,
     visibilityClass(visibility),
     class
 ) %}
