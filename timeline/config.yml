@@ -151,12 +151,6 @@ form:
               left: 20
               right: 20
 
-        - name: item_border_radius
-          label: Border Radius
-          type: dimensions
-          units: px
-          defaultUnit: px
-
         - name: item_shadow
           label: Box Shadow
           type: box-shadow
