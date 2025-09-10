@@ -253,4 +253,9 @@
   100% { transform: translateX(0); opacity: 1; }
 }
 
+{# Remove entry animation #}
+{{ style.css(id ~ ' .qx-timeline-item', 'opacity', '1') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'transform', 'none') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'transition', 'none') }}
+
 {{ style.load(advanced.identifier.id) }}
