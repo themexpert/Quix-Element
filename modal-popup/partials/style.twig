@@ -414,7 +414,8 @@
 
 {# Modal background color #}
 {% if modalBackground %}
-    {# Apply to modal content wrapper (the actual visible modal content) #}
+    {# Apply to modal dialog and content wrapper (the visible modal) #}
+    {{ style.background(ModalID ~ ' .qx-modal-dialog', modalBackground) }}
     {{ style.background(elementSelector, modalBackground) }}
     {{ style.background(elementSelector ~ '.classic-mode', modalBackground) }}
     {{ style.background(elementSelector ~ '.cover-mode', modalBackground) }}
