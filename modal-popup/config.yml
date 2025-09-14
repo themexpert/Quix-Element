@@ -268,16 +268,28 @@ form:
           depends:
             content_type: image
 
-        - name: image_border_radius
-          label: Border Radius
+        - name: content_radius
+          label: Radius
           type: dimensions
-          help: Set border radius for the featured content
-          depends:
-            content_type: image
+          help: Set border radius for featured content (images, videos, and maps)
+          units: px
+          defaultUnit: px
           value:
-            desktop: 0
-            tablet: 0
-            phone: 0
+            desktop:
+              top: 0
+              bottom: 0
+              left: 0
+              right: 0
+            tablet:
+              top: 0
+              bottom: 0
+              left: 0
+              right: 0
+            phone:
+              top: 0
+              bottom: 0
+              left: 0
+              right: 0
 
         - name : modal_fg_content_label
           label: General Content
@@ -286,7 +298,7 @@ form:
         - name: title
           label: Title
           type: text
-          value: Hola People
+          value: Hello Quix
 
         - name: subtitle
           label: Subtitle

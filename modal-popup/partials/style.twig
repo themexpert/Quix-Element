@@ -144,7 +144,7 @@
 {% set content_width = general.content_settings.content_width %}
 {% set content_height = general.content_settings.content_height %}
 {% set content_align = general.content_settings.content_align %}
-{% set image_border_radius = general.content_settings.image_border_radius %}
+{% set content_radius = general.content_settings.content_radius %}
 
 {# Selectors #}
 {% set modal = ModalID ~ ' .qx-modal-dialog ' %}
@@ -280,19 +280,24 @@
 {{ style.minHeight(imageSelector ~ ' img', imageMinHeight) }}
 {{ style.alignment(imageSelector, imageAlignment) }}
 
-{# Image Border Radius #}
-{% if image_border_radius %}
-  {% if general.content_settings.content_type == 'image' %}
-    {{ style.borderRadius(imageSelector ~ ' img', image_border_radius) }}
-  {% elseif general.content_settings.content_type == 'video' %}
-    {{ style.borderRadius(videoSelector ~ ' iframe', image_border_radius) }}
-    {{ style.borderRadius(videoSelector ~ ' video', image_border_radius) }}
-    {{ style.borderRadius(ModalID ~ ' .vp-video-wrapper', image_border_radius) }}
-    {{ style.borderRadius('.vp-video-wrapper', image_border_radius) }}
+{# Content Radius (Rounded Corners) #}
+{% if content_radius %}
+  {% set contentType = general.content_settings.content_type|default('image') %}
+  {% if contentType == 'image' %}
+    {{ style.borderRadius(imageSelector ~ ' img', content_radius) }}
+  {% elseif contentType == 'video' %}
+    {{ style.borderRadius(videoSelector ~ ' iframe', content_radius) }}
+    {{ style.borderRadius(videoSelector ~ ' video', content_radius) }}
+    {{ style.borderRadius(ModalID ~ ' .vp-video-wrapper', content_radius) }}
+    {{ style.borderRadius('.vp-video-wrapper', content_radius) }}
     {# Additional specificity for Vimeo #}
-    {{ style.css('.vp-video-wrapper', 'border-radius', image_border_radius.desktop ~ 'px !important') }}
-  {% elseif general.content_settings.content_type == 'map' %}
-    {{ style.borderRadius(mapSelector ~ ' iframe', image_border_radius) }}
+    {% if content_radius.desktop.top == content_radius.desktop.right and content_radius.desktop.top == content_radius.desktop.bottom and content_radius.desktop.top == content_radius.desktop.left %}
+      {{ style.css('.vp-video-wrapper', 'border-radius', content_radius.desktop.top ~ 'px') }}
+    {% else %}
+      {{ style.css('.vp-video-wrapper', 'border-radius', content_radius.desktop.top ~ 'px ' ~ content_radius.desktop.right ~ 'px ' ~ content_radius.desktop.bottom ~ 'px ' ~ content_radius.desktop.left ~ 'px') }}
+    {% endif %}
+  {% elseif contentType == 'map' %}
+    {{ style.borderRadius(mapSelector ~ ' iframe', content_radius) }}
   {% endif %}
 {% endif %}
 
