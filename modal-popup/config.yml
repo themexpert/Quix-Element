@@ -258,8 +258,7 @@ form:
           filters : image
           showstyle: true
           value: 'media/quixnxt/images/placeholder.png'
-          depends:
-            content_type: image
+          help: Used as primary image in Classic mode or background image in Cover mode
 
         - name: alt_text
           label : Alt Text

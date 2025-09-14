@@ -303,9 +303,9 @@
 
 {# Primary Content Border Radius #}
 {% if primaryContentBorderRadius %}
-{{ style.borderRadius(elementSelector, primaryContentBorderRadius) }}
-{{ style.borderRadius(elementSelector ~ '.cover-mode', primaryContentBorderRadius) }}
-{{ style.borderRadius(elementSelector ~ '.classic-mode', primaryContentBorderRadius) }}
+    {{ style.borderRadius(elementSelector, primaryContentBorderRadius) }}
+    {{ style.borderRadius(elementSelector ~ '.cover-mode', primaryContentBorderRadius) }}
+    {{ style.borderRadius(elementSelector ~ '.classic-mode', primaryContentBorderRadius) }}
 {% endif %}
 
 {# Graphics image and icon #}
@@ -429,6 +429,17 @@
     {{ style.css(elementSelector, 'transition', 'background-color 0.3s ease') }}
     {{ style.css(elementSelector ~ '.classic-mode', 'transition', 'background-color 0.3s ease') }}
     {{ style.css(elementSelector ~ '.cover-mode', 'transition', 'background-color 0.3s ease') }}
+{% endif %}
+
+{# Cover mode background image - explicitly apply the background image for cover mode #}
+{% if general.content_settings.element_mode == 'cover' and general.content_settings.image.source %}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-image', 'url(' ~ general.content_settings.image.source ~ ')') }}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-size', 'cover') }}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-position', 'center center') }}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-repeat', 'no-repeat') }}
+    {% if content_radius %}
+        {{ style.borderRadius(ModalID ~ ' .qx-element-modal_wrapper.cover-mode', content_radius) }}
+    {% endif %}
 {% endif %}
 
 {# Modal overlay background - for the entire popup backdrop when modal is open #}

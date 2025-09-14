@@ -155,7 +155,8 @@
         'qx-d-md-flex qx-flex-md-row' : modal_imagePosition == 'left',
         'qx-d-md-flex qx-flex-md-row-reverse' : modal_imagePosition == 'right',
         'qx-d-md-flex qx-flex-md-column-reverse' : modal_imagePosition == 'down',
-        'lazyload' : modal_elementMode == 'cover'
+        'lazyload' : modal_elementMode == 'cover',
+        'modal-cover-background' : modal_elementMode == 'cover'
     }) %}
 
 
@@ -256,7 +257,11 @@
 					{% if content_source != 'template' %}
 					{# Call to action Markup start #}
 					<div
-						class="{{ wrapperClassesForCallToAction }}" {% if modal_elementMode == 'cover' and modal_image_src.source %} {{ lazyBackground([], modal_image_src.source) }} {% endif %}>
+						class="{{ wrapperClassesForCallToAction }}" 
+						{% if modal_elementMode == 'cover' and modal_image_src.source %} 
+							{{ lazyBackground([], modal_image_src.source) }} 
+							style="background-image: url('{{ modal_image_src.source }}'); background-size: cover; background-position: center center; background-repeat: no-repeat;"
+						{% endif %}>
 
 						{# call-to-action image #}
 						{% if modal_elementMode == "classic" %}
@@ -389,7 +394,11 @@
 					{% if content_source != 'template' %}
 					{# Call to action Markup start #}
 					<div
-						class="{{ wrapperClassesForCallToAction }}" {% if modal_elementMode == 'cover' and modal_image_src.source %} {{ lazyBackground([], modal_image_src.source) }} {% endif %}>
+						class="{{ wrapperClassesForCallToAction }}" 
+						{% if modal_elementMode == 'cover' and modal_image_src.source %} 
+							{{ lazyBackground([], modal_image_src.source) }} 
+							style="background-image: url('{{ modal_image_src.source }}'); background-size: cover; background-position: center center; background-repeat: no-repeat;"
+						{% endif %}>
 
 						{# call-to-action image #}
 						{% if modal_elementMode == "classic" %}
