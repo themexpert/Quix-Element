@@ -1095,3 +1095,146 @@ form:
                             type: border
                             label: Border
                             popover: true
+
+        - name: close_button_style_options
+          label: Close button
+          type: fields-group
+          status: open
+          schema:
+              - name: close_button_style_label
+                label: Close Button Style
+                type: divider
+
+              - name: close_button_styling_fields_group
+                label: Close Button Basic
+                type: fields-group
+                schema:
+                    - name: close_button_bg_color
+                      label: Background Color
+                      type: color
+                      value: "#ff0000"
+                      alpha: true
+                      help: Set the background color of the close button
+
+                    - name: close_button_border_radius
+                      label: Radius
+                      type: dimensions
+                      units: px, %, em
+                      defaultUnit: px
+                      value:
+                          desktop:
+                              top: 50
+                              bottom: 50
+                              left: 50
+                              right: 50
+                          tablet:
+                              top: 50
+                              bottom: 50
+                              left: 50
+                              right: 50
+                          phone:
+                              top: 50
+                              bottom: 50
+                              left: 50
+                              right: 50
+                      help: Set the border radius to make the button rounded
+
+                    - name: close_button_padding
+                      label: Padding
+                      type: dimensions
+                      units: px, em, rem
+                      defaultUnit: px
+                      value:
+                          desktop:
+                              top: 8
+                              bottom: 8
+                              left: 8
+                              right: 8
+                          tablet:
+                              top: 8
+                              bottom: 8
+                              left: 8
+                              right: 8
+                          phone:
+                              top: 6
+                              bottom: 6
+                              left: 6
+                              right: 6
+                      help: Set the padding inside the close button
+
+                    - name: close_button_icon_color
+                      label: Icon Color
+                      type: color
+                      value: "#ffffff"
+                      alpha: true
+                      help: Set the color of the close (X) icon
+
+                    - name: close_button_icon_size
+                      label: Icon Size
+                      type: slider
+                      min: 8
+                      max: 50
+                      suffix: px
+                      responsive: true
+                      value:
+                          desktop: 14
+                          tablet: 14
+                          phone: 12
+                      help: Set the size of the close (X) icon
+
+                    - name: close_button_border_width
+                      label: Border Width
+                      type: slider
+                      min: 0
+                      max: 10
+                      suffix: px
+                      responsive: true
+                      value:
+                          desktop: 0
+                          tablet: 0
+                          phone: 0
+                      help: Set the width of the border for the close button
+
+                    - name: close_button_border_style
+                      label: Border Style
+                      type: select
+                      value: solid
+                      options:
+                          none: None
+                          solid: Solid
+                          dashed: Dashed
+                          dotted: Dotted
+                          double: Double
+                      help: Set the style of the border
+
+                    - name: close_button_border_color
+                      label: Border Color
+                      type: color
+                      value: "#000000"
+                      alpha: true
+                      help: Set the color of the border for the close button
+
+              - name: close_button_hover_fields_group
+                label: Close Button Hover Effects
+                type: fields-group
+                schema:
+                    - name: close_button_hover_bg_color
+                      label: Hover Background Color
+                      type: color
+                      value: "rgba(255, 0, 0, 0.8)"
+                      alpha: true
+                      help: Background color when hovering over the close button
+
+                    - name: close_button_hover_icon_color
+                      label: Hover Icon Color
+                      type: color
+                      value: "#ffffff"
+                      alpha: true
+                      help: Icon color when hovering over the close button
+
+                    - name: close_button_hover_border_color
+                      label: Hover Border Color
+                      type: color
+                      value: "#000000"
+                      alpha: true
+                      help: Border color when hovering over the close button

@@ -460,12 +460,55 @@
 {{ style.css(ModalID ~ ' .qx-inner', 'outline', 'none') }}
 
 {# Close Button Styles #}
-{{ style.css('[class*=qx-modal-close-]', 'background', 'red') }}
-{{ style.css('[class*=qx-modal-close-]', 'border-radius', '100%') }}
-{{ style.css('[class*=qx-modal-close-]:hover', 'background', 'rgba(255, 0, 0, 0.7)') }}
-{{ style.css('[class*=qx-modal-close-]:hover', 'background', 'rgba(255, 0, 0, 1)') }}
-{{ style.css('[class*=qx-modal-close-]:hover', 'color', '#fff') }}
-{{ style.css('[class*=qx-modal-close-]', 'color', '#fff') }}
+{% set closeBtnBgColor = styles.close_button_style_options.close_button_styling_fields_group.close_button_bg_color %}
+{% set closeBtnBorderRadius = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_radius %}
+{% set closeBtnPadding = styles.close_button_style_options.close_button_styling_fields_group.close_button_padding %}
+{% set closeBtnIconColor = styles.close_button_style_options.close_button_styling_fields_group.close_button_icon_color %}
+{% set closeBtnIconSize = styles.close_button_style_options.close_button_styling_fields_group.close_button_icon_size %}
+{% set closeBtnBorderWidth = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_width %}
+{% set closeBtnBorderStyle = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_style %}
+{% set closeBtnBorderColor = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_color %}
+{% set closeBtnHoverBgColor = styles.close_button_style_options.close_button_hover_fields_group.close_button_hover_bg_color %}
+{% set closeBtnHoverIconColor = styles.close_button_style_options.close_button_hover_fields_group.close_button_hover_icon_color %}
+{% set closeBtnHoverBorderColor = styles.close_button_style_options.close_button_hover_fields_group.close_button_hover_border_color %}
+
+{# Scoped Close Button Selectors - Using Modal ID for specificity #}
+{# Include both normal modal and builder preview selectors #}
+{% set closeBtnSelector = ModalID ~ ' .qx-modal-close-default, ' ~ ModalID ~ ' .qx-modal-close-outside, ' ~ id ~ '-modal.border .qx-modal-close-default, ' ~ id ~ '-modal.border .qx-modal-close-outside' %}
+{% set closeBtnSvgSelector = ModalID ~ ' .qx-modal-close-default svg, ' ~ ModalID ~ ' .qx-modal-close-outside svg, ' ~ id ~ '-modal.border .qx-modal-close-default svg, ' ~ id ~ '-modal.border .qx-modal-close-outside svg' %}
+{% set closeBtnSvgLineSelector = ModalID ~ ' .qx-modal-close-default svg line, ' ~ ModalID ~ ' .qx-modal-close-outside svg line, ' ~ id ~ '-modal.border .qx-modal-close-default svg line, ' ~ id ~ '-modal.border .qx-modal-close-outside svg line' %}
+{% set closeBtnHoverSelector = ModalID ~ ' .qx-modal-close-default:hover, ' ~ ModalID ~ ' .qx-modal-close-outside:hover, ' ~ id ~ '-modal.border .qx-modal-close-default:hover, ' ~ id ~ '-modal.border .qx-modal-close-outside:hover' %}
+{% set closeBtnHoverSvgSelector = ModalID ~ ' .qx-modal-close-default:hover svg line, ' ~ ModalID ~ ' .qx-modal-close-outside:hover svg line, ' ~ id ~ '-modal.border .qx-modal-close-default:hover svg line, ' ~ id ~ '-modal.border .qx-modal-close-outside:hover svg line' %}
+
+{# Apply Close Button Styles with high specificity #}
+{{ style.css(closeBtnSelector, 'background', closeBtnBgColor|default('#ff0000') ~ '') }}
+{{ style.css(closeBtnSelector, 'background-color', closeBtnBgColor|default('#ff0000') ~ '') }}
+{{ style.borderRadius(closeBtnSelector, closeBtnBorderRadius) }}
+{{ style.padding(closeBtnSelector, closeBtnPadding) }}
+
+{# Apply border styles using separate controls #}
+{{ style.responsiveCss(closeBtnSelector, closeBtnBorderWidth, 'border-width', 'px') }}
+{{ style.css(closeBtnSelector, 'border-style', closeBtnBorderStyle|default('solid')) }}
+{{ style.css(closeBtnSelector, 'border-color', closeBtnBorderColor|default('#000000')) }}
+
+{# Add smooth transition for all border properties #}
+{{ style.css(closeBtnSelector, 'transition', 'border-color 0.3s ease, border-width 0.3s ease, background-color 0.3s ease') }}
+
+{# Target SVG icon color and size #}
+{{ style.css(closeBtnSvgLineSelector, 'stroke', closeBtnIconColor|default('#ffffff') ~ '') }}
+{{ style.responsiveCss(closeBtnSvgSelector, closeBtnIconSize, 'width', 'px') }}
+{{ style.responsiveCss(closeBtnSvgSelector, closeBtnIconSize, 'height', 'px') }}
+
+{# Close Button Hover Styles #}
+{{ style.css(closeBtnHoverSelector, 'background', closeBtnHoverBgColor|default('rgba(255, 0, 0, 0.8)') ~ '') }}
+{{ style.css(closeBtnHoverSelector, 'background-color', closeBtnHoverBgColor|default('rgba(255, 0, 0, 0.8)') ~ '') }}
+
+{# Apply hover border color only if hover color is different from normal border color #}
+{% if closeBtnHoverBorderColor %}
+    {{ style.css(closeBtnHoverSelector, 'border-color', closeBtnHoverBorderColor) }}
+{% endif %}
+
+{{ style.css(closeBtnHoverSvgSelector, 'stroke', closeBtnHoverIconColor|default('#ffffff') ~ '') }}
 
 {# Shared Message Styles for Delay and Auto Close #}
 {% set messageSelector = ModalID ~ ' .qx-modal-delay-message, ' ~ ModalID ~ ' .qx-modal-auto-close-message' %}
