@@ -236,7 +236,7 @@
 		{% endif %}
 
 
-		{% if mode == 'builder' and enableModalPreview == false %}
+		{% if mode == 'builder' and enableModalPreview == true %}
 			<div id="{{id}}-modal" class="border mt-2">
 				<div class="modal-preview-for-builder">
 					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close{% if enable_close_delay or enable_auto_close %} id="{{id}}-close-btn" style="display: none;"{% endif %}></button>

@@ -27,7 +27,7 @@ form:
                     content_source: template
 
               - name: enable_preview
-                label: Disable Modal Preview
+                label: Enable Modal Preview
                 help: For builder preview only.
                 type: switch
                 value: false
