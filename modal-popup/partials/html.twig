@@ -271,9 +271,9 @@
 										{% if modal_image_src.type == "svg" %}
 											{{ icon(modal_image_src.source) }}
 										{% elseif modal_image_src.type == "image" %}
-											{{ image( modal_image_src.source, modal_image_altText, '', '', modal_image_src) | link(modal_link) }}
+											{{ image( modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
 										{% else %}
-											{{ image(modal_image_src.source, modal_image_altText, '', '', modal_image_src) | link(modal_link) }}
+											{{ image(modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
 										{% endif %}
 									</figure>
 								{% endif %}
@@ -408,9 +408,9 @@
 										{% if modal_image_src.type == "svg" %}
 											{{ icon(modal_image_src.source) }}
 										{% elseif modal_image_src.type == "image" %}
-											{{ image( modal_image_src.source, modal_image_altText, '', '', modal_image_src) | link(modal_link) }}
+											{{ image( modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
 										{% else %}
-											{{ image(modal_image_src.source, modal_image_altText, '', '', modal_image_src) | link(modal_link) }}
+											{{ image(modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
 										{% endif %}
 									</figure>
 								{% endif %}
