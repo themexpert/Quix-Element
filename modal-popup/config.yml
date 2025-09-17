@@ -1,6 +1,8 @@
 name: Modal Popup
 slug: modal-popup
-groups: general
+groups:
+    - advance
+    - pro
 helpId: 5d1fef7e2c7d3a5cd38ec1cd
 form:
     general:
