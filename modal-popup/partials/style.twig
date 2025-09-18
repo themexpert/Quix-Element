@@ -442,7 +442,7 @@
 
 {# Modal overlay background - for the entire popup backdrop when modal is open #}
 {% if modalOverlayBackground and modalOverlayBackground != '' %}
-    {{ style.css('.qx-modal', 'background', modalOverlayBackground ~ '') }}
+    {{ style.css(ModalID, 'background', modalOverlayBackground) }}
 {% endif %}
 
 {# Modal border styling #}
