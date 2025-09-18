@@ -944,7 +944,7 @@ form:
                         right: 25
 
         - name: button_style_options
-          label: Button Options
+          label: Main Modal Button Options
           type: fields-group
           status: open
           schema:
@@ -1038,7 +1038,7 @@ form:
                     phone: 5
 
         - name: trigger_image_style_options
-          label: Image Options
+          label: Trigger Image Options
           type: fields-group
           status: open
           depends:
@@ -1079,7 +1079,7 @@ form:
                             popover: true
 
         - name: close_button_style_options
-          label: Close button
+          label: Modal Close Button
           type: fields-group
           status: open
           schema:
