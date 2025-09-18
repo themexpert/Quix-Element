@@ -13,7 +13,7 @@
 {% set nalignment = styles.button_style_options.button_spacing_fields_group.nalignment %}
 {% set btnPadding = styles.button_style_options.button_spacing_fields_group.btn_padding %}
 {% set iconSpacing = prepareResponsiveValue(styles.button_style_options.icon_spacing) %}
-{% set btnBorder = styles.button_style_options.button_spacing_fields_group.button_border %}
+{% set btnBorder = styles.button_style_options.button_spacing_fields_group.button_border_group.btn_border %}
 
 {# Background > .qx-btn #}
 {{ style.background (id ~ ' .qx-btn', btnBackground) }}
@@ -365,7 +365,12 @@
 {{ style.css(buttonSelector ~ ' *', 'color', buttonTextColor) }}
 {{ style.css(buttonSelector ~ ' *:hover', 'color', buttonHoverTextColor) }}
 {{ style.background(buttonSelector ~ ' .qx-btn', buttonBG) }}
-{{ style.border(buttonSelector ~ ' *', buttonBorder) }}
+{# Apply border to the actual button element for visible borders #}
+{{ style.border(buttonSelector ~ ' .qx-btn', buttonBorder) }}
+{# If border radius is part of the border config, apply it here #}
+{% if buttonBorder.radius is defined %}
+    {{ style.borderRadius(buttonSelector ~ ' .qx-btn', buttonBorder.radius) }}
+{% endif %}
 {{ style.typography(buttonSelector ~ ' *' , buttonFont) }}
 {{ style.padding(buttonSelector ~ ' a ', buttonPadding) }}
 
@@ -447,7 +452,8 @@
 
 {# Modal border styling #}
 {{ style.border(ModalID ~ ' .qx-modal-dialog', modalBorder) }}
-{{ style.border('#' ~ id ~ '-modal .modal-preview-for-builder .qx-modal-dialog', modalBorder) }}
+{# Builder preview: apply border to preview wrapper with class 'border' #}
+{{ style.border(ModalID ~ ' .modal-preview-for-builder', modalBorder) }}
 
 {# Template content CSS overrides - Target template content directly in modal #}
 {# When content_source is 'template', override unwanted .qx-inner and builder CSS #}

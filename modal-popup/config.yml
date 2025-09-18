@@ -731,24 +731,6 @@ form:
                       suffix: px
                       responsive: true
 
-                    - name: image_alignment
-                      label: Alignment
-                      type: choose
-                      options:
-                          left:
-                              label: Left
-                              icon: qxuicon-align-left
-                          center:
-                              label: Center
-                              icon: qxuicon-align-center
-                          right:
-                              label: Right
-                              icon: qxuicon-align-right
-                      value:
-                          desktop: center
-                          tablet: center
-                          phone: center
-
                     - name: primary_content_border_radius
                       label: Border Radius
                       type: dimensions
@@ -808,11 +790,11 @@ form:
                         icon: qxuicon-align-right
 
               - name: graphics_vertical_position
-                label: Vertical Position
+                label: Vertical Alignment
                 type: choose
                 value: top
                 responsive: false
-                help: Position content image relative to other content elements
+                help: Align content image vertically within the modal content
                 options:
                     top:
                         label: Top
