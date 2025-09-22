@@ -33,26 +33,15 @@
             <div class="qx-timeline-wrapper">
                 {% if layout == 'vertical' %}
                     <div class="qx-timeline qx-timeline-vertical">
+                        {% if showConnector %}
+                            <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                        {% endif %}
                         {% for item in timelineItems %}
                             <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
-                                {% if showConnector %}
-                                    <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
-                                {% endif %}
                                 <div class="qx-timeline-marker">
-                                    {% if item.icon.source %}
-                                        {% if item.icon.type == "svg" %}
-                                            {{ icon(item.icon.source) }}
-                                        {% else %}
-                                            <img src="{{ imageUrl(item.icon.source) }}" alt="Timeline icon" />
-                                        {% endif %}
-                                    {% else %}
-                                        <div class="qx-timeline-dot"></div>
-                                    {% endif %}
+                                    <div class="qx-timeline-dot"></div>
                                 </div>
 
-                                {% if item.icon.type == "svg" %}
-                                    {{ addIconStyle('#' ~ id ~ ' .qx-timeline-marker', item.icon) }}
-                                {% endif %}
 
                                 <div class="qx-timeline-content">
                                     {% if item.date %}
@@ -86,26 +75,14 @@
                     </div>
                 {% else %}
                     <div class="qx-timeline qx-timeline-horizontal">
+                        {% if showConnector %}
+                            <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                        {% endif %}
                         {% for item in timelineItems %}
                             <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
-                                {% if showConnector %}
-                                    <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
-                                {% endif %}
                                 <div class="qx-timeline-marker">
-                                    {% if item.icon.source %}
-                                        {% if item.icon.type == "svg" %}
-                                            {{ icon(item.icon.source) }}
-                                        {% else %}
-                                            <img src="{{ imageUrl(item.icon.source) }}" alt="Timeline icon" />
-                                        {% endif %}
-                                    {% else %}
-                                        <div class="qx-timeline-dot"></div>
-                                    {% endif %}
+                                    <div class="qx-timeline-dot"></div>
                                 </div>
-
-                                {% if item.icon.type == "svg" %}
-                                    {{ addIconStyle('#' ~ id ~ ' .qx-timeline-marker', item.icon) }}
-                                {% endif %}
 
                                 <div class="qx-timeline-content">
                                     {% if item.date %}
