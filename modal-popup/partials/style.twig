@@ -1,0 +1,542 @@
+{% include 'global.twig' %}
+
+{% set id = '#' ~ advanced.identifier.id %}
+{% set imgSelector = id ~ ' .qx-element-button-wrapper' %}
+{% set iconSpacingLeft = id ~ ' .iconSpacing-left i,' ~ id ~ ' .iconSpacing-left svg' %}
+{% set iconSpacingRight = id ~ ' .iconSpacing-right i,' ~ id ~ ' .iconSpacing-right svg' %}
+{% set btnBackground = styles.button_style_options.button_spacing_fields_group.button_bg_fields_group.btn_background %}
+{% set textColor = styles.button_style_options.button_color_fields_group.text_color %}
+{% set hoverTextColor = styles.button_style_options.button_color_fields_group.hover_text_color %}
+{% set hoverTextColor = styles.button_style_options.button_color_fields_group.hover_text_color %}
+{% set hoverIconColor = styles.button_style_options.button_color_fields_group.hover_icon_color %}
+{% set font = styles.button_style_options.button_typo_fields_group.font %}
+{% set nalignment = styles.button_style_options.button_spacing_fields_group.nalignment %}
+{% set btnPadding = styles.button_style_options.button_spacing_fields_group.btn_padding %}
+{% set iconSpacing = prepareResponsiveValue(styles.button_style_options.icon_spacing) %}
+{% set btnBorder = styles.button_style_options.button_spacing_fields_group.button_border_group.btn_border %}
+
+{# Background > .qx-btn #}
+{{ style.background (id ~ ' .qx-btn', btnBackground) }}
+
+{# Text Color #}
+{{ style.css( id ~ ' .qx-btn', 'color', textColor) }}
+
+{# Hover Text color #}
+{{ style.css( id ~ ' .qx-btn:hover', 'color', hoverTextColor) }}
+{{ style.css( id ~ ' .qx-btn:hover i', 'color', hoverIconColor) }}
+
+{# Typography #}
+{{ style.typography(id ~ ' *', font) }}
+
+{# Alignment #}
+{{ style.alignment(id, nalignment) }}
+
+{# padding #}
+{{ style.padding(id ~ ' .qx-btn', btnPadding) }}
+
+{# Spacing #}
+{{ style.responsiveCss(iconSpacingLeft, iconSpacing, 'margin-right', iconSpacing.unit) }}
+{{ style.phone(iconSpacingLeft, 'margin-right:' ~ iconSpacing.phone ~ iconSpacing.unit) }}
+{{ style.responsiveCss(iconSpacingRight, iconSpacing, 'margin-left', iconSpacing.unit) }}
+{{ style.phone(iconSpacingRight, 'margin-left:' ~ iconSpacing.phone ~ iconSpacing.unit) }}
+
+{# Border #}
+{{ style.border(id ~ " .qx-btn", btnBorder) }}
+
+{# Trigger Image Styling Start #}
+{% set triggerImageAlignment = general.modal_trigger_options.trigger_image_alignment %}
+{% set triggerImageWidth = styles.trigger_image_style_options.trigger_image_spacing_fields_group.trigger_image_width %}
+{% set triggerImagePadding = styles.trigger_image_style_options.trigger_image_spacing_fields_group.trigger_image_padding %}
+{% set triggerImageBorder = styles.trigger_image_style_options.trigger_image_spacing_fields_group.trigger_image_border_group.trigger_image_border %}
+{% set triggerImageBorderRadius = styles.trigger_image_style_options.trigger_image_spacing_fields_group.trigger_image_border_radius %}
+
+{# Trigger Image Alignment #}
+{{ style.alignment(id ~ ' .qx-element-trigger-image', triggerImageAlignment) }}
+
+{# Make the container only as wide as the image #}
+{{ style.css(id ~ ' .qx-element-trigger-image', 'display', 'inline-block') }}
+{{ style.css(id ~ ' .qx-element-trigger-image', 'max-width', '100%') }}
+
+{# Trigger Image Width #}
+{{ style.responsiveCss(id ~ ' .qx-element-trigger-image img', triggerImageWidth, 'width', triggerImageWidth.unit) }}
+{{ style.responsiveCss(id ~ ' .qx-element-trigger-image img', triggerImageWidth, 'max-width', triggerImageWidth.unit) }}
+{{ style.css(id ~ ' .qx-element-trigger-image img', 'display', 'block') }}
+
+{# Trigger Image Padding #}
+{{ style.padding(id ~ ' .qx-element-trigger-image', triggerImagePadding) }}
+
+{# Trigger Image Border #}
+{{ style.border(id ~ ' .qx-element-trigger-image img', triggerImageBorder) }}
+
+{# Trigger Image Border Radius #}
+{{ style.responsiveCss(id ~ ' .qx-element-trigger-image img', triggerImageBorderRadius, 'border-radius', triggerImageBorderRadius.unit) }}
+
+{# Trigger Image Hover Effect #}
+{{ style.css(id ~ ' .qx-element-trigger-image:hover img', 'opacity', '0.8') }}
+{{ style.css(id ~ ' .qx-element-trigger-image:hover img', 'transition', 'opacity 0.3s ease') }}
+{# Trigger Image Styling End #}
+
+{# Modal Start #}
+
+{% set ModalID = id ~ '-modal' %}
+{# Cover Mode #}
+{% set modalBackground = styles.modal_fg_element_style.modal_background %}
+
+{# Element style #}
+{% set modalOverlayBackground = styles.modal_fg_element_style.modal_overlay_background|default('') %}
+{% set modalBorder = styles.modal_fg_element_style.modal_border_group.modal_border %}
+{% set height = styles.modal_fg_element_style.height %}
+{% set elementMinHeight = styles.modal_fg_element_style.element_min_height %}
+{% set elementWidth = styles.modal_fg_element_style.element_width %}
+{% set elementAlignment = styles.modal_fg_element_style.element_alignment %}
+{% set elementPadding = styles.modal_fg_element_style.element_padding %}
+
+{# Image #}
+{% set imageWidthDesktop = styles.modal_fg_element_style.modal_image_style.image_width.desktop %}
+{% set imageMinHeight = styles.modal_fg_element_style.modal_image_style.image_min_height %}
+{% set imageWidth = styles.modal_fg_element_style.modal_image_style.image_width %}
+{% set imageAlignment = styles.modal_fg_element_style.modal_image_style.image_alignment %}
+
+{# Graphics image and icon #}
+{% set graphicsWidth = styles.modal_fg_element_style.graphics_width %}
+{% set graphicsHeight = styles.modal_fg_element_style.graphics_height %}
+{% set graphicsObjectFit = styles.modal_fg_element_style.graphics_object_fit %}
+{% set graphicsHorizontalAlignment = styles.modal_fg_element_style.graphics_horizontal_alignment %}
+{% set graphicsVerticalPosition = styles.modal_fg_element_style.graphics_vertical_position %}
+{% set graphicsBorderRadius = styles.modal_fg_element_style.graphics_border_radius %}
+{% set graphicsSpacing = styles.modal_fg_element_style.graphics_spacing %}
+
+{# Primary Content Border Radius #}
+{% set primaryContentBorderRadius = styles.modal_fg_element_style.modal_image_style.primary_content_border_radius %}
+
+{# Title Style #}
+{% set titleColor = styles.modal_fg_element_style.title_color %}
+{% set titleHoverColor = styles.modal_fg_element_style.title_hover_color %}
+{% set titleSpacing = styles.modal_fg_element_style.title_spacing %}
+{% set titleFont = styles.modal_fg_element_style.title_font %}
+
+{# Subtitle Style #}
+{% set subtitleColor = styles.modal_fg_element_style.subtitle_color %}
+{% set subtitleHoverColor = styles.modal_fg_element_style.subtitle_hover_color %}
+{% set subtitleSpacing = styles.modal_fg_element_style.subtitle_spacing %}
+{% set subtitleFont = styles.modal_fg_element_style.subtitle_font %}
+
+{# Description Style #}
+{% set descriptionColor = styles.modal_fg_element_style.description_color %}
+{% set descriptionHoverColor = styles.modal_fg_element_style.description_hover_color %}
+{% set descriptionSpacing = styles.modal_fg_element_style.description_spacing %}
+{% set descriptionFont = styles.modal_fg_element_style.description_font %}
+
+{# Button #}
+{% set buttonTextColor = styles.modal_fg_element_style.button_text_color %}
+{% set buttonHoverTextColor = styles.modal_fg_element_style.button_hover_text_color %}
+{% set buttonBG = styles.modal_fg_element_style.button_bg %}
+{% set buttonBorder = styles.modal_fg_element_style.button_border_new %}
+{% set buttonFont = styles.modal_fg_element_style.button_font %}
+{% set buttonPadding = styles.modal_fg_element_style.button_padding %}
+
+{# Modal Positioning #}
+{% set modal_position_type = general.modal_trigger_options.modal_position_type %}
+{% set modal_horizontal_align = general.modal_trigger_options.modal_horizontal_align %}
+{% set modal_vertical_align = general.modal_trigger_options.modal_vertical_align %}
+
+{# Content Sizing #}
+{% set content_width = general.content_settings.content_width %}
+{% set content_height = general.content_settings.content_height %}
+{% set content_align = general.content_settings.content_align %}
+{% set content_radius = general.content_settings.content_radius %}
+
+{# Selectors #}
+{% set modal = ModalID ~ ' .qx-modal-dialog ' %}
+{# This is imoirtant if we want to make width preview on builder... #} 
+{#{% set modal = ModalID ~ ' .qx-modal-dialog ,' ~ ModalID ~ ' .modal-preview-for-builder ' %} #} 
+{% set coverMode = ModalID ~ ' .qx-element-modal_wrapper.cover-mode ' %}
+{% set classicMode = ModalID ~ ' .qx-element-modal_wrapper.classic-mode ' %}
+{% set elementSelector = ModalID ~ ' .qx-element-modal_wrapper' %}
+{% set coverMode = ModalID ~ ' .qx-element-modal_wrapper.cover-mode ' %}
+{% set contentSelector = ModalID ~ ' .qx-element-modal_content' %}
+{% set flexSelector = ModalID ~ ' .qx-element-modal_image,' ~ ModalID ~ '.qx-element-modal_content ' %}
+{% set imageSelector = ModalID ~ ' .qx-element-modal_image' %}
+{% set graphicsSelector = ModalID ~ ' .qx-element-modal_graphics' %}
+{% set titleSelector = ModalID ~ ' .qx-element-modal_title' %}
+{% set subtitleSelector = ModalID ~ ' .qx-element-modal_subtitle' %}
+{% set descriptionSelector = ModalID ~ ' .qx-element-modal_description' %}
+{% set buttonSelector = ModalID ~ ' .qx-element-modal_button' %}
+
+
+{% set videoSelector = ModalID ~ ' .qx-element-modal_video' %}
+{{ style.css(videoSelector, 'display', 'block') }}
+{{ style.css(videoSelector, 'width', '100%') }}
+{{ style.css(videoSelector ~ ' iframe', 'display', 'block') }}
+{{ style.css(videoSelector ~ ' iframe', 'min-height', '250px') }}
+
+{# Apply custom content sizing if set #}
+{% if content_width and content_width != 500 %}
+    {{ style.css(videoSelector ~ ' iframe', 'width', content_width ~ 'px') }}
+{% else %}
+    {{ style.css(videoSelector ~ ' iframe', 'width', '100%') }}
+    {{ style.width(videoSelector ~ ' iframe', imageWidth) }}
+{% endif %}
+
+{% if content_height and content_height != 300 %}
+    {{ style.css(videoSelector ~ ' iframe', 'height', content_height ~ 'px') }}
+    {{ style.css(videoSelector ~ ' iframe', 'aspect-ratio', 'unset') }}
+{% else %}
+    {{ style.css(videoSelector ~ ' iframe', 'height', '100%') }}
+{% endif %}
+
+{# Always apply minimum height from Primary Content settings if set #}
+{% if imageMinHeight %}
+    {{ style.minHeight(videoSelector ~ ' iframe', imageMinHeight) }}
+{% endif %}
+
+{% if content_align %}
+    {{ style.alignment(videoSelector, content_align) }}
+{% else %}
+    {{ style.alignment(videoSelector, imageAlignment) }}
+{% endif %}
+
+
+{% set mapSelector = ModalID ~ ' .qx-element-modal_map' %}
+{{ style.css(mapSelector, 'display', 'block') }}
+{{ style.css(mapSelector, 'width', '100%') }}
+{{ style.css(mapSelector ~ ' iframe', 'display', 'block') }}
+
+
+{# Apply custom content sizing if set #}
+{% if content_width and content_width != 500 %}
+    {{ style.css(mapSelector ~ ' iframe', 'width', content_width ~ 'px') }}
+{% else %}
+    {{ style.css(mapSelector ~ ' iframe', 'width', '100%') }}
+    {{ style.width(mapSelector ~ ' iframe', imageWidth) }}
+{% endif %}
+
+{% if content_height and content_height != 300 %}
+    {{ style.css(mapSelector ~ ' iframe', 'height', content_height ~ 'px') }}
+{% else %}
+    {{ style.css(mapSelector ~ ' iframe', 'height', '100%') }}
+{% endif %}
+
+{# Always apply minimum height from Primary Content settings if set #}
+{% if imageMinHeight %}
+    {{ style.minHeight(mapSelector ~ ' iframe', imageMinHeight) }}
+{% endif %}
+
+{% if content_align %}
+    {{ style.alignment(mapSelector, content_align) }}
+{% else %}
+    {{ style.alignment(mapSelector, imageAlignment) }}
+{% endif %}
+
+{# Image content sizing #}
+{% if content_width and content_width != 500 %}
+    {{ style.css(imageSelector ~ ' img', 'width', content_width ~ 'px') }}
+{% endif %}
+
+{% if content_height %}
+    {{ style.css(imageSelector ~ ' img', 'height', content_height ~ 'px') }}
+    {{ style.css(imageSelector ~ ' img', 'object-fit', 'cover') }}
+{% endif %}
+
+{% if content_align %}
+    {{ style.alignment(imageSelector, content_align) }}
+{% endif %}
+
+
+{# Element style #}
+{% set heightType = height %}
+{% if heightType == 'custom' %}
+  {{ style.minHeight(modal, elementMinHeight) }}
+  {{ style.minHeight(elementSelector, elementMinHeight) }}
+  {{ style.minHeight(contentSelector, elementMinHeight) }}
+{% endif %}
+{{ style.width(modal, elementWidth)}}
+
+{{ style.alignment(contentSelector, elementAlignment) }}
+{{ style.css(contentSelector , 'width', '100%') }}
+{#{{ style.css(contentSelector , 'padding', '0px') }}#}
+{#{{ style.css( id ~ ' .cover-mode .qx-element-modal_content' , 'padding', '100px ') }}#}
+{{ style.padding(classicMode ~ ' .qx-element-modal_content', elementPadding) }}
+{{ style.padding(coverMode ~ ' .qx-element-modal_content', elementPadding) }}
+{{ style.css(coverMode ~ ' .qx-element-modal_content', 'width', '100%') }}
+
+
+{# Image #}
+{% set minWidth = imageWidthDesktop %}
+{% if not minWidth %}
+  {{ style.css(flexSelector , 'min-width', '50%' ) }}
+{% else %}
+  {{ style.css(flexSelector , 'width', '100%' ) }}
+{% endif %}
+
+{{ style.css(flexSelector, 'margin-bottom', '0' ) }}
+{{ style.css(imageSelector , 'display', 'block') }}
+{{ style.css(imageSelector , 'width', '100%') }}
+{{ style.css(imageSelector ~ ' img' , 'min-height', '100%') }}
+{{ style.css(imageSelector ~ ' img' , 'object-fit', 'cover') }}
+{{ style.responsiveCss(imageSelector ~ ' img', imageWidth, 'width', imageWidth.unit) }}
+{{ style.minHeight(imageSelector ~ ' img', imageMinHeight) }}
+{{ style.alignment(imageSelector, imageAlignment) }}
+
+{# Content Radius (Rounded Corners) #}
+{% if content_radius %}
+  {% set contentType = general.content_settings.content_type|default('image') %}
+  {% if contentType == 'image' %}
+    {{ style.borderRadius(imageSelector ~ ' img', content_radius) }}
+  {% elseif contentType == 'video' %}
+    {{ style.borderRadius(videoSelector ~ ' iframe', content_radius) }}
+    {{ style.borderRadius(videoSelector ~ ' video', content_radius) }}
+    {{ style.borderRadius(ModalID ~ ' .vp-video-wrapper', content_radius) }}
+    {{ style.borderRadius('.vp-video-wrapper', content_radius) }}
+    {# Additional specificity for Vimeo #}
+    {% if content_radius.desktop.top == content_radius.desktop.right and content_radius.desktop.top == content_radius.desktop.bottom and content_radius.desktop.top == content_radius.desktop.left %}
+      {{ style.css('.vp-video-wrapper', 'border-radius', content_radius.desktop.top ~ 'px') }}
+    {% else %}
+      {{ style.css('.vp-video-wrapper', 'border-radius', content_radius.desktop.top ~ 'px ' ~ content_radius.desktop.right ~ 'px ' ~ content_radius.desktop.bottom ~ 'px ' ~ content_radius.desktop.left ~ 'px') }}
+    {% endif %}
+  {% elseif contentType == 'map' %}
+    {{ style.borderRadius(mapSelector ~ ' iframe', content_radius) }}
+  {% endif %}
+{% endif %}
+
+{# Primary Content Border Radius #}
+{% if primaryContentBorderRadius %}
+    {{ style.borderRadius(elementSelector, primaryContentBorderRadius) }}
+    {{ style.borderRadius(elementSelector ~ '.cover-mode', primaryContentBorderRadius) }}
+    {{ style.borderRadius(elementSelector ~ '.classic-mode', primaryContentBorderRadius) }}
+{% endif %}
+
+{# Graphics image and icon #}
+{{ style.responsiveCss(graphicsSelector ~ ' *', graphicsWidth, 'width', graphicsWidth.unit) }}
+{{ style.responsiveCss(graphicsSelector ~ ' *', graphicsWidth, 'max-width', graphicsWidth.unit) }}
+{{ style.responsiveCss(graphicsSelector ~ ' *', graphicsHeight, 'height', graphicsHeight.unit) }}
+{{ style.css(graphicsSelector ~ ' img', 'object-fit', graphicsObjectFit) }}
+{{ style.borderRadius(graphicsSelector ~ ' *', graphicsBorderRadius) }}
+{{ style.responsiveCss(graphicsSelector, graphicsSpacing, 'margin-bottom', 'px') }}
+
+{# Graphics alignment #}
+{# Base container setup #}
+{{ style.css(graphicsSelector, 'width', '100%') }}
+{{ style.css(graphicsSelector, 'display', 'block') }}
+
+{# Left alignment - default behavior #}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-left img', 'margin-left', '0') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-left img', 'margin-right', 'auto') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-left svg', 'margin-left', '0') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-left svg', 'margin-right', 'auto') }}
+
+{# Center alignment #}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-center img', 'margin-left', 'auto') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-center img', 'margin-right', 'auto') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-center svg', 'margin-left', 'auto') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-center svg', 'margin-right', 'auto') }}
+
+{# Right alignment #}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-right img', 'margin-left', 'auto') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-right img', 'margin-right', '0') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-right svg', 'margin-left', 'auto') }}
+{{ style.css(graphicsSelector ~ '.qx-graphics-align-right svg', 'margin-right', '0') }}
+
+{# Ensure images are display block for margin alignment to work #}
+{{ style.css(graphicsSelector ~ ' img', 'display', 'block') }}
+{{ style.css(graphicsSelector ~ ' svg', 'display', 'block') }}
+{{ style.css(graphicsSelector ~ ' img', 'max-width', '100%') }}
+{{ style.css(graphicsSelector ~ ' svg', 'max-width', '100%') }}
+
+{# Title Style #}
+{{ style.css(titleSelector ~ ' *', 'color', titleColor) }}
+{{ style.css(elementSelector ~ ':hover .qx-element-modal_title *', 'color', titleHoverColor) }}
+{{ style.responsiveCss(titleSelector ~ ' *', titleSpacing, 'margin-bottom', 'px') }}
+{{ style.typography(titleSelector ~ ' *', titleFont) }}
+
+{# Subtitle Style #}
+{{ style.css(subtitleSelector ~ ' *', 'color', subtitleColor) }}
+{{ style.css(elementSelector ~ ':hover .qx-element-modal_subtitle *', 'color', subtitleHoverColor) }}
+{{ style.responsiveCss(subtitleSelector ~ ' *' , subtitleSpacing, 'margin-bottom', 'px') }}
+{{ style.typography(subtitleSelector ~ ' *', subtitleFont) }}
+
+{# Description Style #}
+{{ style.css(descriptionSelector, 'color', descriptionColor) }}
+{{ style.css(elementSelector ~ ':hover .qx-element-modal_description' , 'color', descriptionHoverColor) }}
+{{ style.responsiveCss(descriptionSelector , descriptionSpacing, 'margin-bottom', 'px') }}
+{{ style.typography(descriptionSelector ~ ' , ' ~ descriptionSelector ~ ' *' , descriptionFont) }}
+
+{# Button #}
+{{ style.css(buttonSelector ~ ' *', 'color', buttonTextColor) }}
+{{ style.css(buttonSelector ~ ' *:hover', 'color', buttonHoverTextColor) }}
+{{ style.background(buttonSelector ~ ' .qx-btn', buttonBG) }}
+{# Apply border to the actual button element for visible borders #}
+{{ style.border(buttonSelector ~ ' .qx-btn', buttonBorder) }}
+{# If border radius is part of the border config, apply it here #}
+{% if buttonBorder.radius is defined %}
+    {{ style.borderRadius(buttonSelector ~ ' .qx-btn', buttonBorder.radius) }}
+{% endif %}
+{{ style.typography(buttonSelector ~ ' *' , buttonFont) }}
+{{ style.padding(buttonSelector ~ ' a ', buttonPadding) }}
+
+{# Modal End #}
+
+{# Add modal positioning CSS - only apply if position type is custom #}
+{% if modal_position_type == 'custom' %}
+    {# Base modal dialog positioning #}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'position', 'fixed') }}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'none') }}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'margin', '0') }}
+    {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'inset', 'auto') }}
+
+    {# Horizontal positioning #}
+    {% if modal_horizontal_align == 'left' %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'left', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto') }}
+    {% elseif modal_horizontal_align == 'right' %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'right', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'left', 'auto') }}
+    {% else %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'left', '50%') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'right', 'auto') }}
+    {% endif %}
+
+    {# Vertical positioning #}
+    {% if modal_vertical_align == 'top' %}
+        {% if modal_horizontal_align == 'center' %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateX(-50%)') }}
+        {% endif %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'top', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'bottom', 'auto') }}
+    {% elseif modal_vertical_align == 'center' %}
+        {% if modal_horizontal_align == 'center' %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translate(-50%, -50%)') }}
+        {% else %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateY(-50%)') }}
+        {% endif %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'top', '50%') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'bottom', 'auto') }}
+    {% elseif modal_vertical_align == 'bottom' %}
+        {% if modal_horizontal_align == 'center' %}
+            {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'transform', 'translateX(-50%)') }}
+        {% endif %}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'bottom', '1rem') }}
+        {{ style.css('[qx-modal]' ~ id ~ '-modal .qx-modal-dialog', 'top', 'auto') }}
+    {% endif %}
+{% endif %}
+
+{# Modal background color #}
+{% if modalBackground %}
+    {# Apply to modal dialog and content wrapper (the visible modal) #}
+    {{ style.background(ModalID ~ ' .qx-modal-dialog', modalBackground) }}
+    {{ style.background(elementSelector, modalBackground) }}
+    {{ style.background(elementSelector ~ '.classic-mode', modalBackground) }}
+    {{ style.background(elementSelector ~ '.cover-mode', modalBackground) }}
+    
+    {# Smooth transition for background color on hover #}
+    {{ style.css(elementSelector, 'transition', 'background-color 0.3s ease') }}
+    {{ style.css(elementSelector ~ '.classic-mode', 'transition', 'background-color 0.3s ease') }}
+    {{ style.css(elementSelector ~ '.cover-mode', 'transition', 'background-color 0.3s ease') }}
+{% endif %}
+
+{# Cover mode background image - explicitly apply the background image for cover mode #}
+{% if general.content_settings.element_mode == 'cover' and general.content_settings.image.source %}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-image', 'url(' ~ general.content_settings.image.source ~ ')') }}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-size', 'cover') }}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-position', 'center center') }}
+    {{ style.css(id ~ ' .qx-element-modal_wrapper.cover-mode', 'background-repeat', 'no-repeat') }}
+    {% if content_radius %}
+        {{ style.borderRadius(ModalID ~ ' .qx-element-modal_wrapper.cover-mode', content_radius) }}
+    {% endif %}
+{% endif %}
+
+{# Modal overlay background - for the entire popup backdrop when modal is open #}
+{% if modalOverlayBackground and modalOverlayBackground != '' %}
+    {{ style.css(ModalID, 'background', modalOverlayBackground) }}
+{% endif %}
+
+{# Modal border styling #}
+{{ style.border(ModalID ~ ' .qx-modal-dialog', modalBorder) }}
+{# Builder preview: apply border to preview wrapper with class 'border' #}
+{{ style.border(ModalID ~ ' .modal-preview-for-builder', modalBorder) }}
+
+{# Template content CSS overrides - Target template content directly in modal #}
+{# When content_source is 'template', override unwanted .qx-inner and builder CSS #}
+{{ style.css(ModalID ~ ' .qx-inner', 'background', 'none') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'border', 'none') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'padding', '0 !important') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'border-radius', '0 !important') }}
+{{ style.css(ModalID ~ ' .qx-inner', 'outline', 'none') }}
+
+{# Close Button Styles #}
+{% set closeBtnBgColor = styles.close_button_style_options.close_button_styling_fields_group.close_button_bg_color %}
+{% set closeBtnBorderRadius = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_radius %}
+{% set closeBtnPadding = styles.close_button_style_options.close_button_styling_fields_group.close_button_padding %}
+{% set closeBtnIconColor = styles.close_button_style_options.close_button_styling_fields_group.close_button_icon_color %}
+{% set closeBtnIconSize = styles.close_button_style_options.close_button_styling_fields_group.close_button_icon_size %}
+{% set closeBtnBorderWidth = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_width %}
+{% set closeBtnBorderStyle = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_style %}
+{% set closeBtnBorderColor = styles.close_button_style_options.close_button_styling_fields_group.close_button_border_color %}
+{% set closeBtnHoverBgColor = styles.close_button_style_options.close_button_hover_fields_group.close_button_hover_bg_color %}
+{% set closeBtnHoverIconColor = styles.close_button_style_options.close_button_hover_fields_group.close_button_hover_icon_color %}
+{% set closeBtnHoverBorderColor = styles.close_button_style_options.close_button_hover_fields_group.close_button_hover_border_color %}
+
+{# Scoped Close Button Selectors - Using Modal ID for specificity #}
+{# Include both normal modal and builder preview selectors #}
+{% set closeBtnSelector = ModalID ~ ' .qx-modal-close-default, ' ~ ModalID ~ ' .qx-modal-close-outside, ' ~ id ~ '-modal.border .qx-modal-close-default, ' ~ id ~ '-modal.border .qx-modal-close-outside' %}
+{% set closeBtnSvgSelector = ModalID ~ ' .qx-modal-close-default svg, ' ~ ModalID ~ ' .qx-modal-close-outside svg, ' ~ id ~ '-modal.border .qx-modal-close-default svg, ' ~ id ~ '-modal.border .qx-modal-close-outside svg' %}
+{% set closeBtnSvgLineSelector = ModalID ~ ' .qx-modal-close-default svg line, ' ~ ModalID ~ ' .qx-modal-close-outside svg line, ' ~ id ~ '-modal.border .qx-modal-close-default svg line, ' ~ id ~ '-modal.border .qx-modal-close-outside svg line' %}
+{% set closeBtnHoverSelector = ModalID ~ ' .qx-modal-close-default:hover, ' ~ ModalID ~ ' .qx-modal-close-outside:hover, ' ~ id ~ '-modal.border .qx-modal-close-default:hover, ' ~ id ~ '-modal.border .qx-modal-close-outside:hover' %}
+{% set closeBtnHoverSvgSelector = ModalID ~ ' .qx-modal-close-default:hover svg line, ' ~ ModalID ~ ' .qx-modal-close-outside:hover svg line, ' ~ id ~ '-modal.border .qx-modal-close-default:hover svg line, ' ~ id ~ '-modal.border .qx-modal-close-outside:hover svg line' %}
+
+{# Apply Close Button Styles with high specificity #}
+{{ style.css(closeBtnSelector, 'background', closeBtnBgColor|default('#ff0000') ~ '') }}
+{{ style.css(closeBtnSelector, 'background-color', closeBtnBgColor|default('#ff0000') ~ '') }}
+{{ style.borderRadius(closeBtnSelector, closeBtnBorderRadius) }}
+{{ style.padding(closeBtnSelector, closeBtnPadding) }}
+
+{# Apply border styles using separate controls #}
+{{ style.responsiveCss(closeBtnSelector, closeBtnBorderWidth, 'border-width', 'px') }}
+{{ style.css(closeBtnSelector, 'border-style', closeBtnBorderStyle|default('solid')) }}
+{{ style.css(closeBtnSelector, 'border-color', closeBtnBorderColor|default('#000000')) }}
+
+{# Add smooth transition for all border properties #}
+{{ style.css(closeBtnSelector, 'transition', 'border-color 0.3s ease, border-width 0.3s ease, background-color 0.3s ease') }}
+
+{# Target SVG icon color and size #}
+{{ style.css(closeBtnSvgLineSelector, 'stroke', closeBtnIconColor|default('#ffffff') ~ '') }}
+{{ style.responsiveCss(closeBtnSvgSelector, closeBtnIconSize, 'width', 'px') }}
+{{ style.responsiveCss(closeBtnSvgSelector, closeBtnIconSize, 'height', 'px') }}
+
+{# Close Button Hover Styles #}
+{{ style.css(closeBtnHoverSelector, 'background', closeBtnHoverBgColor|default('rgba(255, 0, 0, 0.8)') ~ '') }}
+{{ style.css(closeBtnHoverSelector, 'background-color', closeBtnHoverBgColor|default('rgba(255, 0, 0, 0.8)') ~ '') }}
+
+{# Apply hover border color only if hover color is different from normal border color #}
+{% if closeBtnHoverBorderColor %}
+    {{ style.css(closeBtnHoverSelector, 'border-color', closeBtnHoverBorderColor) }}
+{% endif %}
+
+{{ style.css(closeBtnHoverSvgSelector, 'stroke', closeBtnHoverIconColor|default('#ffffff') ~ '') }}
+
+{# Shared Message Styles for Delay and Auto Close #}
+{% set messageSelector = ModalID ~ ' .qx-modal-delay-message, ' ~ ModalID ~ ' .qx-modal-auto-close-message' %}
+{{ style.css(messageSelector, 'color', '#000') }}
+{{ style.css(messageSelector, 'padding', '0px 20px') }}
+{{ style.css(messageSelector, 'font-size', '14px') }}
+{{ style.css(messageSelector, 'font-weight', '500') }}
+{{ style.css(messageSelector, 'text-align', 'center') }}
+{{ style.css(messageSelector, 'margin-top', '15px') }}
+
+{# Shared builder preview styling #}
+{% set messageBuilderSelector = id ~ '-modal.border .qx-modal-delay-message, ' ~ id ~ '-modal.border .qx-modal-auto-close-message' %}
+{{ style.css(messageBuilderSelector, 'position', 'relative') }}
+{{ style.css(messageBuilderSelector, 'top', 'auto') }}
+{{ style.css(messageBuilderSelector, 'left', 'auto') }}
+{{ style.css(messageBuilderSelector, 'transform', 'none') }}
+{{ style.css(messageBuilderSelector, 'margin', '10px auto 20px auto') }}
+{{ style.css(messageBuilderSelector, 'display', 'block') }}
+{{ style.css(messageBuilderSelector, 'width', 'fit-content') }}
+
+{# Countdown number styling - different colors for each type #}
+{{ style.css(ModalID ~ ' .qx-modal-delay-message #' ~ id ~ '-countdown', 'font-weight', 'bold') }}
+{{ style.css(ModalID ~ ' .qx-modal-delay-message #' ~ id ~ '-countdown', 'color', '#ff6b6b') }}
+{{ style.css(ModalID ~ ' .qx-modal-auto-close-message #' ~ id ~ '-auto-countdown', 'font-weight', 'bold') }}
+{{ style.css(ModalID ~ ' .qx-modal-auto-close-message #' ~ id ~ '-auto-countdown', 'color', '#f39c12') }}
+
+{{ style.load(id) }}

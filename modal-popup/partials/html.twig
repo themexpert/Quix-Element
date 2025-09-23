@@ -1,0 +1,513 @@
+{% set id = advanced.identifier.id %}
+{% set class = advanced.identifier.class %}
+{% set src = general.modal_trigger_options.icon %}
+{% set text = general.modal_trigger_options.text %}
+{% set link = general.button_link_fields_group.link %}
+{% set type = general.modal_trigger_options.type %}
+{% set iconAlignment = general.modal_trigger_options.icon_alignment %}
+{% set outline = general.modal_trigger_options.outline %}
+{% set btnClass = 'qx-btn qx-btn-' ~ type %}
+{% set icon = '' %}
+{% set text = general.modal_trigger_options.text| raw %}
+
+{% set enableSS = general.button_link_fields_group.enable_smoothscroll|default(false) %}
+{% set scroll_offset = general.button_link_fields_group.scroll_offset %}
+
+{% set SSTags = "" %}
+{% if enableSS %}
+	{% if scroll_offset != "" %}
+		{% set SSTags = ' data-qx-scroll="offset:' ~ scroll_offset ~ ' "' %}
+	{% else %}
+		{% set SSTags = ' data-qx-scroll ' %}
+	{% endif %}
+{% endif %}
+
+
+{% set content_type = general.content_settings.content_type %}
+{% set video_link_raw = general.content_settings.video_link %}
+
+{# Convert video URLs to embeddable format #}
+{% set video_src = video_link_raw %}
+{% if video_link_raw %}
+    {# YouTube: Convert watch URLs to embed #}
+    {% if 'youtube.com/watch?v=' in video_link_raw %}
+        {% set video_id = video_link_raw|split('v=')[1]|split('&')[0] %}
+        {% set video_src = 'https://www.youtube.com/embed/' ~ video_id %}
+    {% elseif 'youtu.be/' in video_link_raw %}
+        {% set video_id = video_link_raw|split('youtu.be/')[1]|split('?')[0] %}
+        {% set video_src = 'https://www.youtube.com/embed/' ~ video_id %}
+    {% elseif 'm.youtube.com/watch?v=' in video_link_raw %}
+        {% set video_id = video_link_raw|split('v=')[1]|split('&')[0] %}
+        {% set video_src = 'https://www.youtube.com/embed/' ~ video_id %}
+    
+    {# Vimeo: Convert regular URLs to embed #}
+    {% elseif 'vimeo.com/' in video_link_raw and '/embed/' not in video_link_raw %}
+        {% set video_id = video_link_raw|split('vimeo.com/')[1]|split('?')[0] %}
+        {% set video_src = 'https://player.vimeo.com/video/' ~ video_id %}
+    
+    {# Dailymotion: Convert regular URLs to embed #}
+    {% elseif 'dailymotion.com/video/' in video_link_raw and '/embed/' not in video_link_raw %}
+        {% set video_id = video_link_raw|split('/video/')[1]|split('?')[0] %}
+        {% set video_src = 'https://www.dailymotion.com/embed/video/' ~ video_id %}
+    
+    {# If already an embed URL or unknown platform, use as-is #}
+    {% endif %}
+{% endif %}
+
+{% set hide_modal_content = general.content_settings.hide_content %}
+
+{#{% set video_map_height = styles.modal_fg_element_style.modal_image_style.image_min_height %}#}
+{#{% set video_map_width = styles.modal_fg_element_style.modal_image_style.image_width %}#}
+
+{% set textAlignment = general.modal_trigger_options.text_alignment %}
+
+{% set classes = classNames('qx-element qx-element-button-v2', visibilityClass(visibility), class) %}
+{% set animation = advanced.animation_fields_group.animation %}
+{% set animationRepeat = advanced.animation_fields_group.animation_repeat %}
+{% set animationDelay = advanced.animation_fields_group.animation_delay %}
+{% set background = advanced.background_fields_group.background %}
+
+
+{% set modal_triggerMode = general.modal_trigger_options.modal_trigger_settings %}
+{% set modal_elementMode = general.content_settings.element_mode %}
+{% set enableModalPreview = general.content_source_group.enable_preview %}
+
+{# Trigger image variables #}
+{% set triggerImage = general.modal_trigger_options.trigger_image %}
+{% set triggerImageAltText = general.modal_trigger_options.trigger_image_alt_text %}
+{% set triggerImageAlignment = general.modal_trigger_options.trigger_image_alignment %}
+
+{# Image postion #}
+{% set modal_imagePosition = general.content_settings.image_position %}
+{% set modal_image_src = general.content_settings.image %}
+{% set modal_image_altText = general.content_settings.alt_text %}
+
+{# content #}
+{% set modal_graphicsSrc = general.content_settings.graphics_image %}
+{% set modal_graphicsAltText = general.content_settings.graphics_alt_text %}
+{% set graphicsHorizontalAlignment = styles.modal_fg_element_style.graphics_horizontal_alignment %}
+{% set graphicsVerticalPosition = styles.modal_fg_element_style.graphics_vertical_position %}
+
+{# Modal positioning variables #}
+{% set modal_position_type = general.modal_trigger_options.modal_position_type %}
+{% set modal_horizontal_align = general.modal_trigger_options.modal_horizontal_align %}
+{% set modal_vertical_align = general.modal_trigger_options.modal_vertical_align %}
+
+{% set modal_title = general.content_settings.title %}
+{% set modal_subtitle = general.content_settings.subtitle %}
+{% set enable_content = general.content_settings.enable_content|default(true) %}
+{% set modal_description = general.content_settings.content %}
+
+{% set modal_tag = general.modal_fg_markup.title_html_tag %}
+{% set modal_subtitleTag = general.modal_fg_markup.html_subtitle_tag %}
+{#{% set ctaVerticalPosition = general.modal_fg_markup.cta_vertical_position %}#}
+
+{# button #}
+{% set enable_modal_button = general.content_settings.modal_fg_button.enable_button %}
+{% set modal_button = general.content_settings.modal_fg_button.button %}
+{% set modal_link = general.content_settings.modal_fg_button.link %}
+{% set modal_button_type = general.content_settings.modal_fg_button.button_type %}
+{% set modal_btnClass = 'qx-btn qx-btn-' ~ modal_button_type %}
+
+
+{% set location = general.content_settings.location %}
+{% set views = general.content_settings.views %}
+{% set q = location | url_encode %}
+{% set label = location %}
+
+
+{% set zoom = general.content_settings.zoom %}
+{% if zoom.value %}
+	{% set zoom = zoom.value %}
+{% endif %}
+
+
+{# close button #}
+{% set modal_close_button = general.content_source_group.modal_close_button.button_type %}
+{% set close_on_outside_click = general.content_source_group.modal_close_button.close_on_outside_click %}
+{% set content_source = general.content_source_group.content_source %}
+{% set advanced_mode_id = general.content_source_group.id %}
+
+{# close button delay #}
+{% set enable_close_delay = general.content_source_group.modal_close_button.enable_close_delay|default(false) %}
+{% set close_delay_seconds_raw = general.content_source_group.modal_close_button.close_delay_seconds|default(5) %}
+{% if close_delay_seconds_raw.value %}
+	{% set close_delay_seconds = close_delay_seconds_raw.value %}
+{% else %}
+	{% set close_delay_seconds = close_delay_seconds_raw %}
+{% endif %}
+{% set close_delay_message = general.content_source_group.modal_close_button.close_delay_message|default("The button for closing the modal window will appear after {seconds} seconds") %}
+
+{# auto close #}
+{% set enable_auto_close = general.content_source_group.modal_close_button.enable_auto_close|default(false) %}
+{% set auto_close_seconds_raw = general.content_source_group.modal_close_button.auto_close_seconds|default(10) %}
+{% if auto_close_seconds_raw.value %}
+	{% set auto_close_seconds = auto_close_seconds_raw.value %}
+{% else %}
+	{% set auto_close_seconds = auto_close_seconds_raw %}
+{% endif %}
+{% set auto_close_message = general.content_source_group.modal_close_button.auto_close_message|default("This modal will close automatically in {seconds} seconds") %}
+
+{# Wrapper Class #}
+{% set wrapperClassesForCallToAction = classNames('qx-element-modal_wrapper qx-animation-toggle',
+    modal_elementMode ? modal_elementMode ~ '-mode': '',
+    {
+        'qx-d-md-flex qx-flex-md-row' : modal_imagePosition == 'left',
+        'qx-d-md-flex qx-flex-md-row-reverse' : modal_imagePosition == 'right',
+        'qx-d-md-flex qx-flex-md-column-reverse' : modal_imagePosition == 'down',
+        'lazyload' : modal_elementMode == 'cover',
+        'modal-cover-background' : modal_elementMode == 'cover'
+    }) %}
+
+
+{# Content Class #}
+{% set contentClassesForCallToAction = classNames('qx-element-modal_content') %}
+
+{% set classes = classNames('qx-element qx-element-call-to-action-v2', visibilityClass(visibility), class) %}
+{% set animation = advanced.animation_fields_group.animation %}
+{% set animationRepeat = advanced.animation_fields_group.animation_repeat %}
+{% set animationDelay = advanced.animation_fields_group.animation_delay %}
+{% set background = advanced.background_fields_group.background %}
+
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+
+	{% block element %}
+		{% if outline %}
+			{% set btnClass = 'qx-btn qx-btn-outline-' ~ type %}
+		{% endif %}
+
+		{% if general.modal_trigger_options.full_width %}
+			{% set btnClass = btnClass ~ ' qx-btn-block' %}
+		{% endif %}
+
+		{% if src.source %}
+			{% if src.type == "svg" %}
+				{% set icon = icon(src.source) %}
+			{% endif %}
+		{% endif %}
+
+
+		{% if modal_close_button == 'default' %}
+			{% set close_btn = 'default' %}
+		{% else %}
+			{% set close_btn = 'outside' %}
+		{% endif %}
+
+		{% set display = "" %}
+		{% if modal_triggerMode == "ondelay" %}
+			{% set display = 'style=display:none !important;' %}
+		{% endif %}
+		{% if modal_triggerMode == "onscroll" %}
+			{% set display = 'style=visibility:hidden !important;' %}
+		{% endif %}
+		{% if modal_triggerMode == "onbeforeleave" %}
+			{% set display = 'style=display:none !important;' %}
+		{% endif %}
+
+		{% if modal_triggerMode == "onclick" %}
+			<button id='{{id}}-btn' class="{{btnClass}} qx-margin-small-right" type="button" {{display}} qx-toggle="target: #{{id}}-modal;">
+				{% if iconAlignment == 'left' %}
+					{{ ( '<div class="qx-element-button-wrapper qx-flex iconSpacing-' ~ iconAlignment ~ ' qx-align-items-center qx-justify-content-' ~ textAlignment ~ '">' ~ icon ~ ' ' ~ '<span>' ~ text ~ '</span></div>' ) }}
+				{% else %}
+					{{ ('<div class="qx-element-button-wrapper qx-flex iconSpacing-' ~ iconAlignment ~ ' qx-align-items-center qx-justify-content-' ~ textAlignment ~ '">' ~ '<span>' ~ text ~ '</span>' ~ ' ' ~ icon ~ '</div>' ) }}
+				{% endif %}
+
+				{% if src.type == "svg" %}
+					{{ addIconStyle('#' ~ id ~ ' .qx-element-button-wrapper', src) }}
+				{% endif %}
+			</button>
+		{% elseif modal_triggerMode == "onimage" %}
+			<div id='{{id}}-btn' class="qx-element-trigger-image qx-text-{{triggerImageAlignment}}" {{display}} qx-toggle="target: #{{id}}-modal;" style="cursor: pointer;">
+				{% if triggerImage.source %}
+					{{ image(triggerImage.source, triggerImageAltText, '', '', triggerImage) }}
+				{% endif %}
+			</div>
+		{% elseif modal_triggerMode == "ondelay" or modal_triggerMode == "onscroll" or modal_triggerMode == "onbeforeleave" %}
+			<button id='{{id}}-btn' class="{{btnClass}} qx-margin-small-right" type="button" {{display}} qx-toggle="target: #{{id}}-modal;">
+				{# minimal button content #}
+			</button>
+		{% endif %}
+
+
+		{% if mode == 'builder' and enableModalPreview == true %}
+			<div id="{{id}}-modal" class="border mt-2">
+				<div class="modal-preview-for-builder">
+					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close style="display: none;"{% if enable_close_delay or enable_auto_close %} id="{{id}}-close-btn"{% endif %}></button>
+					
+					{% if enable_close_delay %}
+					<div class="qx-modal-delay-message" id="{{id}}-delay-message" style="display: block;">
+						<span>{{ close_delay_message|replace({'{seconds}': '<span id="' ~ id ~ '-countdown">' ~ close_delay_seconds ~ '</span>'})|raw }}</span>
+					</div>
+					{% endif %}
+					
+					{% if enable_auto_close %}
+					<div class="qx-modal-auto-close-message" id="{{id}}-auto-close-message" style="display: block;">
+						<span>{{ auto_close_message|replace({'{seconds}': '<span id="' ~ id ~ '-auto-countdown">' ~ auto_close_seconds ~ '</span>'})|raw }}</span>
+					</div>
+					{% endif %}
+					{# Call to action Markup start #}
+
+					{% if content_source != 'template' %}
+					{# Call to action Markup start #}
+					<div
+						class="{{ wrapperClassesForCallToAction }}" 
+						{% if modal_elementMode == 'cover' and modal_image_src.source %} 
+							{{ lazyBackground([], modal_image_src.source) }} 
+							style="background-image: url('{{ modal_image_src.source }}'); background-size: cover; background-position: center center; background-repeat: no-repeat;"
+						{% endif %}>
+
+						{# call-to-action image #}
+						{% if modal_elementMode == "classic" %}
+							{% if content_type == "image" %}
+								{% if modal_image_src.source %}
+									<figure class="qx-element-modal_image">
+										{% if modal_image_src.type == "svg" %}
+											{{ icon(modal_image_src.source) }}
+										{% elseif modal_image_src.type == "image" %}
+											{{ image( modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
+										{% else %}
+											{{ image(modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
+										{% endif %}
+									</figure>
+								{% endif %}
+							{% elseif content_type == "video" %}
+								<figure class="qx-element-modal_video">
+									<iframe class="qx-element-modal_video-iframe" src="{{video_src}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</figure>
+							{% else %}
+								<figure class="qx-element-modal_map">
+									<iframe id="googleMaps" class="qx-element-modal_map-iframe" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ q }}&amp;t={{ views }}&amp;z={{ zoom|default('16') }}&amp;output=embed&amp;iwloc=near" aria-label="{{ label }}" allowfullscreen="">
+										Loading...
+									</iframe>
+								</figure>
+							{% endif %}
+						{% endif %}
+
+						{% if
+							(hide_modal_content == false and modal_elementMode == "classic")
+							or
+							modal_elementMode == "cover"
+						%}
+							<div class="{{ contentClassesForCallToAction }}">
+								{# Graphics image - Top position #}
+								{% if modal_graphicsSrc.source and graphicsVerticalPosition == 'top' %}
+									<figure class="qx-element-modal_graphics qx-graphics-align-{{ graphicsHorizontalAlignment }}">
+										{% if modal_graphicsSrc.type == "svg" %}
+											{{ icon(modal_graphicsSrc.source) }}
+										{% elseif modal_graphicsSrc.type == "image" %}
+											{{ image( modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% else %}
+											{{ image(modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% endif %}
+									</figure>
+								{% endif %}
+
+								{# call-to-action modal_title #}
+								{% if modal_title %}
+									<div class="qx-element-modal_title">
+										{{ modal_title | wrap(modal_tag) }}
+									</div>
+
+								{% endif %}
+
+								{# call-to-action modal_subtitle #}
+								{% if modal_subtitle %}
+									<div class="qx-element-modal_subtitle">
+										{{ modal_subtitle | wrap(modal_subtitleTag) }}
+									</div>
+								{% endif %}
+
+								{# call-to-action content #}
+								{% if enable_content and modal_description %}
+									<div class="qx-element-modal_description">
+										{{ modal_description|raw }}
+									</div>
+								{% endif %}
+
+								{# call-to-action button #}
+								{% if enable_modal_button %}
+									<div class="qx-element-modal_button">
+										{{ modal_button | link( modal_link, modal_btnClass ) }}
+									</div>
+								{% endif %}
+
+								{# Graphics image - Bottom position #}
+								{% if modal_graphicsSrc.source and graphicsVerticalPosition == 'bottom' %}
+									<figure class="qx-element-modal_graphics qx-graphics-align-{{ graphicsHorizontalAlignment }}">
+										{% if modal_graphicsSrc.type == "svg" %}
+											{{ icon(modal_graphicsSrc.source) }}
+										{% elseif modal_graphicsSrc.type == "image" %}
+											{{ image( modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% else %}
+											{{ image(modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% endif %}
+									</figure>
+								{% endif %}
+							</div>
+						{% endif %}
+					</div>
+					{% else %}
+						{{ getQuixTemplate(advanced_mode_id)|raw }}
+					{% endif %}
+
+					{% if modal_elementMode == 'cover' and modal_image_src.source %}
+						<style type="text/css">
+							{{'#' ~ id}}
+							.qx-element-modal_wrapper.cover-mode {
+								background-size: cover;
+								background-repeat: no-repeat;
+								transition: all 0.5s ease;
+							}
+						</style>
+					{% endif %}
+
+					{% if modal_graphicsSrc.type == "svg" %}
+						{{ addIconStyle('#' ~ id ~ ' .qx-element-modal_graphics', modal_graphicsSrc) }}
+					{% endif %}
+
+				</div>
+			</div>
+		{% else %}
+			<div id="{{id}}-modal"{% if close_on_outside_click is defined and close_on_outside_click == false %} qx-modal="bg-close: false; esc-close: false"{% else %} qx-modal{% endif %}>
+				<div class="qx-modal-dialog">
+					<button class="qx-modal-close-{{close_btn}}" type="button" qx-close{% if enable_close_delay or enable_auto_close %} id="{{id}}-close-btn" style="display: none;"{% endif %}></button>
+					
+					{% if enable_close_delay %}
+					<div class="qx-modal-delay-message" id="{{id}}-delay-message">
+						<span>{{ close_delay_message|replace({'{seconds}': '<span id="' ~ id ~ '-countdown">' ~ close_delay_seconds ~ '</span>'})|raw }}</span>
+					</div>
+					{% endif %}
+					
+					{% if enable_auto_close %}
+					<div class="qx-modal-auto-close-message" id="{{id}}-auto-close-message">
+						<span>{{ auto_close_message|replace({'{seconds}': '<span id="' ~ id ~ '-auto-countdown">' ~ auto_close_seconds ~ '</span>'})|raw }}</span>
+					</div>
+					{% endif %}
+					
+					{% if content_source != 'template' %}
+					{# Call to action Markup start #}
+					<div
+						class="{{ wrapperClassesForCallToAction }}" 
+						{% if modal_elementMode == 'cover' and modal_image_src.source %} 
+							{{ lazyBackground([], modal_image_src.source) }} 
+							style="background-image: url('{{ modal_image_src.source }}'); background-size: cover; background-position: center center; background-repeat: no-repeat;"
+						{% endif %}>
+
+						{# call-to-action image #}
+						{% if modal_elementMode == "classic" %}
+							{% if content_type == "image" %}
+								{% if modal_image_src.source %}
+									<figure class="qx-element-modal_image">
+										{% if modal_image_src.type == "svg" %}
+											{{ icon(modal_image_src.source) }}
+										{% elseif modal_image_src.type == "image" %}
+											{{ image( modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
+										{% else %}
+											{{ image(modal_image_src.source, modal_image_altText, '', '', modal_image_src) }}
+										{% endif %}
+									</figure>
+								{% endif %}
+							{% elseif content_type == "video" %}
+								<figure class="qx-element-modal_video">
+									<iframe class="qx-element-modal_video-iframe" src="{{video_src}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+								</figure>
+							{% else %}
+								<figure class="qx-element-modal_map">
+									<iframe id="googleMaps" class="qx-element-modal_map-iframe" frameborder="0" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q={{ q }}&amp;t={{ views }}&amp;z={{ zoom|default('16') }}&amp;output=embed&amp;iwloc=near" aria-label="{{ label }}" allowfullscreen="">
+										Loading...
+									</iframe>
+								</figure>
+							{% endif %}
+						{% endif %}
+
+						{% if hide_modal_content == false %}
+							<div class="{{ contentClassesForCallToAction }}">
+								{# Graphics image - Top position #}
+								{% if modal_graphicsSrc.source and graphicsVerticalPosition == 'top' %}
+									<figure class="qx-element-modal_graphics qx-graphics-align-{{ graphicsHorizontalAlignment }}">
+										{% if modal_graphicsSrc.type == "svg" %}
+											{{ icon(modal_graphicsSrc.source) }}
+										{% elseif modal_graphicsSrc.type == "image" %}
+											{{ image( modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% else %}
+											{{ image(modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% endif %}
+									</figure>
+								{% endif %}
+
+								{# call-to-action modal_title #}
+								{% if modal_title %}
+									<div class="qx-element-modal_title">
+										{{ modal_title | wrap(modal_tag) }}
+									</div>
+
+								{% endif %}
+
+								{# call-to-action modal_subtitle #}
+								{% if modal_subtitle %}
+									<div class="qx-element-modal_subtitle">
+										{{ modal_subtitle | wrap(modal_subtitleTag) }}
+									</div>
+								{% endif %}
+
+								{# call-to-action content #}
+								{% if enable_content and modal_description %}
+									<div class="qx-element-modal_description">
+										{{ modal_description|raw }}
+									</div>
+								{% endif %}
+
+								{# call-to-action button #}
+								{% if enable_modal_button %}
+									<div class="qx-element-modal_button">
+										{{ modal_button | link( modal_link, modal_btnClass ) }}
+									</div>
+								{% endif %}
+
+								{# Graphics image - Bottom position #}
+								{% if modal_graphicsSrc.source and graphicsVerticalPosition == 'bottom' %}
+									<figure class="qx-element-modal_graphics qx-graphics-align-{{ graphicsHorizontalAlignment }}">
+										{% if modal_graphicsSrc.type == "svg" %}
+											{{ icon(modal_graphicsSrc.source) }}
+										{% elseif modal_graphicsSrc.type == "image" %}
+											{{ image( modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% else %}
+											{{ image(modal_graphicsSrc.source, modal_graphicsAltText, '', '', modal_graphicsSrc) }}
+										{% endif %}
+									</figure>
+								{% endif %}
+							</div>
+						{% endif %}
+					</div>
+					{% else %}
+						{{ getQuixTemplate(advanced_mode_id)|raw }}
+					{% endif %}
+					
+					{% if modal_elementMode == 'cover' and modal_image_src.source %}
+						<style type="text/css">
+							{{'#' ~ id}}
+							.qx-element-modal_wrapper.cover-mode {
+								background-size: cover;
+								background-repeat: no-repeat;
+								transition: all 0.5s ease;
+							}
+						</style>
+					{% endif %}
+
+					{% if modal_graphicsSrc.type == "svg" %}
+						{{ addIconStyle('#' ~ id ~ ' .qx-element-modal_graphics', modal_graphicsSrc) }}
+					{% endif %}
+
+				</div>
+			</div>
+		{% endif %}
+
+	{% endblock %}
+{% endembed %}

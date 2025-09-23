@@ -1,0 +1,235 @@
+{% set id = advanced.identifier.id %}
+{% set modal_triggerMode = general.modal_trigger_options.modal_trigger_settings %}
+{% set modal_delay_time = general.modal_trigger_options.delay_time %}
+{% set scroll_trigger_value = general.modal_trigger_options.scroll_trigger_value %}
+{% set scroll_trigger_unit = general.modal_trigger_options.scroll_trigger_unit %}
+{% set exit_intent_delay = general.modal_trigger_options.exit_intent_delay %}
+{% set exit_intent_cooldown = general.modal_trigger_options.exit_intent_cooldown %}
+{% set exit_intent_trigger_type = general.modal_trigger_options.exit_intent_trigger_type %}
+
+{% if mode != 'builder' %}
+jQuery(document).ready(function($) {
+  var modalTriggerMode = "{{modal_triggerMode}}";
+  var modalId = "{{id}}";
+  
+  if(modalTriggerMode == "ondelay") {
+    var delayTime = {{modal_delay_time|default(5000)}};
+    setTimeout(function() {
+      $("#" + modalId + "-btn").trigger('click');
+    }, delayTime);
+  }
+  else if(modalTriggerMode == "onscroll") {
+    var trigger = document.createElement('div');
+    trigger.style.position = 'absolute';
+    trigger.style.height = '1px';
+    trigger.style.width = '100%';
+    trigger.style.pointerEvents = 'none';
+    trigger.style.zIndex = '-1';
+    
+    var value = {{scroll_trigger_value|default(50)}};
+    var unit = "{{scroll_trigger_unit|default('%')}}";
+    
+    if(unit === '%') {
+        trigger.style.top = value + '%';
+    }
+    
+    document.body.appendChild(trigger);
+    
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+              if(entry.isIntersecting) {
+                  $("#" + modalId + "-btn").trigger('click');
+                  observer.disconnect();
+                  if(trigger.parentNode) {
+                      trigger.parentNode.removeChild(trigger);
+                  }
+              }
+          });
+      }, {
+          threshold: 0.1
+      });
+      
+      observer.observe(trigger);
+    } else {
+      $(window).on('scroll', function() {
+          var scrollTop = $(window).scrollTop();
+          
+          if(scrollTop >= triggerPosition) {
+              $("#" + modalId + "-btn").trigger('click');
+              $(window).off('scroll');
+          }
+      });
+    }
+  }
+  else if(modalTriggerMode == "onbeforeleave") {
+    var exitIntentDelay = {{exit_intent_delay|default(500)}};
+    var exitIntentCooldown = {{exit_intent_cooldown|default(5)}};
+    var modalTriggered = false;
+    var allowPageLeave = false;
+    var cooldownKey = 'modal_' + modalId + '_last_shown';
+    var pendingAction = null;
+    
+    function isInCooldown() {
+      if(exitIntentCooldown <= 0) return false;
+      
+      var lastShown = localStorage.getItem(cooldownKey);
+      if(!lastShown) return false;
+      
+      var now = new Date().getTime();
+      var cooldownTime = exitIntentCooldown * 60 * 1000;
+      return (now - parseInt(lastShown)) < cooldownTime;
+    }
+ 
+    function triggerModal(callback) {
+      if(modalTriggered || isInCooldown()) {
+        if(callback) callback();
+        return;
+      }
+      
+      modalTriggered = true;
+      
+      setTimeout(function() {
+        try {
+          var modalElement;
+          if(typeof UIkit !== 'undefined' && UIkit.modal) {
+            modalElement = UIkit.modal("#" + modalId + "-modal");
+            modalElement.show();
+ 
+            $("#" + modalId + "-modal").off('hidden').on('hidden', function() {
+              allowPageLeave = true;
+              modalTriggered = false;
+              if(callback) callback();
+            });
+            
+          } else {
+            $("#" + modalId + "-btn").trigger('click');
+            
+            $("#" + modalId + "-modal").off('hidden').on('hidden', function() {
+              allowPageLeave = true;
+              modalTriggered = false;
+              if(callback) callback();
+            });
+          }
+          localStorage.setItem(cooldownKey, new Date().getTime().toString());
+        } catch(e) {
+          console.error('Error showing modal:', e);
+          if(callback) callback();
+        }
+      }, exitIntentDelay);
+    }
+
+    function executeAction() {
+      if(pendingAction === 'reload') {
+        window.location.reload();
+      } else if(pendingAction && pendingAction.startsWith('navigate:')) {
+        window.location.href = pendingAction.substring(9);
+      }
+      pendingAction = null;
+    }
+
+    $(document).on('click', 'a[href]', function(e) {
+      if(allowPageLeave || modalTriggered || isInCooldown()) {
+        return true;
+      }
+      
+      var href = $(this).attr('href');
+      if(href && href !== '#' && !href.startsWith('javascript:') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
+        e.preventDefault();
+        pendingAction = 'navigate:' + href;
+        triggerModal(executeAction);
+        return false;
+      }
+    });
+
+    $(window).on('keydown', function(e) {
+      if((e.ctrlKey || e.metaKey) && (e.key === 'r' || e.keyCode === 116)) {
+        if(allowPageLeave || modalTriggered || isInCooldown()) {
+          return true;
+        }
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if(e.shiftKey) {
+          return false;
+        }
+        
+        pendingAction = 'reload';
+        triggerModal(executeAction);
+        return false;
+      }
+      
+      if((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'r' || e.keyCode === 116)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+      }
+    });
+
+    if (typeof document.hidden !== "undefined") {
+      $(document).on('visibilitychange', function() {
+        if(document.hidden && !allowPageLeave && !modalTriggered) {
+          triggerModal();
+        }
+      });
+    }
+  }
+  
+  {% set enable_close_delay = general.content_source_group.modal_close_button.enable_close_delay|default(false) %}
+  {% set enable_auto_close = general.content_source_group.modal_close_button.enable_auto_close|default(false) %}
+  {% if enable_close_delay or enable_auto_close %}
+    {% if enable_close_delay %}
+      {% set timer_seconds = (general.content_source_group.modal_close_button.close_delay_seconds.value ?? general.content_source_group.modal_close_button.close_delay_seconds) | default(5) %}
+      {% set feature_type = 'delay' %}
+    {% else %}
+      {% set timer_seconds = (general.content_source_group.modal_close_button.auto_close_seconds.value ?? general.content_source_group.modal_close_button.auto_close_seconds) | default(10) %}
+      {% set feature_type = 'auto' %}
+    {% endif %}
+    
+    (function() {
+      var m = document.getElementById('{{id}}-modal'), 
+          msg = document.getElementById('{{id}}-{{feature_type == "delay" ? "delay-message" : "auto-close-message"}}'), 
+          btn = document.getElementById('{{id}}-close-btn'), 
+          cnt = document.getElementById('{{id}}-{{feature_type == "delay" ? "countdown" : "auto-countdown"}}'),
+          sec = {{timer_seconds}}, timer, isDelay = {{feature_type == "delay" ? "true" : "false"}};
+      
+      function start() {
+        clearInterval(timer);
+        var remaining = sec;
+        if(cnt) cnt.textContent = remaining;
+        if(msg && !isDelay) msg.style.display = 'block';
+        timer = setInterval(function() {
+          if(cnt) cnt.textContent = --remaining;
+          if(remaining <= 0) {
+            clearInterval(timer);
+            if(msg) msg.style.display = 'none';
+            if(isDelay && btn) btn.style.display = 'block';
+            else if(!isDelay) {
+              var closeBtn = m && m.querySelector('[qx-close]');
+              if(closeBtn) closeBtn.click();
+            }
+          }
+        }, 1000);
+      }
+      
+      function reset() { 
+        clearInterval(timer); 
+        if(msg) msg.style.display = isDelay ? 'block' : 'none'; 
+        if(btn && isDelay) btn.style.display = 'none'; 
+      }
+      
+      if(m) {
+        if(m.classList.contains('border')) setTimeout(start, 100);
+        else {
+          document.querySelectorAll('[qx-toggle*="{{id}}-modal"]').forEach(function(el) {
+            el.addEventListener('click', function() { reset(); setTimeout(start, 150); });
+          });
+          m.querySelectorAll('[qx-close]').forEach(function(el) { el.addEventListener('click', reset); });
+          {% if close_on_outside_click %}m.addEventListener('click', function(e) { if(e.target === m) reset(); });{% endif %}
+        }
+      }
+    })();
+  {% endif %}
+});
+{% endif %}

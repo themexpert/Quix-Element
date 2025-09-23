@@ -1,0 +1,1222 @@
+name: Modal Popup
+slug: modal-popup
+groups:
+    - advance
+    - pro
+helpId: 5d1fef7e2c7d3a5cd38ec1cd
+form:
+    general:
+        - name: content_source_group
+          label: Source
+          type: fields-group
+          status: open
+          schema:
+              - name: content_source
+                type: select
+                label: Content Source
+                value: "custom"
+                options:
+                    custom: Custom
+                    template: Templates
+
+              - name: id
+                type: templates
+                label: Select a template
+                value: ""
+                depends:
+                    content_source: template
+
+              - name: enable_preview
+                label: Enable Modal Preview
+                help: For builder preview only.
+                type: switch
+                value: false
+
+              - name: modal_close_button
+                label: Close Button
+                type: fields-group
+                schema:
+                    - name: button_type
+                      label: Close Button Type
+                      type: select
+                      value: default
+                      options:
+                          default: Default
+                          outside: Outside
+                    - name: close_on_outside_click
+                      label: Close on Outside Click
+                      type: switch
+                      value: true
+                      help: Allow closing the modal by clicking outside the modal content
+
+                    - name: enable_close_delay
+                      label: Enable Close Button Delay
+                      type: switch
+                      value: false
+                      help: When enabled, the close button will appear after a specified delay with a countdown message
+                      depends:
+                          enable_auto_close: false
+
+                    - name: close_delay_seconds
+                      label: Delay Time (Seconds)
+                      type: slider
+                      value: 5
+                      min: 1
+                      max: 60
+                      responsive: false
+                      suffix: s
+                      help: Number of seconds to wait before showing the close button
+                      depends:
+                          enable_close_delay: true
+                          enable_auto_close: false
+
+                    - name: close_delay_message
+                      label: Delay Message
+                      type: text
+                      value: "The button for closing the modal window will appear after {seconds} seconds"
+                      help: Message to show during the delay. Use {seconds} to display the countdown
+                      depends:
+                          enable_close_delay: true
+                          enable_auto_close: false
+
+                    - name: enable_auto_close
+                      label: Enable Auto Close
+                      type: switch
+                      value: false
+                      help: When enabled, the modal will automatically close after a specified time
+                      depends:
+                          enable_close_delay: false
+
+                    - name: auto_close_seconds
+                      label: Auto Close Time (Seconds)
+                      type: slider
+                      value: 10
+                      min: 1
+                      max: 60
+                      responsive: false
+                      suffix: s
+                      help: Number of seconds before automatically closing the modal
+                      depends:
+                          enable_auto_close: true
+                          enable_close_delay: false
+
+                    - name: auto_close_message
+                      label: Auto Close Message
+                      type: text
+                      value: "This modal will close automatically in {seconds} seconds"
+                      help: Message to show during the auto close countdown. Use {seconds} to display the countdown
+                      depends:
+                          enable_auto_close: true
+                          enable_close_delay: false
+
+        - name: content_settings
+          label: Custom Content
+          type: fields-group
+          status: open
+          schema:
+              - name: element_mode
+                type: select
+                label: Layout
+                value: classic
+                options:
+                    classic: Classic
+                    cover: Cover
+
+              - name: content_type
+                label: Primary Content Type
+                type: select
+                value: image
+                options:
+                    image: Image
+                    video: Video Link
+                    map: Map
+                depends:
+                    element_mode: classic
+
+              - name: content_type
+                label: Primary Content Type
+                type: select
+                value: image
+                options:
+                    image: Image
+                depends:
+                    element_mode: cover
+
+              - name: hide_content
+                label: Show Primary Content only
+                type: switch
+                help: This will hide all general content section from modal on classic layout. Only Primary content will be shown.
+                value: false
+                depends:
+                    element_mode: classic
+
+              - name: image_position
+                label: Primary Content Position
+                type: choose
+                responsive: false
+                value: left
+                depends:
+                    element_mode: classic
+                    hide_content: false
+                options:
+                    left:
+                        label: Left
+                        icon: qxuicon-arrow-to-left
+                    right:
+                        label: Right
+                        icon: qxuicon-arrow-to-right
+                    center:
+                        label: Top
+                        icon: qxuicon-arrow-to-top
+                    down:
+                        label: Bottom
+                        icon: qxuicon-arrow-to-bottom
+
+              - name: modal_fg_element_label
+                label: Modal Primary Content
+                type: divider
+
+              - name: location
+                type: text
+                help: Location name, address
+                label: Address
+                value: ThemeXpert
+                depends:
+                    element_mode: classic
+                    content_type: map
+
+              - name: views
+                type: select
+                help: Map type
+                label: Views
+                value: m
+                options:
+                    m: Map
+                    h: Hybrid
+                    k: Satellite
+                    p: Terrain
+                depends:
+                    element_mode: classic
+                    content_type: map
+
+              - name: zoom
+                type: slider
+                help: Select map zoom level.
+                label: Zoom
+                responsive: false
+                units:
+                min: 5
+                max: 20
+                value: 16
+                depends:
+                    element_mode: classic
+                    content_type: map
+
+              - name: video_link
+                label: Video URL
+                type: text
+                value: https://www.youtube.com/watch?v=67QeCi8zb7A
+                help: Paste any YouTube, Vimeo, or Dailymotion video URL. Regular video page URLs will be automatically converted to embeddable format.
+                depends:
+                    element_mode: classic
+                    content_type: video
+
+              # Content Width/Height for image, video, and map
+              - name: content_width
+                label: Content Width (px)
+                type: number
+                value: 500
+                help: Set the width of the image, video, or map content
+                depends:
+                    element_mode: classic
+                    content_type: image,video,map
+
+              - name: content_height
+                label: Content Height (px)
+                type: number
+                value: 300
+                help: Set the height of the image, video, or map content
+                depends:
+                    element_mode: classic
+                    content_type: image,video,map
+
+              - name: content_align
+                label: Content Alignment
+                type: select
+                value: center
+                help: Align the content horizontally within the modal
+                options:
+                    left: Left
+                    center: Center
+                    right: Right
+                depends:
+                    element_mode: classic
+                    content_type: image,video,map
+
+              - name: image
+                label: Featured Image
+                type: media
+                filters: image
+                showstyle: true
+                value: "media/quixnxt/images/placeholder.png"
+                help: Used as primary image in Classic mode or background image in Cover mode
+
+              - name: alt_text
+                label: Alt Text
+                type: text
+                help: Add alt text to improve SEO and accessibility.
+                depends:
+                    content_type: image
+
+              - name: content_radius
+                label: Radius
+                type: dimensions
+                help: Set border radius for featured content (images, videos, and maps)
+                units: px
+                defaultUnit: px
+                value:
+                    desktop:
+                        top: 0
+                        bottom: 0
+                        left: 0
+                        right: 0
+                    tablet:
+                        top: 0
+                        bottom: 0
+                        left: 0
+                        right: 0
+                    phone:
+                        top: 0
+                        bottom: 0
+                        left: 0
+                        right: 0
+
+              - name: modal_fg_content_label
+                label: General Content
+                type: divider
+
+              - name: title
+                label: Title
+                type: text
+                value: Hello Quix
+
+              - name: subtitle
+                label: Subtitle
+                type: text
+                value: Checking heading text
+
+              - name: enable_content
+                label: Enable Content
+                type: switch
+                value: true
+
+              - name: content
+                label: Content
+                type: editor
+                depends:
+                    enable_content: true
+                value: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
+
+              - name: graphics_image
+                label: Content Image
+                type: media
+                showstyle: true
+
+              - name: graphics_alt_text
+                label: Alt Text
+                type: text
+                help: Add alt text to improve SEO and accessibility.
+                depends:
+                    graphics_image: "*"
+
+              - name: modal_fg_button
+                label: Modal Button
+                type: fields-group
+                schema:
+                    - name: enable_button
+                      label: Enable Button
+                      type: switch
+                      value: true
+
+                    - name: button
+                      label: Text
+                      type: text
+                      value: Click Me
+                      depends:
+                          enable_button: true
+
+                    - name: button_type
+                      label: Button Type
+                      type: select
+                      value: primary
+                      depends:
+                          enable_button: true
+                      options:
+                          primary: Primary
+                          secondary: Secondary
+                          success: Success
+                          danger: Danger
+                          warning: Warning
+                          info: Info
+                          light: Light
+                          dark: Dark
+                          link: Link
+
+                    - name: link
+                      label: Link
+                      type: link
+                      depends:
+                          enable_button: true
+                      value:
+                          url: "#"
+                          target: ""
+                          nofollow: false
+
+        - name: modal_trigger_options
+          label: Trigger Option
+          type: fields-group
+          schema:
+              - name: modal_trigger_settings
+                type: select
+                label: Methods
+                value: onclick
+                options:
+                    onclick: Button
+                    onscroll: Scroll
+                    ondelay: Delay
+                    onimage: Image
+                    onbeforeleave: Before Leave
+
+              - name: text
+                label: Button Text
+                type: text
+                value: Open Modal
+                depends:
+                    modal_trigger_settings: onclick
+
+              - name: type
+                label: Button Color
+                type: select
+                value: primary
+                options:
+                    primary: Primary
+                    secondary: Secondary
+                    success: Success
+                    danger: Danger
+                    warning: Warning
+                    info: Info
+                    light: Light
+                    dark: Dark
+                    link: Link
+                depends:
+                    modal_trigger_settings: onclick
+
+              - name: outline
+                label: Outline Button
+                type: switch
+                help: Outline remove all background images and colors from button.
+                depends:
+                    modal_trigger_settings: onclick
+
+              - name: icon
+                label: Button Icon
+                type: media
+                filters: icon
+                help: Icon will visible left to the title
+                depends:
+                    modal_trigger_settings: onclick
+
+              - name: icon_alignment
+                type: choose
+                label: Icon placement
+                responsive: false
+                value: left
+                options:
+                    left:
+                        label: Left
+                        icon: qxuicon-align-left
+                    right:
+                        label: Right
+                        icon: qxuicon-align-right
+                depends:
+                    modal_trigger_settings: onclick
+
+              - name: full_width
+                label: Full Width Button
+                type: switch
+                help: Take full width of parent element space.
+                depends:
+                    modal_trigger_settings: onclick
+
+              - name: text_alignment
+                label: Text Alignment
+                type: choose
+                value: center
+                responsive: false
+                depends:
+                    modal_trigger_settings: onclick
+                    full_width: true
+                options:
+                    start:
+                        label: Left
+                        icon: qxuicon-align-left
+                    center:
+                        label: Center
+                        icon: qxuicon-align-center
+                    end:
+                        label: Right
+                        icon: qxuicon-align-right
+
+              - name: delay_time
+                label: Delay Time (MS)
+                type: text
+                value: 5000
+                depends:
+                    modal_trigger_settings: ondelay
+
+              # Custom image trigger
+              - name: trigger_image
+                label: Image
+                type: media
+                filters: image
+                showstyle: true
+                value: "media/quixnxt/images/placeholder.png"
+                help: Select an image to trigger the modal popup
+                depends:
+                    modal_trigger_settings: onimage
+
+              - name: trigger_image_alt_text
+                label: Alt Text
+                type: text
+                help: Add alt text to improve SEO and accessibility.
+                depends:
+                    modal_trigger_settings: onimage
+
+              - name: trigger_image_alignment
+                label: Alignment
+                type: choose
+                value: center
+                responsive: false
+                depends:
+                    modal_trigger_settings: onimage
+                options:
+                    start:
+                        label: Left
+                        icon: qxuicon-align-left
+                    center:
+                        label: Center
+                        icon: qxuicon-align-center
+                    end:
+                        label: Right
+                        icon: qxuicon-align-right
+
+              # When onscroll is selected:
+              - name: scroll_trigger_value
+                label: Position
+                type: text
+                help: Enter a value between 0 and 100 to set the scroll percentage at which the modal will be triggered.
+                value: 50
+                depends:
+                    modal_trigger_settings: onscroll
+
+              # When onbeforeleave is selected:
+              - name: exit_intent_delay
+                label: Exit Intent Delay (MS)
+                type: text
+                help: Delay before modal appears when user tries to leave (in milliseconds). Set to 0 for immediate display.
+                value: 500
+                depends:
+                    modal_trigger_settings: onbeforeleave
+
+              - name: exit_intent_cooldown
+                label: Cooldown Period (Minutes)
+                type: text
+                help: Time to wait before showing modal again after it's been closed (in minutes). Set to 0 to show every time.
+                value: 5
+                depends:
+                    modal_trigger_settings: onbeforeleave
+
+              # New modal positioning fields:
+              - name: modal_position_type
+                label: Modal Position
+                type: select
+                value: "center"
+                options:
+                    center: Center (Default)
+                    custom: Custom Position
+
+              - name: modal_horizontal_align
+                label: Horizontal Position
+                type: select
+                value: center
+                depends:
+                    modal_position_type: custom
+                options:
+                    left: Left
+                    center: Center
+                    right: Right
+
+              - name: modal_vertical_align
+                label: Vertical Position
+                type: select
+                value: top
+                depends:
+                    modal_position_type: custom
+                options:
+                    top: Top
+                    center: Center
+                    bottom: Bottom
+
+        - name: modal_fg_markup
+          label: Markup
+          type: fields-group
+          schema:
+              - name: title_html_tag
+                label: Title HTML Tag
+                type: select
+                value: h2
+                options:
+                    h1: H1
+                    h2: H2
+                    h3: H3
+                    h4: H4
+                    h5: H5
+                    h6: H6
+
+              - name: html_subtitle_tag
+                label: Subtitle HTML Tag
+                type: select
+                value: h4
+                options:
+                    h1: H1
+                    h2: H2
+                    h3: H3
+                    h4: H4
+                    h5: H5
+                    h6: H6
+
+    styles:
+        - name: modal_fg_element_style
+          label: Modal Options
+          type: fields-group
+          schema:
+              - name: modal_fg_element_style_label
+                label: Basic
+                type: divider
+
+              - name: modal_overlay_background
+                label: Modal Overlay Background
+                type: color
+                help: Set the background color of the entire popup overlay when modal is open.
+                value: "rgba(0,0,0,0.6)"
+                alpha: true
+
+              - name: modal_background
+                label: Modal Background
+                type: background
+                popover: true
+                help: Set the background for the modal content, including color, hover effects, gradients, etc.
+
+              - name: modal_border_group
+                label: Modal Border
+                type: fields-group
+                schema:
+                    - name: modal_border
+                      type: border
+                      label: Border
+                      popover: true
+
+              - name: height
+                type: select
+                value: default
+                options:
+                    default: Default
+                    custom: Min Height
+
+              - name: element_min_height
+                label: Minimum Height
+                type: slider
+                min: 0
+                max: 1500
+                suffix: px
+                responsive: true
+                depends:
+                    height: "custom"
+
+              - name: element_width
+                label: Modal Width
+                type: slider
+                min: 0
+                max: 100
+                suffix: %
+                responsive: true
+                value:
+                    desktop: 70
+                    tablet: 90
+                    phone: 90
+
+              - name: element_alignment
+                label: Alignment
+                type: choose
+                value:
+                    desktop: center
+                    tablet: center
+                    phone: center
+                options:
+                    left:
+                        label: Left
+                        icon: qxuicon-align-left
+                    center:
+                        label: Center
+                        icon: qxuicon-align-center
+                    right:
+                        label: Right
+                        icon: qxuicon-align-right
+                    justify:
+                        label: Justify
+                        icon: qxuicon-align-justify
+
+              - name: element_padding
+                label: Padding
+                type: dimensions
+                units: px
+                defaultUnit: px
+                value:
+                    desktop:
+                        top: 40
+                        bottom: 40
+                        left: 40
+                        right: 40
+                    tablet:
+                        top: 40
+                        bottom: 40
+                        left: 40
+                        right: 40
+                    phone:
+                        top: 50
+                        bottom: 50
+                        left: 25
+                        right: 25
+
+              - name: modal_image_style_label
+                label: Primary Content
+                type: divider
+
+              - name: modal_image_style
+                label: Modal Primary Content
+                type: fields-group
+                depends:
+                    element_mode: classic
+                schema:
+                    - name: image_width
+                      label: Width
+                      type: slider
+                      min: 0
+                      units: %, px
+                      defaultUnit: "%"
+                      responsive: true
+                      max: 2000
+                      value:
+                          desktop: 100
+                          tablet: 100
+                          phone: 100
+
+                    - name: image_min_height
+                      label: Minimum Height
+                      type: slider
+                      min: 0
+                      max: 1500
+                      units: "px"
+                      defaultUnit: "px"
+                      suffix: px
+                      responsive: true
+
+                    - name: primary_content_border_radius
+                      label: Border Radius
+                      type: dimensions
+
+              - name: modal_graphics_style_lable
+                label: Content Image
+                type: divider
+
+              - name: graphics_width
+                label: Width
+                type: slider
+                max: 2000
+                units: %, px
+                defaultUnit: "%"
+                value:
+                    desktop: 100
+                    tablet: 100
+                    phone: 100
+
+              - name: graphics_height
+                label: Height
+                type: slider
+                min: 0
+                max: 1500
+                units: px
+                defaultUnit: px
+                suffix: px
+                responsive: true
+
+              - name: graphics_object_fit
+                label: Object Fit
+                type: select
+                value: cover
+                help: Controls how the image should be resized to fit its container
+                options:
+                    fill: Fill
+                    contain: Contain
+                    cover: Cover
+                    none: None
+                    scale-down: Scale Down
+
+              - name: graphics_horizontal_alignment
+                label: Horizontal Alignment
+                type: choose
+                value: center
+                responsive: false
+                help: Align content image horizontally within the modal content
+                options:
+                    left:
+                        label: Left
+                        icon: qxuicon-align-left
+                    center:
+                        label: Center
+                        icon: qxuicon-align-center
+                    right:
+                        label: Right
+                        icon: qxuicon-align-right
+
+              - name: graphics_vertical_position
+                label: Vertical Alignment
+                type: choose
+                value: top
+                responsive: false
+                help: Align content image vertically within the modal content
+                options:
+                    top:
+                        label: Top
+                        icon: qxuicon-arrow-to-top
+                    bottom:
+                        label: Bottom
+                        icon: qxuicon-arrow-to-bottom
+
+              - name: graphics_spacing
+                label: Spacing
+                type: slider
+                max: 100
+                value:
+                    desktop: 15
+                    tablet: 10
+                    phone: 10
+
+              - name: graphics_border_radius
+                label: Border Radius
+                type: dimensions
+
+              - name: modal_title_style
+                label: Title
+                type: divider
+
+              - name: title_color
+                label: Color
+                type: color
+
+              - name: title_hover_color
+                label: Hover Color
+                type: color
+
+              - name: title_spacing
+                label: Spacing
+                type: slider
+                max: 100
+                value:
+                    desktop: 15
+                    tablet: 10
+                    phone: 10
+
+              - name: title_font
+                label: Typography
+                type: typography
+                popover: true
+
+              - name: modal_subtitle_style
+                label: Subtitle
+                type: divider
+
+              - name: subtitle_color
+                label: Color
+                type: color
+
+              - name: subtitle_hover_color
+                label: Hover Color
+                type: color
+
+              - name: subtitle_spacing
+                label: Spacing
+                type: slider
+                max: 100
+                value:
+                    desktop: 15
+                    tablet: 10
+                    phone: 10
+
+              - name: subtitle_font
+                label: Typography
+                type: typography
+                popover: true
+
+              - name: modal_description_style
+                label: Description
+                type: divider
+
+              - name: description_color
+                label: Color
+                type: color
+
+              - name: description_hover_color
+                label: Hover Color
+                type: color
+
+              - name: description_spacing
+                label: Spacing
+                type: slider
+                max: 100
+                value:
+                    desktop: 15
+                    tablet: 10
+                    phone: 10
+
+              - name: description_font
+                label: Typography
+                type: typography
+                popover: true
+
+              - name: modal_button_style
+                label: Modal Button
+                type: divider
+
+              - name: button_bg
+                label: Background
+                type: background
+                popover: true
+
+              - name: button_border_new
+                type: border
+                label: Border
+                popover: true
+
+              - name: button_font
+                label: Typography
+                type: typography
+                popover: true
+
+              - name: button_text_color
+                label: Text Color
+                type: color
+
+              - name: button_hover_text_color
+                label: Hover Color
+                type: color
+
+              - name: button_padding
+                label: Button Padding
+                type: dimensions
+                units: px
+                defaultUnit: px
+                value:
+                    desktop:
+                        top: 5
+                        bottom: 5
+                        left: 45
+                        right: 45
+                    tablet:
+                        top: 10
+                        bottom: 10
+                        left: 30
+                        right: 30
+                    phone:
+                        top: 10
+                        bottom: 10
+                        left: 25
+                        right: 25
+
+        - name: button_style_options
+          label: Main Modal Button Options
+          type: fields-group
+          status: open
+          schema:
+              - name: button_spacing_fields_group_label
+                label: Button Basic
+                type: divider
+
+              - name: button_spacing_fields_group
+                label: Button Basic
+                type: fields-group
+                schema:
+                    - name: nalignment
+                      label: Alignment
+                      type: choose
+                      responsive: true
+                      value:
+                          desktop: left
+                          tablet: left
+                          phone: left
+                      options:
+                          left:
+                              label: Left
+                              icon: qxuicon-align-left
+                          center:
+                              label: Center
+                              icon: qxuicon-align-center
+                          right:
+                              label: Right
+                              icon: qxuicon-align-right
+
+                    - name: btn_padding
+                      label: Padding
+                      type: dimensions
+                      units: %, px, em, rem, vh
+
+                    - name: button_bg_fields_group
+                      label: Button Background
+                      type: fields-group
+                      schema:
+                          - name: btn_background
+                            label: Background
+                            type: background
+                            video: false
+                            popover: true
+
+                    - name: button_border_group
+                      label: Button Border
+                      type: fields-group
+                      schema:
+                          - name: btn_border
+                            type: border
+                            label: Border
+                            popover: true
+
+              - name: button_typo_fields_group_label
+                label: Button Typography
+                type: divider
+
+              - name: button_typo_fields_group
+                label: Typography
+                type: fields-group
+                schema:
+                    - name: font
+                      type: typography
+                      label: Typography
+                      popover: true
+
+              - name: button_color_fields_group
+                label: Button Text & Icon Color
+                type: fields-group
+                schema:
+                    - name: text_color
+                      label: Text Color
+                      type: color
+
+                    - name: hover_text_color
+                      label: Hover Text Color
+                      type: color
+
+                    - name: hover_icon_color
+                      label: Hover Icon Color
+                      type: color
+
+              - name: icon_spacing
+                label: Icon Spacing
+                type: slider
+                max: 100
+                value:
+                    desktop: 5
+                    tablet: 5
+                    phone: 5
+
+        - name: trigger_image_style_options
+          label: Trigger Image Options
+          type: fields-group
+          status: open
+          depends:
+              general.modal_trigger_options.modal_trigger_settings: onimage
+          schema:
+              - name: trigger_image_style_label
+                label: Image Style
+                type: divider
+
+              - name: trigger_image_spacing_fields_group
+                label: Image Basic
+                type: fields-group
+                schema:
+                    - name: trigger_image_width
+                      label: Image Width
+                      type: slider
+                      min: 0
+                      max: 500
+                      suffix: px
+                      responsive: true
+                      value:
+                          desktop: 200
+                          tablet: 150
+                          phone: 100
+
+                    - name: trigger_image_padding
+                      label: Padding
+                      type: dimensions
+                      units: %, px, em, rem, vh
+
+                    - name: trigger_image_border_group
+                      label: Image Border
+                      type: fields-group
+                      schema:
+                          - name: trigger_image_border
+                            type: border
+                            label: Border
+                            popover: true
+
+        - name: close_button_style_options
+          label: Modal Close Button
+          type: fields-group
+          status: open
+          schema:
+              - name: close_button_style_label
+                label: Close Button Style
+                type: divider
+
+              - name: close_button_styling_fields_group
+                label: Close Button Basic
+                type: fields-group
+                schema:
+                    - name: close_button_bg_color
+                      label: Background Color
+                      type: color
+                      value: "#ff0000"
+                      alpha: true
+                      help: Set the background color of the close button
+
+                    - name: close_button_border_radius
+                      label: Radius
+                      type: dimensions
+                      units: px, %, em
+                      defaultUnit: px
+                      value:
+                          desktop:
+                              top: 50
+                              bottom: 50
+                              left: 50
+                              right: 50
+                          tablet:
+                              top: 50
+                              bottom: 50
+                              left: 50
+                              right: 50
+                          phone:
+                              top: 50
+                              bottom: 50
+                              left: 50
+                              right: 50
+                      help: Set the border radius to make the button rounded
+
+                    - name: close_button_padding
+                      label: Padding
+                      type: dimensions
+                      units: px, em, rem
+                      defaultUnit: px
+                      value:
+                          desktop:
+                              top: 8
+                              bottom: 8
+                              left: 8
+                              right: 8
+                          tablet:
+                              top: 8
+                              bottom: 8
+                              left: 8
+                              right: 8
+                          phone:
+                              top: 6
+                              bottom: 6
+                              left: 6
+                              right: 6
+                      help: Set the padding inside the close button
+
+                    - name: close_button_icon_color
+                      label: Icon Color
+                      type: color
+                      value: "#ffffff"
+                      alpha: true
+                      help: Set the color of the close (X) icon
+
+                    - name: close_button_icon_size
+                      label: Icon Size
+                      type: slider
+                      min: 8
+                      max: 50
+                      suffix: px
+                      responsive: true
+                      value:
+                          desktop: 14
+                          tablet: 14
+                          phone: 12
+                      help: Set the size of the close (X) icon
+
+                    - name: close_button_border_width
+                      label: Border Width
+                      type: slider
+                      min: 0
+                      max: 10
+                      suffix: px
+                      responsive: true
+                      value:
+                          desktop: 0
+                          tablet: 0
+                          phone: 0
+                      help: Set the width of the border for the close button
+
+                    - name: close_button_border_style
+                      label: Border Style
+                      type: select
+                      value: solid
+                      options:
+                          none: None
+                          solid: Solid
+                          dashed: Dashed
+                          dotted: Dotted
+                          double: Double
+                      help: Set the style of the border
+
+                    - name: close_button_border_color
+                      label: Border Color
+                      type: color
+                      value: "#000000"
+                      alpha: true
+                      help: Set the color of the border for the close button
+
+              - name: close_button_hover_fields_group
+                label: Close Button Hover Effects
+                type: fields-group
+                schema:
+                    - name: close_button_hover_bg_color
+                      label: Hover Background Color
+                      type: color
+                      value: "rgba(255, 0, 0, 0.8)"
+                      alpha: true
+                      help: Background color when hovering over the close button
+
+                    - name: close_button_hover_icon_color
+                      label: Hover Icon Color
+                      type: color
+                      value: "#ffffff"
+                      alpha: true
+                      help: Icon color when hovering over the close button
+
+                    - name: close_button_hover_border_color
+                      label: Hover Border Color
+                      type: color
+                      value: "#000000"
+                      alpha: true
+                      help: Border color when hovering over the close button
