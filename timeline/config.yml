@@ -76,6 +76,18 @@ form:
                 value: true
                 help: Display the connecting line between timeline items
 
+              - name: show_markers
+                label: Show Timeline Markers
+                type: switch
+                value: true
+                help: Display the marker dots/icons on timeline items
+
+              - name: show_arrows
+                label: Show Arrow Indicators
+                type: switch
+                value: false
+                help: Display arrow indicators connecting timeline items to the main line
+
               - name: connector_style
                 label: Connector Style
                 type: select

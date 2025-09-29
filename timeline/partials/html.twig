@@ -8,6 +8,8 @@
 {% set connectorPosition = general.layout_settings.connector_position %}
 {% set connectorPositionHorizontal = general.layout_settings.connector_position_horizontal %}
 {% set contentAlignment = general.layout_settings.content_vertical_alignment %}
+{% set showMarkers = general.layout_settings.show_markers is defined ? general.layout_settings.show_markers : true %}
+{% set showArrows = general.layout_settings.show_arrows is defined ? general.layout_settings.show_arrows : false %}
 
 {# Use appropriate connector position based on layout #}
 {% set finalConnectorPosition = layout == 'horizontal' ? connectorPositionHorizontal : connectorPosition %}
@@ -47,9 +49,14 @@
                         {% endif %}
                         {% for item in timelineItems %}
                             <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
-                                <div class="qx-timeline-marker">
-                                    <div class="qx-timeline-dot"></div>
-                                </div>
+                                {% if showMarkers %}
+                                    <div class="qx-timeline-marker">
+                                        <div class="qx-timeline-dot"></div>
+                                    </div>
+                                {% endif %}
+                                {% if showArrows %}
+                                    <div class="qx-timeline-arrow"></div>
+                                {% endif %}
 
 
                                 <div class="qx-timeline-content">
@@ -115,9 +122,14 @@
                             <div class="qx-timeline-slider-track">
                                 {% for item in timelineItems %}
                                     <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
-                                        <div class="qx-timeline-marker">
-                                            <div class="qx-timeline-dot"></div>
-                                        </div>
+                                        {% if showMarkers %}
+                                            <div class="qx-timeline-marker">
+                                                <div class="qx-timeline-dot"></div>
+                                            </div>
+                                        {% endif %}
+                                        {% if showArrows %}
+                                            <div class="qx-timeline-arrow"></div>
+                                        {% endif %}
 
                                         <div class="qx-timeline-content">
                                             {% if item.date %}
