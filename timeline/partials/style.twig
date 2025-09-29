@@ -115,23 +115,108 @@
 {{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'width', connectorWidth ~ 'px') }}
 
 {# Horizontal Timeline #}
-{{ style.css(id ~ ' .qx-timeline-horizontal', 'display', 'flex') }}
-{{ style.css(id ~ ' .qx-timeline-horizontal', 'justify-content', 'space-between') }}
-{{ style.css(id ~ ' .qx-timeline-horizontal', 'align-items', 'flex-start') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal', 'position', 'relative') }}
+
+{# Horizontal Slider Container #}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'overflow', 'hidden') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'width', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'padding-top', '80px') }}
+
+{# Horizontal Slider Track #}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'transition', 'transform 0.3s ease') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'align-items', 'flex-start') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'width', 'auto') }}
+{% if mode != 'builder' %}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'gap', '25px') }}
+{% endif %}
+
+{# Builder Mode Fixes #}
+{% if mode == 'builder' %}
+{% set itemsPerView = 3 %}
+{% if general.layout_settings.items_per_view %}
+  {% if general.layout_settings.items_per_view.desktop %}
+    {% set itemsPerView = general.layout_settings.items_per_view.desktop %}
+  {% else %}
+    {% set itemsPerView = general.layout_settings.items_per_view %}
+  {% endif %}
+{% endif %}
+{% set gapSize = (itemsPerView - 1) * 25 %}
+
+{{ style.css(id ~ ' .qx-timeline-horizontal', 'min-height', '280px') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'min-height', '280px') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'overflow', 'hidden') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'flex-wrap', 'nowrap') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'min-width', 'unset') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'max-width', 'unset') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex', '0 0 auto') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'margin-right', '0') }}
+
+{# Current setting-based styles #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'width', 'calc((100% - ' ~ gapSize ~ 'px) / ' ~ itemsPerView ~ ')') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item:not(:last-child)', 'margin-right', '25px') }}
+
+{# Also add data-attribute-based styles as fallback/override #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="1"] .qx-timeline-item', 'width', 'calc(100% - 0px)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="2"] .qx-timeline-item', 'width', 'calc((100% - 25px) / 2)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="3"] .qx-timeline-item', 'width', 'calc((100% - 50px) / 3)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="4"] .qx-timeline-item', 'width', 'calc((100% - 75px) / 4)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="5"] .qx-timeline-item', 'width', 'calc((100% - 100px) / 5)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="6"] .qx-timeline-item', 'width', 'calc((100% - 125px) / 6)') }}
+{% endif %}
 
 {# Global Horizontal Connector Styling #}
-{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'top', '-45px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'top', '35px') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'left', '0') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'width', '100%') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'height', connectorWidth ~ 'px') }}
+
+{# Horizontal Navigation Arrows #}
+{{ style.css(id ~ ' .qx-timeline-nav', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'top', '20px') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'z-index', '10') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'background', 'rgba(0, 0, 0, 0.7)') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'color', 'white') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'border', 'none') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'border-radius', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'width', '32px') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'height', '32px') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'align-items', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'justify-content', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'cursor', 'pointer') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'transition', 'all 0.3s ease') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'opacity', '0') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'pointer-events', 'none') }}
+
+{{ style.css(id ~ ' .qx-timeline-nav-prev', 'left', '-13px') }}
+{{ style.css(id ~ ' .qx-timeline-nav-next', 'right', '-13px') }}
+
+{{ style.css(id ~ ' .qx-timeline-nav:hover', 'background', 'rgba(0, 0, 0, 0.9)') }}
+
+{# Navigation Visibility States #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="always"] .qx-timeline-nav', 'opacity', '1') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="always"] .qx-timeline-nav', 'pointer-events', 'auto') }}
+
+{# Disabled state #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="disabled"] .qx-timeline-nav', 'opacity', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="disabled"] .qx-timeline-nav', 'pointer-events', 'none') }}
+
+{# Hover state #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"] .qx-timeline-nav', 'opacity', '0 !important') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"] .qx-timeline-nav', 'pointer-events', 'none') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"]:hover .qx-timeline-nav', 'opacity', '1 !important') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"]:hover .qx-timeline-nav', 'pointer-events', 'auto') }}
+
 
 {# Timeline Items #}
 {{ style.css(id ~ ' .qx-timeline-item', 'position', 'relative') }}
 {{ style.css(id ~ ' .qx-timeline-item', 'margin-bottom', '0') }}
 {{ style.responsiveCss(id ~ ' .qx-timeline-item', itemSpacing, 'padding-bottom', 'px') }}
 {{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item:last-child', 'padding-bottom', '0') }}
-{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex', '1') }}
-{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item:not(:last-child)', 'margin-right', '20px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex', '0 0 auto') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'min-width', '0') }}
 
 {# Timeline Marker #}
 {{ style.css(id ~ ' .qx-timeline-marker', 'position', 'absolute') }}

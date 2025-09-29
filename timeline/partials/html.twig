@@ -74,45 +74,73 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <div class="qx-timeline qx-timeline-horizontal">
-                        {% if showConnector %}
-                            <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                    {% set itemsPerView = 3 %}
+                    {% if general.layout_settings.items_per_view %}
+                        {% if general.layout_settings.items_per_view.desktop %}
+                            {% set itemsPerView = general.layout_settings.items_per_view.desktop %}
+                        {% else %}
+                            {% set itemsPerView = general.layout_settings.items_per_view %}
                         {% endif %}
-                        {% for item in timelineItems %}
-                            <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
-                                <div class="qx-timeline-marker">
-                                    <div class="qx-timeline-dot"></div>
-                                </div>
+                    {% endif %}
+                    <div class="qx-timeline qx-timeline-horizontal" 
+                         data-items-per-view="{{ itemsPerView }}"
+                         data-slider-mode="{{ general.layout_settings.slider_mode ?: 'manual' }}"
+                         data-auto-speed="{{ general.layout_settings.auto_play_speed ?: 3 }}"
+                         data-show-nav="{{ general.layout_settings.show_navigation ?: 'hover' }}">
+                        
+                        <div class="qx-timeline-slider-container">
+                            {% if showConnector %}
+                                <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                                <button class="qx-timeline-nav qx-timeline-nav-prev" aria-label="Previous">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <button class="qx-timeline-nav qx-timeline-nav-next" aria-label="Next">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            {% endif %}
+                            
+                            <div class="qx-timeline-slider-track">
+                                {% for item in timelineItems %}
+                                    <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
+                                        <div class="qx-timeline-marker">
+                                            <div class="qx-timeline-dot"></div>
+                                        </div>
 
-                                <div class="qx-timeline-content">
-                                    {% if item.date %}
-                                        <div class="qx-timeline-date">{{ item.date }}</div>
-                                    {% endif %}
-
-                                    {% if item.title %}
-                                        <h3 class="qx-timeline-title">
-                                            {% if item.link.url %}
-                                                {{ item.title | link(item.link) }}
-                                            {% else %}
-                                                {{ item.title }}
+                                        <div class="qx-timeline-content">
+                                            {% if item.date %}
+                                                <div class="qx-timeline-date">{{ item.date }}</div>
                                             {% endif %}
-                                        </h3>
-                                    {% endif %}
 
-                                    {% if item.image.source %}
-                                        <div class="qx-timeline-image">
-                                            {{ image(item.image.source, item.title, '', '', item.image) }}
-                                        </div>
-                                    {% endif %}
+                                            {% if item.title %}
+                                                <h3 class="qx-timeline-title">
+                                                    {% if item.link.url %}
+                                                        {{ item.title | link(item.link) }}
+                                                    {% else %}
+                                                        {{ item.title }}
+                                                    {% endif %}
+                                                </h3>
+                                            {% endif %}
 
-                                    {% if item.description %}
-                                        <div class="qx-timeline-description">
-                                            {{ item.description|raw }}
+                                            {% if item.image.source %}
+                                                <div class="qx-timeline-image">
+                                                    {{ image(item.image.source, item.title, '', '', item.image) }}
+                                                </div>
+                                            {% endif %}
+
+                                            {% if item.description %}
+                                                <div class="qx-timeline-description">
+                                                    {{ item.description|raw }}
+                                                </div>
+                                            {% endif %}
                                         </div>
-                                    {% endif %}
-                                </div>
+                                    </div>
+                                {% endfor %}
                             </div>
-                        {% endfor %}
+                        </div>
                     </div>
                 {% endif %}
             </div>

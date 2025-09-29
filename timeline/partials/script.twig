@@ -4,6 +4,10 @@
 
 {% if mode != 'builder' %}
 jQuery(document).ready(function($) {
+{% endif %}
+{% if mode == 'builder' %}
+jQuery(function($) {
+{% endif %}
   var timelineId = "{{ id }}";
   var $timeline = $('#' + timelineId);
 
@@ -68,11 +72,147 @@ jQuery(document).ready(function($) {
     }
   });
 
+  function initTimelineSlider() {
+    var $horizontalTimeline = $timeline.find('.qx-timeline-horizontal');
+
+    if ($horizontalTimeline.length) {
+      var $track = $horizontalTimeline.find('.qx-timeline-slider-track');
+      var $items = $track.find('.qx-timeline-item');
+      var $prevBtn = $horizontalTimeline.find('.qx-timeline-nav-prev');
+      var $nextBtn = $horizontalTimeline.find('.qx-timeline-nav-next');
+
+      var itemsPerView = parseInt($horizontalTimeline.data('items-per-view')) || 3;
+      var sliderMode = $horizontalTimeline.data('slider-mode') || 'manual';
+      var autoSpeed = parseInt($horizontalTimeline.data('auto-speed')) || 3;
+      var currentSlide = 0;
+      var totalSlides = Math.ceil($items.length / itemsPerView);
+      var autoPlayInterval;
+      
+      function updateSliderWidth() {
+        var containerWidth = $horizontalTimeline.find('.qx-timeline-slider-container').width();
+        var spacing = 25;
+        var itemWidth = (containerWidth - (itemsPerView - 1) * spacing) / itemsPerView;
+        
+        $items.each(function() {
+          $(this).css({
+            'width': itemWidth + 'px',
+            'flex-shrink': '0',
+            'flex-grow': '0'
+          });
+        });
+        
+        var trackWidth = ($items.length * itemWidth) + (($items.length - 1) * spacing);
+        $track.css('width', trackWidth + 'px');
+      }
+      
+      function goToSlide(slideIndex) {
+        if (slideIndex < 0) slideIndex = totalSlides - 1;
+        if (slideIndex >= totalSlides) slideIndex = 0;
+        
+        currentSlide = slideIndex;
+        var containerWidth = $horizontalTimeline.find('.qx-timeline-slider-container').width();
+        var spacing = 25;
+        var itemWidth = (containerWidth - (itemsPerView - 1) * spacing) / itemsPerView;
+        var moveDistance = slideIndex * (itemWidth + spacing) * itemsPerView;
+        $track.css('transform', 'translateX(-' + moveDistance + 'px)');
+        
+        $prevBtn.toggleClass('disabled', slideIndex === 0);
+        $nextBtn.toggleClass('disabled', slideIndex === totalSlides - 1);
+      }
+      
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+      
+      function prevSlide() {
+        goToSlide(currentSlide - 1);
+      }
+      
+      function startAutoPlay() {
+        if (sliderMode === 'auto') {
+          autoPlayInterval = setInterval(function() {
+            nextSlide();
+          }, autoSpeed * 1000);
+        }
+      }
+      
+      function stopAutoPlay() {
+        if (autoPlayInterval) {
+          clearInterval(autoPlayInterval);
+        }
+      }
+      
+      $prevBtn.on('click', function() {
+        stopAutoPlay();
+        prevSlide();
+        startAutoPlay();
+      });
+      
+      $nextBtn.on('click', function() {
+        stopAutoPlay();
+        nextSlide();
+        startAutoPlay();
+      });
+      
+      $horizontalTimeline.on('mouseenter', function() {
+        stopAutoPlay();
+      }).on('mouseleave', function() {
+        startAutoPlay();
+      });
+      
+      var startX = 0;
+      var currentX = 0;
+      var isDragging = false;
+      
+      $track.on('touchstart mousedown', function(e) {
+        stopAutoPlay();
+        isDragging = true;
+        startX = e.type === 'touchstart' ? e.originalEvent.touches[0].clientX : e.clientX;
+        e.preventDefault();
+      });
+      
+      $(document).on('touchmove mousemove', function(e) {
+        if (!isDragging) return;
+        currentX = e.type === 'touchmove' ? e.originalEvent.touches[0].clientX : e.clientX;
+        e.preventDefault();
+      });
+      
+      $(document).on('touchend mouseup', function() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        var diffX = startX - currentX;
+        var threshold = 50;
+        
+        if (Math.abs(diffX) > threshold) {
+          if (diffX > 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+        }
+        startAutoPlay();
+      });
+      
+      updateSliderWidth();
+      goToSlide(0);
+      startAutoPlay();
+      
+      $(window).on('resize', function() {
+        updateSliderWidth();
+      });
+    }
+  }
+
   initTimelineAnimations();
+  initTimelineSlider();
   handleHashNavigation();
 
   $(window).on('resize', function() {
     setTimeout(initTimelineAnimations, 300);
   });
 });
+{% if mode != 'builder' %}
+{% endif %}
+{% if mode == 'builder' %}
 {% endif %}

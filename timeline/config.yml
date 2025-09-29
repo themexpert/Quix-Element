@@ -93,6 +93,7 @@ form:
                 value: left
                 depends:
                     show_connector: true
+                    layout: vertical
                 options:
                     left:
                         label: Left Side
@@ -100,6 +101,49 @@ form:
                         label: Center
                     right:
                         label: Right Side
+
+              - name: items_per_view
+                label: Items Per View
+                type: slider
+                min: 1
+                max: 6
+                value: 3
+                responsive: true
+                help: Number of timeline items to show at once in horizontal layout and value must be between 1 and 6.
+                depends:
+                    layout: horizontal
+
+              - name: slider_mode
+                label: Slider Mode
+                type: select
+                value: manual
+                depends:
+                    layout: horizontal
+                options:
+                    manual: Manual
+                    auto: Auto Play
+
+              - name: auto_play_speed
+                label: Auto Play Speed (seconds)
+                type: slider
+                min: 1
+                max: 10
+                suffix: s
+                value: 3
+                depends:
+                    layout: horizontal
+                    slider_mode: auto
+
+              - name: show_navigation
+                label: Show Navigation Arrows
+                type: select
+                value: hover
+                depends:
+                    layout: horizontal
+                options:
+                    always: Always Visible
+                    hover: Show on Hover
+                    disabled: Disabled
 
     styles:
         - name: timeline_appearance
