@@ -118,9 +118,9 @@
 {{ style.css(id ~ ' .qx-timeline-horizontal', 'position', 'relative') }}
 
 {# Horizontal Slider Container #}
-{{ style.css(id ~ ' .qx-timeline-slider-container', 'overflow', 'hidden') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'overflow', 'clip') }}
 {{ style.css(id ~ ' .qx-timeline-slider-container', 'width', '100%') }}
-{{ style.css(id ~ ' .qx-timeline-slider-container', 'padding-top', '80px') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'padding-top', '55px') }}
 
 {# Horizontal Slider Track #}
 {{ style.css(id ~ ' .qx-timeline-slider-track', 'display', 'flex') }}
@@ -190,9 +190,6 @@
 {{ style.css(id ~ ' .qx-timeline-nav', 'opacity', '0') }}
 {{ style.css(id ~ ' .qx-timeline-nav', 'pointer-events', 'none') }}
 
-{{ style.css(id ~ ' .qx-timeline-nav-prev', 'left', '-13px') }}
-{{ style.css(id ~ ' .qx-timeline-nav-next', 'right', '-13px') }}
-
 {{ style.css(id ~ ' .qx-timeline-nav:hover', 'background', 'rgba(0, 0, 0, 0.9)') }}
 
 {# Navigation Visibility States #}
@@ -208,7 +205,6 @@
 {{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"] .qx-timeline-nav', 'pointer-events', 'none') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"]:hover .qx-timeline-nav', 'opacity', '1 !important') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"]:hover .qx-timeline-nav', 'pointer-events', 'auto') }}
-
 
 {# Timeline Items #}
 {{ style.css(id ~ ' .qx-timeline-item', 'position', 'relative') }}
@@ -285,36 +281,68 @@
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'left', '50%') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'transform', 'translateX(-50%)') }}
 
-{# Horizontal Connector Position: Center System #}
+{# Horizontal Connector Position: Center #}
 {{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-connector', 'top', '50%') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-connector', 'transform', 'translateY(-50%)') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-top', '120px') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-bottom', '40px') }}
 
-{# Center layout: alternating top/bottom items #}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even)', 'align-self', 'flex-end') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even)', 'margin-bottom', '60px') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'align-self', 'flex-start') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'margin-top', '60px') }}
+{# Center Position Specific Overrides #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-slider-container', 'overflow-x', 'clip') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-slider-container', 'overflow-y', 'visible') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-slider-container', 'padding-top', '0') }}
 
-{# Center marker positioning for horizontal #}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'top', 'auto') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'bottom', '-60px') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'top', '-60px') }}
+{# Keep stretch alignment for equal heights but use transforms for positioning #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-track', 'align-items', 'stretch') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-track', 'position', 'relative') }}
 
-{# Horizontal Connector Position: Top System #}
-{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-connector', 'top', '35px') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-marker', 'top', '-52px') }}
+{# Odd items: above center line #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'transform', 'translateY(-170px)') }}
 
-{# Horizontal Connector Position: Bottom System #}
+{# Even items: below center line #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even)', 'transform', 'translateY(170px)') }}
+
+{# Markers positioned ON the connector line #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'top', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'bottom', '-50px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'top', '-50px') }}
+
+{% if mode == 'builder' %}
+{# Builder mode center position marker fixes - these override the general styles above #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'transform', 'translateY(-150px)') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'bottom', '-42px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'top', '-38px') }}
+{% endif %}
+
+{# Horizontal Connector Position: Top #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-connector', 'top', '12px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-marker', 'top', '-50px') }}
+
+{# Horizontal Top Position Navigation #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-prev', 'left', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-prev', 'top', '-3px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-next', 'right', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-next', 'top', '-3px') }}
+
+{# Horizontal Center Position Navigation #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'left', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'top', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'bottom', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'margin', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'right', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'top', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'bottom', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'margin', 'auto') }}
+
+{# Horizontal Connector Position: Bottom #}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-connector', 'top', 'auto') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-connector', 'bottom', '10px') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-marker', 'top', 'auto') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-marker', 'bottom', '-55px') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-top', '0px') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-bottom', '60px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'left', '-13px') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'bottom', '-5px') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'top', 'unset') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'right', '-13px') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'bottom', '-5px') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'top', 'unset') }}
 
@@ -344,7 +372,8 @@
 
 {# Content alignment based on connector position #}
 {{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'justify-content', 'flex-end') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-content', 'justify-content', 'flex-start') }}
 
 {# Timeline Date #}
 {{ style.css(id ~ ' .qx-timeline-date', 'color', dateColor) }}
