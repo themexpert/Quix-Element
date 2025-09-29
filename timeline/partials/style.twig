@@ -370,10 +370,30 @@
 {# Reverse content order only for bottom connector position #}
 {{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-content', 'flex-direction', 'column-reverse') }}
 
-{# Content alignment based on connector position #}
+{# Content vertical alignment for horizontal layout #}
+{% set contentAlignment = general.layout_settings.content_vertical_alignment %}
+
+{# Always generate all alignment classes for real-time builder updates #}
+{{ style.css(id ~ '.qx-timeline-content-align-top.qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-content-align-top .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
+
+{# Center alignment #}
+{{ style.css(id ~ '.qx-timeline-content-align-center.qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-content-align-center .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'center') }}
+
+{# Bottom alignment #}
+{{ style.css(id ~ '.qx-timeline-content-align-bottom.qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
+{{ style.css(id ~ '.qx-timeline-content-align-bottom .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
+
+{# Default content alignment based on connector position when no specific alignment is set #}
 {{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'justify-content', 'flex-end') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-content', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-content', 'justify-content', 'center') }}
+
+{# Content alignment overrides #}
+{{ style.css(id ~ '.qx-timeline-content-align-top .qx-timeline-horizontal .qx-timeline-item .qx-timeline-content', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-content-align-center .qx-timeline-horizontal .qx-timeline-item .qx-timeline-content', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-content-align-bottom .qx-timeline-horizontal .qx-timeline-item .qx-timeline-content', 'justify-content', 'flex-end') }}
 
 {# Timeline Date #}
 {{ style.css(id ~ ' .qx-timeline-date', 'color', dateColor) }}

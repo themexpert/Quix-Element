@@ -161,6 +161,26 @@ form:
                     hover: Show on Hover
                     disabled: Disabled
 
+              - name: content_vertical_alignment
+                label: Content Vertical Alignment
+                type: choose
+                value: center
+                responsive: false
+                help: Vertical alignment of content within each timeline item
+                depends:
+                    layout: horizontal
+                    connector_position_horizontal: ["top", "bottom"]
+                options:
+                    top:
+                        label: Top
+                        icon: qxuicon-arrow-to-top
+                    center:
+                        label: Center
+                        icon: qxuicon-align-center
+                    bottom:
+                        label: Bottom
+                        icon: qxuicon-arrow-to-bottom
+
     styles:
         - name: timeline_appearance
           label: Timeline Appearance

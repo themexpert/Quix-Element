@@ -7,14 +7,19 @@
 {% set connectorStyle = general.layout_settings.connector_style %}
 {% set connectorPosition = general.layout_settings.connector_position %}
 {% set connectorPositionHorizontal = general.layout_settings.connector_position_horizontal %}
+{% set contentAlignment = general.layout_settings.content_vertical_alignment %}
 
 {# Use appropriate connector position based on layout #}
 {% set finalConnectorPosition = layout == 'horizontal' ? connectorPositionHorizontal : connectorPosition %}
+
+{# Content alignment class for horizontal layout #}
+{% set contentAlignmentClass = (layout == 'horizontal' and contentAlignment) ? 'qx-timeline-content-align-' ~ contentAlignment : '' %}
 
 {% set classes = classNames('qx-element qx-element-timeline-v2',
     'qx-timeline-' ~ layout,
     'qx-timeline-align-' ~ alignment,
     'qx-timeline-connector-pos-' ~ finalConnectorPosition,
+    contentAlignmentClass,
     visibilityClass(visibility),
     class
 ) %}
