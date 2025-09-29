@@ -125,7 +125,7 @@
 {# Horizontal Slider Track #}
 {{ style.css(id ~ ' .qx-timeline-slider-track', 'display', 'flex') }}
 {{ style.css(id ~ ' .qx-timeline-slider-track', 'transition', 'transform 0.3s ease') }}
-{{ style.css(id ~ ' .qx-timeline-slider-track', 'align-items', 'flex-start') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'align-items', 'stretch') }}
 {{ style.css(id ~ ' .qx-timeline-slider-track', 'width', 'auto') }}
 {% if mode != 'builder' %}
 {{ style.css(id ~ ' .qx-timeline-slider-track', 'gap', '25px') }}
@@ -213,10 +213,13 @@
 {# Timeline Items #}
 {{ style.css(id ~ ' .qx-timeline-item', 'position', 'relative') }}
 {{ style.css(id ~ ' .qx-timeline-item', 'margin-bottom', '0') }}
-{{ style.responsiveCss(id ~ ' .qx-timeline-item', itemSpacing, 'padding-bottom', 'px') }}
+{{ style.responsiveCss(id ~ ' .qx-timeline-vertical .qx-timeline-item', itemSpacing, 'padding-bottom', 'px') }}
 {{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item:last-child', 'padding-bottom', '0') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex', '0 0 auto') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'min-width', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'padding-bottom', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex-direction', 'column') }}
 
 {# Timeline Marker #}
 {{ style.css(id ~ ' .qx-timeline-marker', 'position', 'absolute') }}
@@ -282,6 +285,39 @@
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'left', '50%') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'transform', 'translateX(-50%)') }}
 
+{# Horizontal Connector Position: Center System #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-connector', 'top', '50%') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-connector', 'transform', 'translateY(-50%)') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-top', '120px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-bottom', '40px') }}
+
+{# Center layout: alternating top/bottom items #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even)', 'align-self', 'flex-end') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even)', 'margin-bottom', '60px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'align-self', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'margin-top', '60px') }}
+
+{# Center marker positioning for horizontal #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'top', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'bottom', '-60px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'top', '-60px') }}
+
+{# Horizontal Connector Position: Top System #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-connector', 'top', '35px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-marker', 'top', '-52px') }}
+
+{# Horizontal Connector Position: Bottom System #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-connector', 'top', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-connector', 'bottom', '10px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-marker', 'top', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-marker', 'bottom', '-55px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-top', '0px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-bottom', '60px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'bottom', '-5px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'top', 'unset') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'bottom', '-5px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'top', 'unset') }}
+
 {# Timeline Dot (default marker) #}
 {{ style.css(id ~ ' .qx-timeline-dot', 'width', '15px') }}
 {{ style.css(id ~ ' .qx-timeline-dot', 'height', '15px') }}
@@ -297,6 +333,16 @@
 {{ style.padding(id ~ ' .qx-timeline-content', itemPadding) }}
 {{ style.borderRadius(id ~ ' .qx-timeline-content', itemBorderRadius) }}
 {{ style.boxShadow(id ~ ' .qx-timeline-content', itemShadow) }}
+
+{# Make horizontal timeline content fill full height #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'height', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'flex-direction', 'column') }}
+
+{# Content alignment based on connector position #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
 
 {# Timeline Date #}
 {{ style.css(id ~ ' .qx-timeline-date', 'color', dateColor) }}

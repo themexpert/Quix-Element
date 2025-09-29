@@ -102,6 +102,22 @@ form:
                     right:
                         label: Right Side
 
+              - name: connector_position_horizontal
+                label: Connector Position
+                type: select
+                value: top
+                help: Position of the connector line in horizontal layout
+                depends:
+                    show_connector: true
+                    layout: horizontal
+                options:
+                    top:
+                        label: Top
+                    center:
+                        label: Center
+                    bottom:
+                        label: Bottom
+
               - name: items_per_view
                 label: Items Per View
                 type: slider

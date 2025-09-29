@@ -6,11 +6,15 @@
 {% set showConnector = general.layout_settings.show_connector %}
 {% set connectorStyle = general.layout_settings.connector_style %}
 {% set connectorPosition = general.layout_settings.connector_position %}
+{% set connectorPositionHorizontal = general.layout_settings.connector_position_horizontal %}
+
+{# Use appropriate connector position based on layout #}
+{% set finalConnectorPosition = layout == 'horizontal' ? connectorPositionHorizontal : connectorPosition %}
 
 {% set classes = classNames('qx-element qx-element-timeline-v2',
     'qx-timeline-' ~ layout,
     'qx-timeline-align-' ~ alignment,
-    'qx-timeline-connector-pos-' ~ connectorPosition,
+    'qx-timeline-connector-pos-' ~ finalConnectorPosition,
     visibilityClass(visibility),
     class
 ) %}
