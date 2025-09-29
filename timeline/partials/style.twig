@@ -339,10 +339,12 @@
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'display', 'flex') }}
 {{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'flex-direction', 'column') }}
 
+{# Reverse content order only for bottom connector position #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-content', 'flex-direction', 'column-reverse') }}
+
 {# Content alignment based on connector position #}
 {{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
 {{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
-{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
 
 {# Timeline Date #}
 {{ style.css(id ~ ' .qx-timeline-date', 'color', dateColor) }}
