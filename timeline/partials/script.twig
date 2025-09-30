@@ -1,0 +1,241 @@
+{% set id = advanced.identifier.id %}
+{% set enableHover = styles.hover_effects.enable_hover %}
+{% set hoverAnimation = styles.hover_effects.hover_animation %}
+
+{% if mode != 'builder' %}
+jQuery(document).ready(function($) {
+{% endif %}
+{% if mode == 'builder' %}
+jQuery(function($) {
+{% endif %}
+  var timelineId = "{{ id }}";
+  var $timeline = $('#' + timelineId);
+
+  function initTimelineAnimations() {
+    if (typeof IntersectionObserver !== 'undefined') {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var $item = $(entry.target);
+            $item.addClass('qx-timeline-item-visible');
+
+            {% if enableHover and hoverAnimation != 'none' %}
+              setTimeout(function() {
+                $item.addClass('qx-timeline-item-animated');
+              }, 200);
+            {% endif %}
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      $timeline.find('.qx-timeline-item').each(function() {
+        observer.observe(this);
+      });
+    } else {
+      $timeline.find('.qx-timeline-item').addClass('qx-timeline-item-visible');
+    }
+  }
+
+  function handleHashNavigation() {
+    if (window.location.hash) {
+      var hash = window.location.hash;
+      var $target = $timeline.find(hash);
+
+      if ($target.length) {
+        setTimeout(function() {
+          $('html, body').animate({
+            scrollTop: $target.offset().top - 100
+          }, 800);
+        }, 500);
+      }
+    }
+  }
+
+  $timeline.find('.qx-timeline-item a').on('click', function(e) {
+    var $link = $(this);
+    var href = $link.attr('href');
+
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      var $target = $(href);
+
+      if ($target.length) {
+        $('html, body').animate({
+          scrollTop: $target.offset().top - 100
+        }, 800, function() {
+          history.pushState(null, null, href);
+        });
+      }
+    }
+  });
+
+  function initTimelineSlider() {
+    var $horizontalTimeline = $timeline.find('.qx-timeline-horizontal');
+
+    if ($horizontalTimeline.length) {
+      var $track = $horizontalTimeline.find('.qx-timeline-slider-track');
+      var $items = $track.find('.qx-timeline-item');
+      var $prevBtn = $horizontalTimeline.find('.qx-timeline-nav-prev');
+      var $nextBtn = $horizontalTimeline.find('.qx-timeline-nav-next');
+
+      var itemsPerView = parseInt($horizontalTimeline.data('items-per-view')) || 3;
+      var sliderMode = $horizontalTimeline.data('slider-mode') || 'manual';
+      
+      var slideAsSetAttr = $horizontalTimeline.data('slide-as-set');
+      var debugSlideAsSetAttr = $horizontalTimeline.data('debug-slide-as-set');
+      var slideAsSet = slideAsSetAttr === true || slideAsSetAttr === 'true';
+      
+      var autoSpeed = 3;
+      try {
+        var speedAttr = $horizontalTimeline[0].getAttribute('data-auto-speed');
+        if (speedAttr && speedAttr !== '[object Object]' && !isNaN(parseInt(speedAttr))) {
+          autoSpeed = parseInt(speedAttr);
+        }
+      } catch (e) {
+        autoSpeed = 3;
+      }
+      
+      var currentSlide = 0;
+      var totalSlides = slideAsSet ? Math.ceil($items.length / itemsPerView) : Math.max(1, $items.length - itemsPerView + 1);
+      var autoPlayInterval;
+      
+      function updateSliderWidth() {
+        var containerWidth = $horizontalTimeline.find('.qx-timeline-slider-container').width();
+        var spacing = 25;
+        var itemWidth = (containerWidth - (itemsPerView - 1) * spacing) / itemsPerView;
+        
+        $items.each(function() {
+          $(this).css({
+            'width': itemWidth + 'px',
+            'flex-shrink': '0',
+            'flex-grow': '0'
+          });
+        });
+        
+        var trackWidth = ($items.length * itemWidth) + (($items.length - 1) * spacing);
+        $track.css('width', trackWidth + 'px');
+      }
+      
+      function goToSlide(slideIndex) {
+        if (slideIndex < 0) slideIndex = totalSlides - 1;
+        if (slideIndex >= totalSlides) slideIndex = 0;
+        
+        currentSlide = slideIndex;
+        var containerWidth = $horizontalTimeline.find('.qx-timeline-slider-container').width();
+        var spacing = 25;
+        var itemWidth = (containerWidth - (itemsPerView - 1) * spacing) / itemsPerView;
+        
+        var moveDistance;
+        if (slideAsSet) {
+          moveDistance = slideIndex * (itemWidth + spacing) * itemsPerView;
+        } else {
+          moveDistance = slideIndex * (itemWidth + spacing);
+        }
+        
+        $track.css('transform', 'translateX(-' + moveDistance + 'px)');
+        
+        $prevBtn.toggleClass('disabled', slideIndex === 0);
+        $nextBtn.toggleClass('disabled', slideIndex === totalSlides - 1);
+      }
+      
+      function nextSlide() {
+        goToSlide(currentSlide + 1);
+      }
+      
+      function prevSlide() {
+        goToSlide(currentSlide - 1);
+      }
+      
+      function startAutoPlay() {
+        if (sliderMode === 'auto') {
+          stopAutoPlay();
+          autoPlayInterval = setInterval(function() {
+            nextSlide();
+          }, autoSpeed * 1000);
+        }
+      }
+      
+      function stopAutoPlay() {
+        if (autoPlayInterval) {
+          clearInterval(autoPlayInterval);
+          autoPlayInterval = null;
+        }
+      }
+      
+      $prevBtn.on('click', function() {
+        stopAutoPlay();
+        prevSlide();
+        startAutoPlay();
+      });
+      
+      $nextBtn.on('click', function() {
+        stopAutoPlay();
+        nextSlide();
+        startAutoPlay();
+      });
+      
+      $horizontalTimeline.on('mouseenter', function() {
+        stopAutoPlay();
+      }).on('mouseleave', function() {
+        startAutoPlay();
+      });
+      
+      var startX = 0;
+      var currentX = 0;
+      var isDragging = false;
+      
+      $track.on('touchstart mousedown', function(e) {
+        stopAutoPlay();
+        isDragging = true;
+        startX = e.type === 'touchstart' ? e.originalEvent.touches[0].clientX : e.clientX;
+        e.preventDefault();
+      });
+      
+      $(document).on('touchmove mousemove', function(e) {
+        if (!isDragging) return;
+        currentX = e.type === 'touchmove' ? e.originalEvent.touches[0].clientX : e.clientX;
+        e.preventDefault();
+      });
+      
+      $(document).on('touchend mouseup', function() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        var diffX = startX - currentX;
+        var threshold = 50;
+        
+        if (Math.abs(diffX) > threshold) {
+          if (diffX > 0) {
+            nextSlide();
+          } else {
+            prevSlide();
+          }
+        }
+        startAutoPlay();
+      });
+      
+      updateSliderWidth();
+      goToSlide(0);
+      startAutoPlay();
+      
+      $(window).on('resize', function() {
+        updateSliderWidth();
+      });
+    }
+  }
+
+  initTimelineAnimations();
+  initTimelineSlider();
+  handleHashNavigation();
+
+  $(window).on('resize', function() {
+    setTimeout(initTimelineAnimations, 300);
+  });
+});
+{% if mode != 'builder' %}
+{% endif %}
+{% if mode == 'builder' %}
+{% endif %}

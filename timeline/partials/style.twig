@@ -1,0 +1,596 @@
+{% include 'global.twig' %}
+
+{% set id = '#' ~ advanced.identifier.id %}
+{% set timelineBg = styles.timeline_appearance.timeline_bg %}
+{% set timelinePadding = styles.timeline_appearance.timeline_padding %}
+{% set timelineBorder = styles.timeline_appearance.timeline_border %}
+{% set connectorColor = styles.timeline_appearance.connector_color %}
+
+{# Extract slider values with responsive support #}
+{% set connectorWidth = (styles.timeline_appearance.connector_width.desktop ?? styles.timeline_appearance.connector_width.value ?? styles.timeline_appearance.connector_width ?: 2) %}
+{% set itemSpacing = styles.timeline_appearance.item_spacing %}
+
+{% set itemBg = styles.item_styles.item_bg %}
+{% set itemBorder = styles.item_styles.item_border %}
+{% set itemPadding = styles.item_styles.item_padding %}
+{% set itemBorderRadius = styles.item_styles.item_border_radius %}
+{% set itemShadow = styles.item_styles.item_shadow %}
+
+
+{% set titleColor = styles.content_styles.title_color %}
+{% set titleFont = styles.content_styles.title_font %}
+{% set dateColor = styles.content_styles.date_color %}
+{% set dateFont = styles.content_styles.date_font %}
+{% set descriptionColor = styles.content_styles.description_color %}
+{% set descriptionFont = styles.content_styles.description_font %}
+
+{% set enableHover = styles.hover_effects.enable_hover %}
+{% set hoverItemBg = styles.hover_effects.hover_item_bg %}
+{% set hoverTitleColor = styles.hover_effects.hover_title_color %}
+{% set hoverTitleFont = styles.hover_effects.hover_title_font %}
+{% set hoverDateColor = styles.hover_effects.hover_date_color %}
+{% set hoverDateFont = styles.hover_effects.hover_date_font %}
+{% set hoverDescriptionColor = styles.hover_effects.hover_description_color %}
+{% set hoverDescriptionFont = styles.hover_effects.hover_description_font %}
+
+{% set showMarkers = general.layout_settings.show_markers is defined ? general.layout_settings.show_markers : true %}
+{% set showArrows = general.layout_settings.show_arrows is defined ? general.layout_settings.show_arrows : false %}
+{% set mobileLayout = styles.responsive_settings.mobile_layout %}
+{% set hideOnMobile = styles.responsive_settings.hide_on_mobile %}
+
+{# Timeline Wrapper #}
+{{ style.css(id ~ ' .qx-timeline-wrapper', 'position', 'relative') }}
+{{ style.background(id ~ ' .qx-timeline-wrapper', timelineBg) }}
+{{ style.padding(id ~ ' .qx-timeline-wrapper', timelinePadding) }}
+{{ style.border(id ~ ' .qx-timeline-wrapper', timelineBorder) }}
+
+{# Timeline Base Styles #}
+{{ style.css(id ~ ' .qx-timeline', 'position', 'relative') }}
+{{ style.css(id ~ ' .qx-timeline', 'list-style', 'none') }}
+{{ style.css(id ~ ' .qx-timeline', 'margin', '0') }}
+{{ style.css(id ~ ' .qx-timeline', 'padding', '0') }}
+
+{# Timeline Alignment Styles #}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-content', 'text-align', 'left') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-content', 'margin-left', '45px') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-content', 'margin-right', '45px') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-content', 'text-align', 'center') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-content', 'margin-left', '45px') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-content', 'margin-right', '45px') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-content', 'text-align', 'right') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-content', 'margin-right', '45px') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-content', 'margin-left', '45px') }}
+
+{# Updated: Center/left/right align images using flexbox #}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-left .qx-timeline-image', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-center .qx-timeline-image', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-vertical.qx-timeline-align-right .qx-timeline-image', 'justify-content', 'flex-end') }}
+
+{{ style.css(id ~ ' .qx-timeline-horizontal.qx-timeline-align-left', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal.qx-timeline-align-center', 'justify-content', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal.qx-timeline-align-right', 'justify-content', 'flex-end') }}
+
+{# Horizontal Content Alignment #}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-left .qx-timeline-content', 'text-align', 'left') }}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-center .qx-timeline-content', 'text-align', 'center') }}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-right .qx-timeline-content', 'text-align', 'right') }}
+
+{# Horizontal Image Alignment #}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-left .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-left .qx-timeline-image', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-center .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-center .qx-timeline-image', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-right .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-horizontal.qx-timeline-align-right .qx-timeline-image', 'justify-content', 'flex-end') }}
+
+{# Timeline Connector #}
+{{ style.css(id ~ ' .qx-timeline-connector', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-connector', 'background-color', connectorColor) }}
+{{ style.css(id ~ ' .qx-timeline-connector', 'width', connectorWidth ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-connector', 'border-radius', connectorWidth ~ 'px') }}
+
+{# Connector Styles #}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'border-style', 'dashed') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'border-width', '0 ' ~ connectorWidth ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'background-color', 'transparent') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dashed', 'border-color', connectorColor) }}
+
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'border-style', 'dotted') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'border-width', '0 ' ~ connectorWidth ~ 'px') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'background-color', 'transparent') }}
+{{ style.css(id ~ ' .qx-timeline-connector-dotted', 'border-color', connectorColor) }}
+
+{# Horizontal Connector Styles #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector-dashed', 'border-width', connectorWidth ~ 'px 0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector-dotted', 'border-width', connectorWidth ~ 'px 0') }}
+
+{# Vertical Timeline #}
+
+{# Global Vertical Connector Styling #}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'left', '-1px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'top', '10px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'height', '97.5%') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'width', connectorWidth ~ 'px') }}
+
+{# Horizontal Timeline #}
+{{ style.css(id ~ ' .qx-timeline-horizontal', 'position', 'relative') }}
+
+{# Horizontal Slider Container #}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'overflow', 'clip') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'width', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'padding-top', '55px') }}
+
+{# Horizontal Slider Track #}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'transition', 'transform 0.6s ease-out') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'align-items', 'stretch') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'width', 'auto') }}
+{% if mode != 'builder' %}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'gap', '25px') }}
+{% endif %}
+
+{# Builder Mode Fixes #}
+{% if mode == 'builder' %}
+{% set itemsPerView = 3 %}
+{% if general.layout_settings.items_per_view %}
+  {% if general.layout_settings.items_per_view.desktop %}
+    {% set itemsPerView = general.layout_settings.items_per_view.desktop %}
+  {% else %}
+    {% set itemsPerView = general.layout_settings.items_per_view %}
+  {% endif %}
+{% endif %}
+{% set gapSize = (itemsPerView - 1) * 25 %}
+
+{{ style.css(id ~ ' .qx-timeline-horizontal', 'min-height', '280px') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'min-height', '280px') }}
+{{ style.css(id ~ ' .qx-timeline-slider-container', 'overflow', 'hidden') }}
+{{ style.css(id ~ ' .qx-timeline-slider-track', 'flex-wrap', 'nowrap') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'min-width', 'unset') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'max-width', 'unset') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex', '0 0 auto') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'margin-right', '0') }}
+
+{# Current setting-based styles #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'width', 'calc((100% - ' ~ gapSize ~ 'px) / ' ~ itemsPerView ~ ')') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item:not(:last-child)', 'margin-right', '25px') }}
+
+{# Also add data-attribute-based styles as fallback/override #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="1"] .qx-timeline-item', 'width', 'calc(100% - 0px)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="2"] .qx-timeline-item', 'width', 'calc((100% - 25px) / 2)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="3"] .qx-timeline-item', 'width', 'calc((100% - 50px) / 3)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="4"] .qx-timeline-item', 'width', 'calc((100% - 75px) / 4)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="5"] .qx-timeline-item', 'width', 'calc((100% - 100px) / 5)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-items-per-view="6"] .qx-timeline-item', 'width', 'calc((100% - 125px) / 6)') }}
+{% endif %}
+
+{# Global Horizontal Connector Styling #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'top', '35px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'left', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'width', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'height', connectorWidth ~ 'px') }}
+
+{# Horizontal Navigation Arrows #}
+{{ style.css(id ~ ' .qx-timeline-nav', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'top', '20px') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'z-index', '10') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'background', 'rgba(0, 0, 0, 0.7)') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'color', 'white') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'border', 'none') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'border-radius', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'width', '32px') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'height', '32px') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'align-items', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'justify-content', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'cursor', 'pointer') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'transition', 'all 0.3s ease') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'opacity', '0') }}
+{{ style.css(id ~ ' .qx-timeline-nav', 'pointer-events', 'none') }}
+
+{{ style.css(id ~ ' .qx-timeline-nav:hover', 'background', 'rgba(0, 0, 0, 0.9)') }}
+
+{# Navigation Visibility States #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="always"] .qx-timeline-nav', 'opacity', '1') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="always"] .qx-timeline-nav', 'pointer-events', 'auto') }}
+
+{# Disabled state #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="disabled"] .qx-timeline-nav', 'opacity', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="disabled"] .qx-timeline-nav', 'pointer-events', 'none') }}
+
+{# Hover state #}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"] .qx-timeline-nav', 'opacity', '0 !important') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"] .qx-timeline-nav', 'pointer-events', 'none') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"]:hover .qx-timeline-nav', 'opacity', '1 !important') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal[data-show-nav="hover"]:hover .qx-timeline-nav', 'pointer-events', 'auto') }}
+
+{# Timeline Items #}
+{{ style.css(id ~ ' .qx-timeline-item', 'position', 'relative') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'margin-bottom', '0') }}
+{{ style.responsiveCss(id ~ ' .qx-timeline-vertical .qx-timeline-item', itemSpacing, 'padding-bottom', 'px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-item:last-child', 'padding-bottom', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex', '0 0 auto') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'min-width', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'padding-bottom', '0') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'flex-direction', 'column') }}
+
+{# Timeline Marker #}
+{% if showMarkers %}
+{{ style.css(id ~ ' .qx-timeline-marker', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'align-items', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'justify-content', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'z-index', '2') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'width', '15px') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'height', '15px') }}
+{{ style.css(id ~ ' .qx-timeline-marker', 'top', '5px') }}
+{% else %}
+{{ style.css(id ~ ' .qx-timeline-marker', 'display', 'none') }}
+{% endif %}
+
+{# Vertical Marker Position #}
+{% if showMarkers %}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'transform', 'translateX(-50%)') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'top', '0') }}
+{% endif %}
+
+{# Vertical Marker Position #}
+{% if showMarkers %}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'transform', 'translateX(-50%)') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'top', '0') }}
+{% endif %}
+
+{# Connector Position: Right Side #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical', 'padding-right', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical', 'padding-left', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-connector', 'left', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-connector', 'right', '-0.1px') }}
+{% if showMarkers %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-marker', 'right', '-14px') }}
+{% endif %}
+
+{# Center Connector Position: Alternate items left/right #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical', 'padding-left', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical', 'padding-right', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-connector', 'left', '50%') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-connector', 'transform', 'translateX(-50%)') }}
+
+{# Center layout: two-column structure #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'width', '50%') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'clear', 'none') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even)', 'float', 'left') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even)', 'margin-right', '1px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd)', 'float', 'right') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd)', 'clear', 'right') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical::after', 'content', '""') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical::after', 'display', 'table') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical::after', 'clear', 'both') }}
+
+{# Center marker placement #}
+{% if showMarkers %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'left', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'right', '-7.5px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'transform', 'none') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'left', '-7.5px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'transform', 'none') }}
+{% endif %}
+
+{# Center content alignment #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-content', 'text-align', 'right') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-content', 'margin-right', '45px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-content', 'margin-left', '0') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'text-align', 'left') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'margin-left', '45px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'margin-right', '0') }}
+
+{# Center image alignment #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-image', 'display', 'flex') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-image', 'justify-content', 'flex-end') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-image', 'justify-content', 'flex-start') }}
+
+{# Horizontal Marker Position #}
+{% if showMarkers %}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'top', '-52px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'left', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'transform', 'translateX(-50%)') }}
+{% endif %}
+
+{# Arrow Indicators #}
+{% if showArrows %}
+{# Base arrow styles #}
+{{ style.css(id ~ ' .qx-timeline-arrow', 'position', 'absolute') }}
+{{ style.css(id ~ ' .qx-timeline-arrow', 'background-color', connectorColor) }}
+{{ style.css(id ~ ' .qx-timeline-arrow', 'pointer-events', 'none') }}
+
+{# Vertical layout arrows - extending from dots toward content #}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-arrow', 'width', '30px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-arrow', 'height', '2px') }}
+{{ style.css(id ~ ' .qx-timeline-vertical .qx-timeline-arrow', 'top', '12px') }}
+
+{# Vertical left position arrows - extend from dot to the right toward content #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-left .qx-timeline-vertical .qx-timeline-arrow', 'left', '0') }}
+
+{# Vertical right position arrows - extend from dot to the left toward content #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-right .qx-timeline-vertical .qx-timeline-arrow', 'right', '0.01px') }}
+
+{# Vertical center position arrows - extend from dots toward content #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(odd) .qx-timeline-arrow', 'left', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item:nth-child(even) .qx-timeline-arrow', 'right', '0.001px') }}
+
+{# Horizontal layout arrows - extending from dots toward content #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-arrow', 'width', '2px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-arrow', 'height', '30px') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-arrow', 'left', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-arrow', 'transform', 'translateX(-50%)') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-arrow', 'z-index', '-10') }}
+
+{# Horizontal top position arrows - extend from dot downward toward content #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-arrow', 'top', '-42px') }}
+
+{# Horizontal bottom position arrows - extend from dot upward toward content #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-arrow', 'bottom', '-42px') }}
+
+{# Horizontal center position arrows - extend from dots toward content #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-arrow', 'bottom', '-42px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-arrow', 'top', '-42px') }}
+
+{# Builder mode center position arrow adjustments #}
+{% if mode == 'builder' %}
+
+{% endif %}
+{% endif %}
+
+{# Horizontal Connector Position: Center #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-connector', 'top', '50%') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-connector', 'transform', 'translateY(-50%)') }}
+
+{# Center Position Specific Overrides #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-slider-container', 'overflow-x', 'clip') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-slider-container', 'overflow-y', 'visible') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-slider-container', 'padding-top', '0') }}
+
+{# Keep stretch alignment for equal heights but use transforms for positioning #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-track', 'align-items', 'stretch') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-slider-track', 'position', 'relative') }}
+
+{# Odd items: above center line #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'transform', 'translateY(-170px)') }}
+
+{# Even items: below center line #}
+{% if mode == 'builder' %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even)', 'transform', 'translateY(177px)') }}
+{% else %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even)', 'transform', 'translateY(170px)') }}
+{% endif %}
+
+{# Markers positioned ON the connector line #}
+{% if showMarkers %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'top', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'bottom', '-50px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'top', '-50px') }}
+{% endif %}
+
+{% if mode == 'builder' and showMarkers %}
+{# Builder mode center position marker fixes - these override the general styles above #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd)', 'transform', 'translateY(-150px)') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-marker', 'bottom', '-42px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-marker', 'top', '-45px') }}
+{% endif %}
+
+{# Horizontal Connector Position: Top #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-connector', 'top', '12px') }}
+{% if showMarkers %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-marker', 'top', '-50px') }}
+{% endif %}
+
+{# Horizontal Top Position Navigation #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-prev', 'left', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-prev', 'top', '-3px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-next', 'right', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-nav-next', 'top', '-3px') }}
+
+{# Horizontal Center Position Navigation #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'left', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'top', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'bottom', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-prev', 'margin', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'right', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'top', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'bottom', '0.001px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-nav-next', 'margin', 'auto') }}
+
+{# Horizontal Connector Position: Bottom #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-connector', 'top', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-connector', 'bottom', '10px') }}
+{% if showMarkers %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-marker', 'top', 'auto') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-marker', 'bottom', '-55px') }}
+{% endif %}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-top', '0px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-slider-container', 'padding-bottom', '60px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'left', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'bottom', '-5px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-prev', 'top', 'unset') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'right', '-13px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'bottom', '-5px') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-bottom .qx-timeline-horizontal .qx-timeline-nav-next', 'top', 'unset') }}
+
+{# Timeline Dot (default marker) #}
+{% if showMarkers %}
+{{ style.css(id ~ ' .qx-timeline-dot', 'width', '15px') }}
+{{ style.css(id ~ ' .qx-timeline-dot', 'height', '15px') }}
+{{ style.css(id ~ ' .qx-timeline-dot', 'border-radius', '50%') }}
+{{ style.css(id ~ ' .qx-timeline-dot', 'background-color', connectorColor) }}
+{% endif %}
+
+{# Icon Styling #}
+
+{# Timeline Content #}
+{{ style.css(id ~ ' .qx-timeline-content', 'position', 'relative') }}
+{{ style.background(id ~ ' .qx-timeline-content', itemBg) }}
+{{ style.border(id ~ ' .qx-timeline-content', itemBorder) }}
+{{ style.padding(id ~ ' .qx-timeline-content', itemPadding) }}
+{{ style.borderRadius(id ~ ' .qx-timeline-content', itemBorderRadius) }}
+{{ style.boxShadow(id ~ ' .qx-timeline-content', itemShadow) }}
+
+{# Make horizontal timeline content fill full height #}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'height', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'display', 'flex') }}
+{{ style.css(id ~ ' .qx-timeline-horizontal .qx-timeline-content', 'flex-direction', 'column') }}
+
+
+
+{# Content vertical alignment for horizontal layout #}
+{% set contentAlignment = general.layout_settings.content_vertical_alignment %}
+
+{# Always generate all alignment classes for real-time builder updates #}
+{{ style.css(id ~ '.qx-timeline-content-align-top.qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-content-align-top .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
+
+{# Center alignment #}
+{{ style.css(id ~ '.qx-timeline-content-align-center.qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-content-align-center .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'center') }}
+
+{# Bottom alignment #}
+{{ style.css(id ~ '.qx-timeline-content-align-bottom.qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
+{{ style.css(id ~ '.qx-timeline-content-align-bottom .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-end') }}
+
+{# Default content alignment based on connector position when no specific alignment is set #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-top .qx-timeline-horizontal .qx-timeline-content', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(odd) .qx-timeline-content', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-horizontal .qx-timeline-item:nth-child(even) .qx-timeline-content', 'justify-content', 'center') }}
+
+{# Content alignment overrides #}
+{{ style.css(id ~ '.qx-timeline-content-align-top .qx-timeline-horizontal .qx-timeline-item .qx-timeline-content', 'justify-content', 'flex-start') }}
+{{ style.css(id ~ '.qx-timeline-content-align-center .qx-timeline-horizontal .qx-timeline-item .qx-timeline-content', 'justify-content', 'center') }}
+{{ style.css(id ~ '.qx-timeline-content-align-bottom .qx-timeline-horizontal .qx-timeline-item .qx-timeline-content', 'justify-content', 'flex-end') }}
+
+{# Timeline Date #}
+{{ style.css(id ~ ' .qx-timeline-date', 'color', dateColor) }}
+{{ style.css(id ~ ' .qx-timeline-date', 'margin-bottom', '8px') }}
+{{ style.css(id ~ ' .qx-timeline-date', 'font-size', '14px') }}
+{{ style.css(id ~ ' .qx-timeline-date', 'font-weight', '500') }}
+{{ style.typography(id ~ ' .qx-timeline-date', dateFont) }}
+
+{# Timeline Title #}
+{{ style.css(id ~ ' .qx-timeline-title', 'color', titleColor) }}
+{{ style.css(id ~ ' .qx-timeline-title', 'margin-bottom', '0') }}
+{{ style.css(id ~ ' .qx-timeline-title', 'margin-top', '0') }}
+{{ style.typography(id ~ ' .qx-timeline-title', titleFont) }}
+{{ style.css(id ~ ' .qx-timeline-title a', 'color', 'inherit') }}
+{{ style.css(id ~ ' .qx-timeline-title a:hover', 'color', 'inherit') }}
+{{ style.css(id ~ ' .qx-timeline-title a', 'text-decoration', 'none') }}
+
+{# Timeline Image #}
+{{ style.css(id ~ ' .qx-timeline-image', 'margin-bottom', '15px') }}
+{{ style.css(id ~ ' .qx-timeline-image img', 'max-width', '100%') }}
+{{ style.css(id ~ ' .qx-timeline-image img', 'height', 'auto') }}
+{{ style.css(id ~ ' .qx-timeline-image img', 'border-radius', '4px') }}
+
+{# Timeline Description #}
+{{ style.css(id ~ ' .qx-timeline-description', 'color', descriptionColor) }}
+{{ style.css(id ~ ' .qx-timeline-description', 'margin-bottom', '0') }}
+{{ style.typography(id ~ ' .qx-timeline-description', descriptionFont) }}
+{{ style.css(id ~ ' .qx-timeline-description p:last-child', 'margin-bottom', '0') }}
+
+{# Active Item Styling #}
+{% if showMarkers %}
+{{ style.css(id ~ ' .qx-timeline-item-active .qx-timeline-marker', 'transform', 'translateX(-50%) scale(1.4)') }}
+{{ style.css(id ~ ' .qx-timeline-item-active .qx-timeline-dot', 'background-color', connectorColor) }}
+
+{# Active Item Styling for Center Position #}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item-active:nth-child(even) .qx-timeline-marker', 'transform', 'scale(1.4)') }}
+{{ style.css(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item-active:nth-child(odd) .qx-timeline-marker', 'transform', 'scale(1.4)') }}
+{% endif %}
+
+{# Hover Effects #}
+{% if enableHover %}
+    {{ style.css(id ~ ' .qx-timeline-item', 'transition', 'all 0.3s ease') }}
+
+    {% if hoverItemBg %}
+        {{ style.background(id ~ ' .qx-timeline-item:hover .qx-timeline-content', hoverItemBg) }}
+    {% endif %}
+
+    {% if hoverTitleColor %}
+        {{ style.css(id ~ ' .qx-timeline-item:hover .qx-timeline-title', 'color', hoverTitleColor) }}
+    {% endif %}
+
+    {% if hoverTitleFont %}
+        {{ style.typography(id ~ ' .qx-timeline-item:hover .qx-timeline-title', hoverTitleFont) }}
+    {% endif %}
+
+    {% if hoverDateColor %}
+        {{ style.css(id ~ ' .qx-timeline-item:hover .qx-timeline-date', 'color', hoverDateColor) }}
+    {% endif %}
+
+    {% if hoverDateFont %}
+        {{ style.typography(id ~ ' .qx-timeline-item:hover .qx-timeline-date', hoverDateFont) }}
+    {% endif %}
+
+    {% if hoverDescriptionColor %}
+        {{ style.css(id ~ ' .qx-timeline-item:hover .qx-timeline-description', 'color', hoverDescriptionColor) }}
+    {% endif %}
+
+    {% if hoverDescriptionFont %}
+        {{ style.typography(id ~ ' .qx-timeline-item:hover .qx-timeline-description', hoverDescriptionFont) }}
+    {% endif %}
+{% endif %}
+
+{# Responsive Design #}
+{% if hideOnMobile %}
+    {# Hide entire timeline on mobile when hideOnMobile is enabled #}
+    {{ style.phone(id ~ ' .qx-timeline-wrapper', 'display: none') }}
+{% else %}
+    {# Mobile layout adjustments when timeline is visible #}
+    {% if mobileLayout == 'vertical' %}
+        {# Force vertical layout on mobile #}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal', 'flex-direction: column') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'margin-right: 0') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-item', 'margin-bottom: ' ~ (itemSpacing.mobile ?? itemSpacing.value ?? itemSpacing ?: 20) ~ 'px') }}
+        
+        {# Vertical layout mobile optimizations #}
+        {{ style.phone(id ~ ' .qx-timeline-vertical', 'padding-left: 40px') }}
+        {{ style.phone(id ~ ' .qx-timeline-vertical .qx-timeline-marker', 'left: -40px') }}
+        {{ style.phone(id ~ ' .qx-timeline-vertical .qx-timeline-connector', 'left: 10px') }}
+        
+        {# Center connector mobile adjustments #}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'width: 100%') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'float: none') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item', 'clear: both') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item .qx-timeline-marker', 'left: -40px') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item .qx-timeline-marker', 'right: auto') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item .qx-timeline-content', 'text-align: left') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item .qx-timeline-content', 'margin-left: 45px') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-item .qx-timeline-content', 'margin-right: 0') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-connector', 'left: 10px') }}
+        {{ style.phone(id ~ '.qx-timeline-connector-pos-center .qx-timeline-vertical .qx-timeline-connector', 'transform: none') }}
+        
+    {% elseif mobileLayout == 'horizontal' %}
+        {# Keep horizontal layout on mobile but optimize #}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'top: -30px') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'left: 50%') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-marker', 'transform: translateX(-50%)') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'display: block') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'top: 0') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'height: 2px') }}
+        {{ style.phone(id ~ ' .qx-timeline-horizontal .qx-timeline-connector', 'width: 100%') }}
+    {% endif %}
+{% endif %}
+
+{# Placeholder Styling #}
+{{ style.css(id ~ ' .qx-timeline-placeholder', 'text-align', 'center') }}
+{{ style.css(id ~ ' .qx-timeline-placeholder', 'padding', '40px') }}
+{{ style.css(id ~ ' .qx-timeline-placeholder', 'color', '#999') }}
+{{ style.css(id ~ ' .qx-timeline-placeholder p', 'margin', '0') }}
+
+{# Remove entry animation #}
+{{ style.css(id ~ ' .qx-timeline-item', 'opacity', '1') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'transform', 'none') }}
+{{ style.css(id ~ ' .qx-timeline-item', 'transition', 'none') }}
+
+{{ style.load(advanced.identifier.id) }}

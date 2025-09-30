@@ -1,0 +1,189 @@
+{% set id = advanced.identifier.id %}
+{% set class = advanced.identifier.class %}
+{% set timelineItems = general.timeline_items %}
+{% set layout = general.layout_settings.layout %}
+{% set alignment = general.layout_settings.alignment %}
+{% set showConnector = general.layout_settings.show_connector %}
+{% set connectorStyle = general.layout_settings.connector_style %}
+{% set connectorPosition = general.layout_settings.connector_position %}
+{% set connectorPositionHorizontal = general.layout_settings.connector_position_horizontal %}
+{% set contentAlignment = general.layout_settings.content_vertical_alignment %}
+{% set showMarkers = general.layout_settings.show_markers is defined ? general.layout_settings.show_markers : true %}
+{% set showArrows = general.layout_settings.show_arrows is defined ? general.layout_settings.show_arrows : false %}
+
+{# Use appropriate connector position based on layout #}
+{% set finalConnectorPosition = layout == 'horizontal' ? connectorPositionHorizontal : connectorPosition %}
+
+{# Content alignment class for horizontal layout #}
+{% set contentAlignmentClass = (layout == 'horizontal' and contentAlignment) ? 'qx-timeline-content-align-' ~ contentAlignment : '' %}
+
+{% set classes = classNames('qx-element qx-element-timeline-v2',
+    'qx-timeline-' ~ layout,
+    'qx-timeline-align-' ~ alignment,
+    'qx-timeline-connector-pos-' ~ finalConnectorPosition,
+    contentAlignmentClass,
+    visibilityClass(visibility),
+    class
+) %}
+
+{% set animation = advanced.animation_fields_group.animation %}
+{% set animationRepeat = advanced.animation_fields_group.animation_repeat %}
+{% set animationDelay = advanced.animation_fields_group.animation_delay %}
+{% set background = advanced.background_fields_group.background %}
+
+{% embed "animation.twig" with {
+    "id" : id,
+    "classes" : classes,
+    "animation" : animation,
+    "animationRepeat" : animationRepeat,
+    "animationDelay" : animationDelay,
+    "background" : background
+} %}
+    {% block element %}
+        {% if timelineItems %}
+            <div class="qx-timeline-wrapper">
+                {% if layout == 'vertical' %}
+                    <div class="qx-timeline qx-timeline-vertical">
+                        {% if showConnector %}
+                            <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                        {% endif %}
+                        {% for item in timelineItems %}
+                            <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
+                                {% if showMarkers %}
+                                    <div class="qx-timeline-marker">
+                                        <div class="qx-timeline-dot"></div>
+                                    </div>
+                                {% endif %}
+                                {% if showArrows %}
+                                    <div class="qx-timeline-arrow"></div>
+                                {% endif %}
+
+
+                                <div class="qx-timeline-content">
+                                    {% if item.date %}
+                                        <div class="qx-timeline-date">{{ item.date }}</div>
+                                    {% endif %}
+
+                                    {% if item.title %}
+                                        <h3 class="qx-timeline-title">
+                                            {% if item.link.url %}
+                                                {{ item.title | link(item.link) }}
+                                            {% else %}
+                                                {{ item.title }}
+                                            {% endif %}
+                                        </h3>
+                                    {% endif %}
+
+                                    {% if item.image.source %}
+                                        <div class="qx-timeline-image">
+                                            {{ image(item.image.source, item.title, '', '', item.image) }}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if item.description %}
+                                        <div class="qx-timeline-description">
+                                            {{ item.description|raw }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% set itemsPerView = 3 %}
+                    {% if general.layout_settings.items_per_view %}
+                        {% if general.layout_settings.items_per_view.desktop %}
+                            {% set itemsPerView = general.layout_settings.items_per_view.desktop %}
+                        {% else %}
+                            {% set itemsPerView = general.layout_settings.items_per_view %}
+                        {% endif %}
+                    {% endif %}
+                    {% set autoPlaySpeed = general.layout_settings.auto_play_speed %}
+                    {% if autoPlaySpeed.desktop is defined %}
+                        {% set autoPlaySpeed = autoPlaySpeed.desktop %}
+                    {% elseif autoPlaySpeed.value is defined %}
+                        {% set autoPlaySpeed = autoPlaySpeed.value %}
+                    {% elseif autoPlaySpeed is iterable %}
+                        {% set autoPlaySpeed = autoPlaySpeed|first %}
+                    {% endif %}
+                    
+                    {% if autoPlaySpeed > 100 %}
+                        {% set autoPlaySpeed = (autoPlaySpeed / 1000)|round %}
+                    {% endif %}
+                    
+                    <div class="qx-timeline qx-timeline-horizontal" 
+                         data-items-per-view="{{ itemsPerView }}"
+                         data-slider-mode="{{ general.layout_settings.slider_mode ?: 'manual' }}"
+                         data-auto-speed="{{ autoPlaySpeed ?: 3 }}"
+                         data-show-nav="{{ general.layout_settings.show_navigation ?: 'hover' }}"
+                         data-slide-as-set="{{ general.layout_settings.slide_as_set ? 'true' : 'false' }}"
+                         data-debug-slide-as-set="{{ general.layout_settings.slide_as_set }}">
+                        
+                        <div class="qx-timeline-slider-container">
+                            {% if showConnector %}
+                                <div class="qx-timeline-connector qx-timeline-connector-{{ connectorStyle }}"></div>
+                                <button class="qx-timeline-nav qx-timeline-nav-prev" aria-label="Previous">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <button class="qx-timeline-nav qx-timeline-nav-next" aria-label="Next">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            {% endif %}
+                            
+                            <div class="qx-timeline-slider-track">
+                                {% for item in timelineItems %}
+                                    <div class="qx-timeline-item {{ item.active ? 'qx-timeline-item-active' : '' }}" data-index="{{ loop.index }}">
+                                        {% if showMarkers %}
+                                            <div class="qx-timeline-marker">
+                                                <div class="qx-timeline-dot"></div>
+                                            </div>
+                                        {% endif %}
+                                        {% if showArrows %}
+                                            <div class="qx-timeline-arrow"></div>
+                                        {% endif %}
+
+                                        <div class="qx-timeline-content">
+                                            {% if item.date %}
+                                                <div class="qx-timeline-date">{{ item.date }}</div>
+                                            {% endif %}
+
+                                            {% if item.title %}
+                                                <h3 class="qx-timeline-title">
+                                                    {% if item.link.url %}
+                                                        {{ item.title | link(item.link) }}
+                                                    {% else %}
+                                                        {{ item.title }}
+                                                    {% endif %}
+                                                </h3>
+                                            {% endif %}
+
+                                            {% if item.image.source %}
+                                                <div class="qx-timeline-image">
+                                                    {{ image(item.image.source, item.title, '', '', item.image) }}
+                                                </div>
+                                            {% endif %}
+
+                                            {% if item.description %}
+                                                <div class="qx-timeline-description">
+                                                    {{ item.description|raw }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="qx-timeline-placeholder">
+                <p>Add timeline items to get started</p>
+            </div>
+        {% endif %}
+    {% endblock %}
+{% endembed %}

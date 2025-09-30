@@ -1,0 +1,382 @@
+name: Timeline
+slug: timeline
+groups: general
+helpId: timeline-element
+form:
+    general:
+        - name: timeline_items
+          label: Timeline Items
+          type: group-repeater
+          schema:
+              - name: title
+                label: Title
+                type: text
+                value: Timeline Item Title
+
+              - name: date
+                label: Date/Time
+                type: text
+                value: January 2025
+                help: Enter the date or time for this timeline item
+
+              - name: description
+                label: Description
+                type: editor
+                value: Add your timeline item description here.
+
+              - name: image
+                label: Image
+                type: media
+                filters: image
+                showstyle: true
+
+              - name: link
+                label: Link
+                type: link
+                help: Optional link for the timeline item
+
+              - name: active
+                label: Active State
+                type: switch
+                value: false
+                help: Mark this item as currently active/highlighted
+
+        - name: layout_settings
+          label: Layout Settings
+          type: fields-group
+          status: open
+          schema:
+              - name: layout
+                label: Layout Type
+                type: select
+                value: vertical
+                options:
+                    vertical: Vertical
+                    horizontal: Horizontal
+
+              - name: alignment
+                label: Timeline Alignment
+                type: choose
+                value: center
+                responsive: false
+                options:
+                    left:
+                        label: Left
+                        icon: qxuicon-align-left
+                    center:
+                        label: Center
+                        icon: qxuicon-align-center
+                    right:
+                        label: Right
+                        icon: qxuicon-align-right
+
+              - name: show_connector
+                label: Show Timeline Connector
+                type: switch
+                value: true
+                help: Display the connecting line between timeline items
+
+              - name: show_markers
+                label: Show Timeline Markers
+                type: switch
+                value: true
+                help: Display the marker dots/icons on timeline items
+
+              - name: show_arrows
+                label: Show Arrow Indicators
+                type: switch
+                value: false
+                help: Display arrow indicators connecting timeline items to the main line
+
+              - name: connector_style
+                label: Connector Style
+                type: select
+                value: solid
+                depends:
+                    show_connector: true
+                options:
+                    solid: Solid
+                    dashed: Dashed
+                    dotted: Dotted
+
+              - name: connector_position
+                label: Connector Position
+                type: select
+                value: left
+                depends:
+                    show_connector: true
+                    layout: vertical
+                options:
+                    left:
+                        label: Left Side
+                    center:
+                        label: Center
+                    right:
+                        label: Right Side
+
+              - name: connector_position_horizontal
+                label: Connector Position
+                type: select
+                value: top
+                help: Position of the connector line in horizontal layout
+                depends:
+                    show_connector: true
+                    layout: horizontal
+                options:
+                    top:
+                        label: Top
+                    center:
+                        label: Center
+                    bottom:
+                        label: Bottom
+
+              - name: items_per_view
+                label: Items Per View
+                type: slider
+                min: 1
+                max: 6
+                value: 3
+                responsive: true
+                help: Number of timeline items to show at once in horizontal layout and value must be between 1 and 6.
+                depends:
+                    layout: horizontal
+
+              - name: slider_mode
+                label: Slider Mode
+                type: select
+                value: manual
+                depends:
+                    layout: horizontal
+                options:
+                    manual: Manual
+                    auto: Auto Play
+
+              - name: auto_play_speed
+                label: Auto Play Speed (seconds)
+                type: slider
+                min: 1
+                max: 10
+                suffix: s
+                value: 3
+                depends:
+                    layout: horizontal
+                    slider_mode: auto
+
+              - name: show_navigation
+                label: Show Navigation Arrows
+                type: select
+                value: hover
+                depends:
+                    layout: horizontal
+                options:
+                    always: Always Visible
+                    hover: Show on Hover
+                    disabled: Disabled
+
+              - name: slide_as_set
+                label: Slide As A Set
+                type: switch
+                value: false
+                help: Navigate by full sets of items instead of one item at a time
+                depends:
+                    layout: horizontal
+
+              - name: content_vertical_alignment
+                label: Content Vertical Alignment
+                type: choose
+                value: center
+                responsive: false
+                help: Vertical alignment of content within each timeline item
+                depends:
+                    layout: horizontal
+                    connector_position_horizontal: ["top", "bottom"]
+                options:
+                    top:
+                        label: Top
+                        icon: qxuicon-arrow-to-top
+                    center:
+                        label: Center
+                        icon: qxuicon-align-center
+                    bottom:
+                        label: Bottom
+                        icon: qxuicon-arrow-to-bottom
+
+    styles:
+        - name: timeline_appearance
+          label: Timeline Appearance
+          type: fields-group
+          status: open
+          schema:
+              - name: timeline_bg
+                label: Timeline Background
+                type: background
+                popover: true
+
+              - name: timeline_padding
+                label: Timeline Padding
+                type: padding
+                popover: true
+
+              - name: timeline_border
+                label: Timeline Border
+                type: border
+                popover: true
+
+              - name: connector_color
+                label: Connector Color
+                type: color
+                value: "#e5e5e5"
+
+              - name: connector_width
+                label: Connector Width
+                type: slider
+                min: 1
+                max: 10
+                suffix: px
+                value: 2
+
+              - name: item_spacing
+                label: Item Spacing
+                type: slider
+                max: 100
+                suffix: px
+                value: 20
+                responsive: true
+
+        - name: item_styles
+          label: Timeline Item Styles
+          type: fields-group
+          schema:
+              - name: item_bg
+                label: Item Background
+                type: background
+                popover: true
+
+              - name: item_border
+                label: Item Border
+                type: border
+                popover: true
+
+              - name: item_padding
+                label: Item Padding
+                type: dimensions
+                units: px
+                defaultUnit: px
+                value:
+                    desktop:
+                        top: 20
+                        bottom: 20
+                        left: 20
+                        right: 20
+
+              - name: item_shadow
+                label: Box Shadow
+                type: box-shadow
+                popover: true
+
+        - name: content_styles
+          label: Content Styles
+          type: fields-group
+          schema:
+              - name: title_color
+                label: Title Color
+                type: color
+                value: "#333333"
+
+              - name: title_font
+                label: Title Typography
+                type: typography
+                popover: true
+
+              - name: date_color
+                label: Date Color
+                type: color
+                value: "#666666"
+
+              - name: date_font
+                label: Date Typography
+                type: typography
+                popover: true
+
+              - name: description_color
+                label: Description Color
+                type: color
+                value: "#666666"
+
+              - name: description_font
+                label: Description Typography
+                type: typography
+                popover: true
+
+        - name: hover_effects
+          label: Hover Effects
+          type: fields-group
+          schema:
+              - name: enable_hover
+                label: Enable Hover Effects
+                type: switch
+                value: true
+
+              - name: hover_item_bg
+                label: Item Background
+                type: background
+                popover: true
+                depends:
+                    enable_hover: true
+
+              - name: hover_title_color
+                label: Title Color
+                type: color
+                depends:
+                    enable_hover: true
+
+              - name: hover_title_font
+                label: Title Typography
+                type: typography
+                popover: true
+                depends:
+                    enable_hover: true
+
+              - name: hover_date_color
+                label: Date Color
+                type: color
+                depends:
+                    enable_hover: true
+
+              - name: hover_date_font
+                label: Date Typography
+                type: typography
+                popover: true
+                depends:
+                    enable_hover: true
+
+              - name: hover_description_color
+                label: Description Color
+                type: color
+                depends:
+                    enable_hover: true
+
+              - name: hover_description_font
+                label: Description Typography
+                type: typography
+                popover: true
+                depends:
+                    enable_hover: true
+
+        - name: responsive_settings
+          label: Responsive Settings
+          type: fields-group
+          schema:
+              - name: mobile_layout
+                label: Mobile Layout
+                type: select
+                value: vertical
+                options:
+                    vertical: Vertical
+                    horizontal: Horizontal
+
+              - name: hide_on_mobile
+                label: Hide Elements on Mobile
+                type: switch
+                value: false
+                help: Hide certain elements on mobile devices to save space
