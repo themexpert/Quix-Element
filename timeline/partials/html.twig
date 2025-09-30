@@ -98,11 +98,26 @@
                             {% set itemsPerView = general.layout_settings.items_per_view %}
                         {% endif %}
                     {% endif %}
+                    {% set autoPlaySpeed = general.layout_settings.auto_play_speed %}
+                    {% if autoPlaySpeed.desktop is defined %}
+                        {% set autoPlaySpeed = autoPlaySpeed.desktop %}
+                    {% elseif autoPlaySpeed.value is defined %}
+                        {% set autoPlaySpeed = autoPlaySpeed.value %}
+                    {% elseif autoPlaySpeed is iterable %}
+                        {% set autoPlaySpeed = autoPlaySpeed|first %}
+                    {% endif %}
+                    
+                    {% if autoPlaySpeed > 100 %}
+                        {% set autoPlaySpeed = (autoPlaySpeed / 1000)|round %}
+                    {% endif %}
+                    
                     <div class="qx-timeline qx-timeline-horizontal" 
                          data-items-per-view="{{ itemsPerView }}"
                          data-slider-mode="{{ general.layout_settings.slider_mode ?: 'manual' }}"
-                         data-auto-speed="{{ general.layout_settings.auto_play_speed ?: 3 }}"
-                         data-show-nav="{{ general.layout_settings.show_navigation ?: 'hover' }}">
+                         data-auto-speed="{{ autoPlaySpeed ?: 3 }}"
+                         data-show-nav="{{ general.layout_settings.show_navigation ?: 'hover' }}"
+                         data-slide-as-set="{{ general.layout_settings.slide_as_set ? 'true' : 'false' }}"
+                         data-debug-slide-as-set="{{ general.layout_settings.slide_as_set }}">
                         
                         <div class="qx-timeline-slider-container">
                             {% if showConnector %}

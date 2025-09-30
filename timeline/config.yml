@@ -173,6 +173,14 @@ form:
                     hover: Show on Hover
                     disabled: Disabled
 
+              - name: slide_as_set
+                label: Slide As A Set
+                type: switch
+                value: false
+                help: Navigate by full sets of items instead of one item at a time
+                depends:
+                    layout: horizontal
+
               - name: content_vertical_alignment
                 label: Content Vertical Alignment
                 type: choose

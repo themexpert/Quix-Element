@@ -83,9 +83,23 @@ jQuery(function($) {
 
       var itemsPerView = parseInt($horizontalTimeline.data('items-per-view')) || 3;
       var sliderMode = $horizontalTimeline.data('slider-mode') || 'manual';
-      var autoSpeed = parseInt($horizontalTimeline.data('auto-speed')) || 3;
+      
+      var slideAsSetAttr = $horizontalTimeline.data('slide-as-set');
+      var debugSlideAsSetAttr = $horizontalTimeline.data('debug-slide-as-set');
+      var slideAsSet = slideAsSetAttr === true || slideAsSetAttr === 'true';
+      
+      var autoSpeed = 3;
+      try {
+        var speedAttr = $horizontalTimeline[0].getAttribute('data-auto-speed');
+        if (speedAttr && speedAttr !== '[object Object]' && !isNaN(parseInt(speedAttr))) {
+          autoSpeed = parseInt(speedAttr);
+        }
+      } catch (e) {
+        autoSpeed = 3;
+      }
+      
       var currentSlide = 0;
-      var totalSlides = Math.ceil($items.length / itemsPerView);
+      var totalSlides = slideAsSet ? Math.ceil($items.length / itemsPerView) : Math.max(1, $items.length - itemsPerView + 1);
       var autoPlayInterval;
       
       function updateSliderWidth() {
@@ -113,7 +127,14 @@ jQuery(function($) {
         var containerWidth = $horizontalTimeline.find('.qx-timeline-slider-container').width();
         var spacing = 25;
         var itemWidth = (containerWidth - (itemsPerView - 1) * spacing) / itemsPerView;
-        var moveDistance = slideIndex * (itemWidth + spacing) * itemsPerView;
+        
+        var moveDistance;
+        if (slideAsSet) {
+          moveDistance = slideIndex * (itemWidth + spacing) * itemsPerView;
+        } else {
+          moveDistance = slideIndex * (itemWidth + spacing);
+        }
+        
         $track.css('transform', 'translateX(-' + moveDistance + 'px)');
         
         $prevBtn.toggleClass('disabled', slideIndex === 0);
@@ -130,6 +151,7 @@ jQuery(function($) {
       
       function startAutoPlay() {
         if (sliderMode === 'auto') {
+          stopAutoPlay();
           autoPlayInterval = setInterval(function() {
             nextSlide();
           }, autoSpeed * 1000);
@@ -139,6 +161,7 @@ jQuery(function($) {
       function stopAutoPlay() {
         if (autoPlayInterval) {
           clearInterval(autoPlayInterval);
+          autoPlayInterval = null;
         }
       }
       
